@@ -103,6 +103,7 @@ class Battery {
         unsigned int  readTimeToFull();
         unsigned int  readRemainingCapacity();
         unsigned int  readReportedCapacity();
+        unsigned int  readBatteryCycles();
         int  readCurrent();
         int  readCurrentAvg();
         unsigned int  readPercentage();

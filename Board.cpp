@@ -12,72 +12,87 @@ Board::Board(PF1550 * _pPMIC) {
 
 // Check if the board is powered through USB
 
-void Board::begin(){
-    this -> pPMIC -> begin();
-}
-
-
 bool Board::isUSBPowered() {
-
-    uint8_t reg_val = this -> pPMIC ->  readPMICreg(Register::CHARGER_VBUS_SNS);
-    Serial.println(reg_val);
-    return false;
-
-}
-
-bool Board::isCharging(){
-
-    uint8_t reg_val = this -> pPMIC ->  readPMICreg(Register::CHARGER_CHG_SNS);
-    Serial.println(reg_val);
-    return false;
-
+    uint16_t reg_val = this -> pPMIC ->  readPMICreg(Register::CHARGER_VBUS_SNS);
+    return getBitFromOffset(reg_val, 2) == 0;
 }
 
 bool Board::isBatteryPowered() {
-
     uint8_t reg_val = this -> pPMIC ->  readPMICreg(Register::CHARGER_BATT_SNS);
-    Serial.println(reg_val);
-    return false;
+    uint8_t batPower = extractBits(reg_val, 0, 2);
+    return batPower == 0;
+}
 
+void Board::setExternalSwitch(bool on) {
+        if(on)
+            this -> pPMIC -> getControlPointer()  -> turnSw2On(Sw2Mode::Normal);    
+        else 
+            this -> pPMIC -> getControlPointer()  -> turnSw2Off(Sw2Mode::Normal); 
+}
+
+bool Board::setExternalVoltage(float v) {
+        this -> setExternalSwitch(false);
+        uint8_t voltage_reg = getRailVoltage(v, 4);
+        if (voltage_reg != 0xFF){
+            this -> pPMIC ->  writePMICreg(Register::PMIC_SW2_VOLT, voltage_reg);
+            if(this -> pPMIC ->  readPMICreg(Register::PMIC_SW2_VOLT) == voltage_reg){
+                this -> setExternalSwitch(true);
+                return true;
+            } else 
+                return false;
+        } else {
+            return false;
+        }
 }
 
 
 #if defined(ARDUINO_NICLA_VISION)
-void Board::toggleCameraPower(bool on) {
-        if(on){
-            Serial.println("Turning cameras on");
-            this -> pPMIC ->  configLDO1(Ldo1Voltage::V_2_80, true, true, false); // 2v8 -> camera, ToF sensor
-            this -> pPMIC ->  configLDO2(Ldo2Voltage::V_1_80, true, true, false); // 1v8 -> CAM_IO
-            this -> pPMIC ->  configLDO3(Ldo3Voltage::V_1_80, true, true, false); // 1v8 -> CAM_CORE
-        } else {
-            Serial.println("Turning cameras off");
-            this -> pPMIC ->  configLDO1(Ldo1Voltage::V_2_80, false, false, false); // 2v8 -> camera, ToF sensor
-            this -> pPMIC ->  configLDO2(Ldo2Voltage::V_1_80, false, false, false); // 1v8 -> CAM_IO
-            this -> pPMIC ->  configLDO3(Ldo3Voltage::V_1_80, false, false, false); // 1v8 -> CAM_CORE
-        }
+void Board::setCameraSwitch(bool on) {
+        if(on)
+            this -> pPMIC -> getControlPointer() -> turnLDO1On(Ldo1Mode::Normal);
+            this -> pPMIC -> getControlPointer() -> turnLDO2On(Ldo2Mode::Normal);
+            this -> pPMIC -> getControlPointer() -> turnLDO3On(Ldo3Mode::Normal);
+        else
+            this -> pPMIC -> getControlPointer() -> turnLDO1Off(Ldo1Mode::Normal);
+            this -> pPMIC -> getControlPointer() -> turnLDO2Off(Ldo2Mode::Normal);
+            this -> pPMIC -> getControlPointer() -> turnLDO3Off(Ldo3Mode::Normal);
 }
+#endif
 
-void Board::toggleExternalPower(bool on) {
-        if(on){
-            this -> pPMIC ->  configSw2(Sw2Voltage::V_3_30, 
-                Sw2Voltage::V_3_30,
-                Sw2Voltage::V_3_30,
-                Sw2CurrentLimit::I_1_5_A,
-                true,             
-                true,
-                true);         
+#if defined(ARDUINO_PORTENTA_C33)
+
+    void Board::setCommunicationSwitch(bool on){
+        if(on)
+            this -> pPMIC -> getControlPointer()  -> turnSw1On(Sw1Mode::Normal);    
+        else
+            this -> pPMIC -> getControlPointer()  -> turnSw1Off(Sw1Mode::Normal);   
+    }
+
+    bool Board::setAnalogVoltage(float v) {
+        uint8_t voltage_reg = getRailVoltage(v, CONTEXT_LDO1);
+        if (voltage_reg != 0xFF){
+            this -> pPMIC ->  writePMICreg(Register::PMIC_LDO1_VOLT, voltage_reg);
+            if(this -> pPMIC ->  readPMICreg(Register::PMIC_LDO1_VOLT) == voltage_reg)
+                return true;
+            else 
+                return false;
         } else {
-               this -> pPMIC ->  configSw2(Sw2Voltage::V_3_30, 
-                Sw2Voltage::V_3_30,
-                Sw2Voltage::V_3_30,
-                Sw2CurrentLimit::I_1_5_A,
-                false,             
-                false,
-                false); 
+            return false;
         }
-}
+    }
+
+    bool Board::setReferenceVoltage(float v){
+        uint8_t voltage_reg = getRailVoltage(v, CONTEXT_LDO2);
+        if (voltage_reg != 0xFF){
+            this -> pPMIC ->  writePMICreg(Register::PMIC_LDO2_VOLT, voltage_reg);
+            if(this -> pPMIC ->  readPMICreg(Register::PMIC_LDO2_VOLT) == voltage_reg)
+                return true;
+            else 
+                return false;
+        } else {
+            return false;
+        }
+    }
 
 #endif
 
-
-    

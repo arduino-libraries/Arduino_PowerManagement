@@ -5,9 +5,10 @@
 #include <Arduino.h>
 #include "Board.h"
 #include "Battery.h"
+#include "Charger.h"
 #include <Arduino_PMIC.h>
 
-//#include "Charger.h"
+
 
 class PowerManagement{
     public: 
@@ -15,13 +16,12 @@ class PowerManagement{
         void begin();
         Board getBoard();
         Battery getBattery();
-        //Charger getCharger();
-
+        Charger getCharger();
 
     private:
         Battery * battery;
         Board * board;
-        //Charger * charger;
+        Charger * charger;
         PF1550 * pPMIC;
 };
 

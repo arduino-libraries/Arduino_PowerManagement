@@ -13,6 +13,16 @@
 #define clearBit(byte, bit)       (byte &= ~BV(bit))
 #define toggleBit(byte, bit)      (byte ^= BV(bit))
 
+static inline int extractBits(int value, int startBit, int endBit) {
+    if (startBit < 0 || startBit > 31 || endBit < 0 || endBit > 31 || startBit > endBit) {
+        // Handle invalid bit range
+        return 0; // You might want to return an appropriate error value here
+    }
+
+    int mask = (1 << (endBit - startBit + 1)) - 1;
+    return (value >> startBit) & mask;
+}
+
 static inline uint8_t writeRegister16(TwoWire *wire, uint8_t address, uint8_t reg, uint16_t data)
 {
   uint8_t msb, lsb;
@@ -38,6 +48,21 @@ static inline uint16_t readRegister16(TwoWire *ptr, uint8_t address, uint8_t reg
     ptr->endTransmission();
     return temp;
 
+}
+
+static inline uint16_t extractAndReverseBits(uint16_t value, int startBit, int endBit) {
+    if (startBit < 0 || startBit > 15 || endBit < 0 || endBit > 15 || startBit > endBit) {
+        // Handle invalid bit range
+        return 0; // You might want to return an appropriate error value here
+    }
+
+    uint16_t result = 0;
+    for (int i = endBit; i >= startBit; i--) {
+        uint16_t bit = (value >> i) & 1;
+        result = (result << 1) | bit;
+    }
+
+    return result;
 }
 
 static inline bool getBitFromOffset(uint16_t value, uint8_t offset) {

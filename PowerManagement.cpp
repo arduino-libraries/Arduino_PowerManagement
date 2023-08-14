@@ -12,11 +12,15 @@ PowerManagement::PowerManagement(){
     #endif
 
     this-> pPMIC = new PF1550(io);
-
     this -> board = new Board(this-> pPMIC);
+    this -> charger = new Charger(this->pPMIC);
     this -> battery = new Battery();   
 }
 
+void PowerManagement::begin(){
+    this -> pPMIC -> begin();
+    this -> battery -> begin();
+}
 
 
 Board PowerManagement::getBoard() {
@@ -27,5 +31,6 @@ Battery PowerManagement::getBattery() {
     return *battery; // Return the dereferenced battery pointer (actual Battery instance)
 }
 
-
-
+Charger PowerManagement::getCharger() {
+    return *charger;
+}

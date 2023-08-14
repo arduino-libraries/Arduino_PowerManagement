@@ -1,7 +1,7 @@
 #ifndef Battery_H
 #define Battery_H
 
-#define CAPACITY 600
+#define CAPACITY 200
 #define V_EMPTY 3000
 
 #include "Battery.h"
