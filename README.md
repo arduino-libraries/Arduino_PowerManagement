@@ -77,7 +77,6 @@ Serial.println(String(battery.readTimeToFull()) + "s");
 Serial.print("* Time-to-empty: ");
 Serial.println(String(battery.readTimeToEmpty()) + "s");
 
-
 ```
 
 #### Charger 
@@ -105,29 +104,23 @@ It will return a value of `ChargeStatus` which can be one of the above:
 This library allows you to change the following charging parameters of the charging process. Please be careful with these and make sure they are supported by the battery you are using as the wrong values might damage your board or the battery. 
 
 ##### Charge Voltage
-This is the voltage that your battery is charged with.
-You can modify it by calling `charger.setChargeVoltage(ChargeVoltage v);` with a parameter of `ChargeVoltage`.
+This is the voltage that your battery is charged with:
+`charger.setChargeVoltage(ChargeVoltage::V_3_80);`
+
 `ChargeVoltage` is an enum with values ranging from `ChargeVoltage::V_3_50` to `ChargeVoltage::V_4_44` in steps of 0.02V, (`V_3_50`, `V_3_52`, ..., `V_3_42`, `V_4_44`)
 
 ##### Charge Current
 This is the current used in the constant charging phase. 
-You can modify it by calling `setChargeCurrent(ChargeCurrent u);` with a parameter of `ChargeCurrent`.
+`charger.setChargeCurrent(ChargeCurrent::I_500_mA);`
+
 `ChargeCurrent` is an enum with value ranging from `ChargeCurrent::I_100_mA` to `ChargeCurrent::I_100_mA` in steps of 50mA (`I_100_mA`, `I_150_mA`, ... `I_950_mA`, `I_1000_mA`).
 
 ##### End of Charge Current
 This is the current used in the end-of-charge phase where the voltage is kept at 4.2V. 
-You can modify it by calling `setEndOfChargeCurrent(EndOfChargeCurrent i);` with a parameter of `EndOfChargeCurrent`.
+`charger.setEndOfChargeCurrent(EndOfChargeCurrent::I_5_mA);`
 `EndOfChargeCurrent` is an enum with the following values (`I_5_mA`, `I_10_mA`, `I_20_mA`, `I_30_mA`, `I_50_mA`. )
 
-Here's a concrete example of all of the parameters above.
-
-```cpp
-  charger.setChargeCurrent(ChargeCurrent::I_500_mA);
-  charger.setChargeVoltage(ChargeVoltage::V_3_80);
-  charger.setEndOfChargeCurrent(EndOfChargeCurrent::I_5_mA);
-  charger.setMaxInputCurrent(MaxInputCurrent::I_100_mA);
 ```
-
 
 #### Board
 ##### Nicla vision
