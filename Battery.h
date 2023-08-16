@@ -91,23 +91,81 @@
 #define EN_HIBERNATION_BIT 15
 #define MODEL_CFG_REFRESH_BIT 15
 
+/**
+ * @file Battery.h
+ * @brief Battery class definition and member function declarations.
+*/
+
 class Battery {
     public: 
+        /**
+         * @brief Constructor for the Battery class. 
+        */
         Battery();
-        void begin();
-        unsigned int  readVoltage();
-        unsigned int  readVoltageAvg();
-        int  readTemp();
-        int  readTempAvg();
-        unsigned int  readTimeToEmpty();
-        unsigned int  readTimeToFull();
-        unsigned int  readRemainingCapacity();
-        unsigned int  readReportedCapacity();
-        unsigned int  readBatteryCycles();
-        int  readCurrent();
-        int  readCurrentAvg();
-        unsigned int  readPercentage();
 
+        /**
+         * @brief Initializes the battery communication and configuration.
+        */
+        void begin();
+
+        /**
+         * @brief Reads the current voltage of the battery.
+         * @return The current voltage in millivolts (mV).
+        */
+        unsigned int readVoltage();
+
+        /**
+         * @brief Reads the average voltage of the battery.
+         * @return The average voltage in millivolts (mV). 
+        */
+        unsigned int readVoltageAvg();
+
+        /**
+         * @brief Reads the current temperature of the battery.
+         * @return The current temperature in degrees Celsius.
+        */
+        int readTemp();
+
+        /**
+         * @brief Reads the average temperature of the battery.
+         * @return The current temperature in degrees Celsius.
+        */
+        int readTempAvg();
+        
+        /**
+         * @brief Reads the battery's state of charge (SOC).
+         * @return The state of charge as a percentage.
+        */
+        unsigned int readPercentage();
+
+        /**
+         * @brief Reads the estimated time to empty (discharge) of the battery.
+         * @return The estimated time to empty in minutes.
+        */
+        unsigned int readTimeToEmpty();
+
+        /**
+         * @brief Reads the estimated time to full (charge) of the battery.
+         * @return The estimated time to full in minutes.
+        */
+        unsigned int readTimeToFull();
+
+        /**
+         * @brief Reads the remaining capacity of the battery.
+         * @return The remaining capacity in milliampere-hours (mAh).
+        */
+        unsigned int readRemainingCapacity();
+
+        /**
+         * @brief Reads the reported capacity of the battery.
+         * @return The reported capacity in milliampere-hours (mAh).
+        */
+        unsigned int readReportedCapacity();
+
+        /**
+         * @brief Reads the reported capacity of the battery.
+         * @return The reported capacity in milliampere-hours (mAh).
+        */
 
     private:
           #if defined(ARDUINO_PORTENTA_C33)

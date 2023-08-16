@@ -10,8 +10,6 @@ Board::Board(PF1550 * _pPMIC) {
 }
 
 
-// Check if the board is powered through USB
-
 bool Board::isUSBPowered() {
     uint16_t reg_val = this -> pPMIC ->  readPMICreg(Register::CHARGER_VBUS_SNS);
     return getBitFromOffset(reg_val, 2) == 0;
