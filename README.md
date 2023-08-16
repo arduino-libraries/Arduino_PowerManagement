@@ -4,11 +4,12 @@ This library abstracts the functionality of the PF1550 Power Management IC and M
 It allows you to monitor the battery usage of your board, control and monitor charging parameters, enable or disable specific power rails on each board to save power, as well as change voltages on some of these rails. 
 
 ## Examples 
-* **/examples/battery** - 
-* **/examples/charger** -
-* **/examples/external_voltage** -
-* **/examples/power_shell** -
-* **/examples/toggle_nicla_cameras** - 
+* **/examples/battery** - Demonstrates battery metrics monitoring.
+* **/examples/charger** - Illustrates charger status monitoring and control.
+* **/examples/external_voltage** - Explains how to set external voltage.
+* **/examples/power_shell** - Provides power rail control examples.
+* **/examples/toggle_nicla_cameras** - Demonstrates toggling Nicla Vision cameras.
+
 
 ## Features
 
@@ -132,7 +133,6 @@ charger.setEndOfChargeCurrent(EndOfChargeCurrent::I_5_mA);
 *EndOfChargeCurrent* is an enum with the following values (`I_5_mA`, `I_10_mA`, `I_20_mA`, `I_30_mA`, `I_50_mA`).
 
 #### Board
-
 
 
 ##### Nicla vision
