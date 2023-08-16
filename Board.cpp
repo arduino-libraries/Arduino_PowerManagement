@@ -1,9 +1,7 @@
 #include "Board.h"
 
-// Constructor
-Board::Board() {
 
-}
+Board::Board() {}
 
 Board::Board(PF1550 * _pPMIC) {
     this -> pPMIC = _pPMIC;

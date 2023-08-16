@@ -40,7 +40,7 @@ Board PowerManagement::getBoard() {
 
 /**
  * @brief returns the initialised instance of the Battery class
- * @returns returns the dereferenced board pointer (actual Battery instance)
+ * @returns returns the dereferenced bbattery pointer (actual Battery instance)
 */
 Battery PowerManagement::getBattery() {
     return *battery; 
@@ -48,7 +48,7 @@ Battery PowerManagement::getBattery() {
 
 /**
  * @brief returns the initialised instance of the Charger class
- * @returns returns the dereferenced board pointer (actual Battery instance)
+ * @returns returns the dereferenced charger pointer (actual Charger instance)
 */
 Charger PowerManagement::getCharger() {
     return *charger;

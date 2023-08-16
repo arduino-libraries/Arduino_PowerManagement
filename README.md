@@ -6,10 +6,8 @@ It allows you to monitor the battery usage of your board, control and monitor ch
 ## Examples 
 * **/examples/battery** - Demonstrates battery metrics monitoring.
 * **/examples/charger** - Illustrates charger status monitoring and control.
-* **/examples/external_voltage** - Explains how to set external voltage.
-* **/examples/power_shell** - Provides power rail control examples.
-* **/examples/toggle_nicla_cameras** - Demonstrates toggling Nicla Vision cameras.
-
+* **/examples/portenta_c33** - Demonstrates how to change the different voltages on the C33, as well as turning the communication stack on and off.
+* **/examples/power_shell** - Provides an interactive shell on the serial port that allows you to interact with any aspect of this library. 
 
 ## Features
 
@@ -160,12 +158,35 @@ This method takes a float parameter and automatically converts it internally to 
 This power rail is the only rail that can be modified on the Portenta H7 board, while Portenta C33 and Nicla Vision have some extra tricks up their sleeves.
 
 #### Portenta C33
-The Portenta C33 board offers the most flexibility in power delivery out of the three boards. 
+The Portenta C33 board offers the most flexibility in power delivery out of the three boards. It allows you to tweak the ADC voltage as well as the reference voltage, allowing for more precise analog sensor readings, as well as toggle the power to the ESP32 chip used for WiFi and BLE to save power. 
+
+
+To turn off the ESP32 and Secure Element this method can be used:
+```cpp
+board.setCommunicationSwitch(false);
+```
+**NOTE:** This command turns off the power to the Secure Element as well, so if you would like to connect your board to Ethernet you will lose access to secure communications. 
+
+
+To change the reference voltage (AREF) use this method:
+```cpp
+board.setReferenceVoltage(1.80);
+```
+The reference regulator can be set from 1.80V to 3.30V in steps of 0.10V. Any value outside this range or with different steps will not be accepted by the library.
+
+To change the analog voltage (AVCC) use this method:
+```cpp
+board.setAnalogVoltage();
+```
+The analog voltage can be set to any of the following values: 0.75V, 0.80V, 0.85V, 0.90V, 0.95V, 1.00V, 1.05V, 1.10V, 1.15V, 1.20V, 1.25V, 1.30V, 1.35V, 1.40V, 1.45V, 1.50V, 1.80V, 1.90V, 2.00V, 2.10V, 2.20V, 2.30V, 2.40V, 2.50V, 2.60V, 2.70V, 2.80V, 2.90V, 3.00V, 3.10V, 3.20V, 3.30V. Any value outside this range or with different steps will not be accepted by the library.
 
 
 
-#### Nicla vision
+#### Nicla Vision
+On the Nicla Vision board you can turn the rails that power the cameras and ToF sensor on and off: 
+```cpp
+board.setCameraSwitch(false);
+```
 
-
-
+**NOTE:** Any change to the power rails persists even if the board is disconnected from power. Make sure you design your solution accordingly. 
 
