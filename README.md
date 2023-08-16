@@ -31,7 +31,7 @@ It allows you to monitor the battery usage of your board, control and monitor ch
         * Change voltage on external power rail
 
 
-### Usage 
+## Usage 
 
 ```cpp
 #include "PowerManagement.h"
@@ -53,7 +53,7 @@ void setup(){
 }
 ```
 
-#### Battery
+### Battery
 The battery object contains methods to read battery usage and health metrics. You can get current and average values for voltage, percentage, current and time as well as an estimated of the time left to charge completely and time left to discharge. 
 
 ```cpp
@@ -80,16 +80,19 @@ Serial.println(String(battery.readTimeToEmpty()) + "s");
 
 ```
 
-#### Charger 
+### Charger 
 Charging a LiPo battery is done in three stages. This library allows you to monitor what charging stage we are in as well as control some of the chagring parameters. 
 
 * **Pre-charge** - First phase of the charging process where the battery is charged at a low constant current and is slowly increased until it reaches the full *charge current*
+
 * **Constant Current** - Second phase of the charging process where the battery is charging in constant current mode until it reaches the voltage where the it's considered fully charged. (4.2V)
+
 * **Constant Voltage** - Third phase of the charging process where the battery is kept at the fully charged voltage and current is slowly decreased to the *end of charge current*.
 
 #### Get charger status 
 You can find out what stage the charger is in by calling the `getChargeStatus()` method.
-It will return a value of `ChargeStatus` which can be one of the above:
+
+It will return a value of *ChargeStatus* which can be one of the above:
 * `PRECHARGE` - First stage of the charging process
 * `FAST_CHARGE_CC` - Second stage of the charging process
 * `FAST_CHARGE_CV` - Last stage of the charging process
@@ -132,14 +135,37 @@ charger.setEndOfChargeCurrent(EndOfChargeCurrent::I_5_mA);
 
 *EndOfChargeCurrent* is an enum with the following values (`I_5_mA`, `I_10_mA`, `I_20_mA`, `I_30_mA`, `I_50_mA`).
 
-#### Board
+### Board
+The PF1550 power management IC has three LDO regulators, and three DCDC converters, each of these have a configurable voltage range and can be turned on and off. 
+The implementation of these regulators and the power rails rails differs from board to board, for example on the Nicla Vision, some of the rails are dedicated to the voltages required by the camera, while on the Portenta H7 some of these rails are dedicated to the rich USB-C functionality.
 
+Changing some voltages on some rails might break the boards functionality or even damage the board, so not all of these are available trough this library. 
 
-##### Nicla vision
+However there is one power rail they all have in common, and that is the external power rail. The external power rail is labeled as 3V3 on all of these boards and can be used to power external peripherals. 
 
+Using this library we can turn it off, and thus the external peripherals to save power: 
 
-##### Portenta C33
+```cpp
+board.setExternalSwitch(false);
+```
+
+or change its voltage between the following values (1.10V, 1.20V, 1.35V, 1.50V, 1.80V, 2.50V, 3.00V and 3.30V)
+
+```cpp
+board.setExternalVoltage(1.80);
+```
+
+This method takes a float parameter and automatically converts it internally to the specific internal representation, but any voltage that is not one of the enumerated walue will not work and get this method to return false. 
+
+This power rail is the only rail that can be modified on the Portenta H7 board, while Portenta C33 and Nicla Vision have some extra tricks up their sleeves.
+
+#### Portenta C33
 The Portenta C33 board offers the most flexibility in power delivery out of the three boards. 
 
 
-##### Portenta H7
+
+#### Nicla vision
+
+
+
+

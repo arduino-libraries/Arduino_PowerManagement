@@ -29,16 +29,27 @@ void PowerManagement::begin(){
     this -> battery -> begin();
 }
 
-
+/**
+ * @brief returns the initialised instance of the Board class
+ * @returns returns the dereferenced board pointer (actual Board instance)
+*/
 Board PowerManagement::getBoard() {
-    return *board; // Return the dereferenced board pointer (actual Board instance)
+    return *board; 
 }
 
 
+/**
+ * @brief returns the initialised instance of the Battery class
+ * @returns returns the dereferenced board pointer (actual Battery instance)
+*/
 Battery PowerManagement::getBattery() {
-    return *battery; // Return the dereferenced battery pointer (actual Battery instance)
+    return *battery; 
 }
 
+/**
+ * @brief returns the initialised instance of the Charger class
+ * @returns returns the dereferenced board pointer (actual Battery instance)
+*/
 Charger PowerManagement::getCharger() {
     return *charger;
 }
