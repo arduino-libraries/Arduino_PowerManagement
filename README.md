@@ -55,7 +55,7 @@ void setup(){
 #### Battery
 The battery object contains methods to read battery usage and health metrics. You can get current and average values for voltage, percentage, current and time as well as an estimated of the time left to charge completely and time left to discharge. 
 
-```
+```cpp
 Serial.print("* Voltage: ");
 Serial.println(String(battery.readVoltageAvg()) + "mV");
 
@@ -82,9 +82,9 @@ Serial.println(String(battery.readTimeToEmpty()) + "s");
 #### Charger 
 Charging a LiPo battery is done in three stages. This library allows you to monitor what charging stage we are in as well as control some of the chagring parameters. 
 
-* **Pre-charge** - First phase of the charging process where the battery is charged at a low constant current and is slowly increased until it reaches the full **charge current**
-* **Constant Current** - Second phase of the charging process where the battery is charging in constant current mode until it reaches the voltage where the it's considered fully charged (4.2V normally)
-* **Constant Voltage** - Third phase of the charging process where the battery is kept at the fully charged voltage and current is slowly decreased to the ending **end of charge current**
+* **Pre-charge** - First phase of the charging process where the battery is charged at a low constant current and is slowly increased until it reaches the full *charge current*
+* **Constant Current** - Second phase of the charging process where the battery is charging in constant current mode until it reaches the voltage where the it's considered fully charged. (4.2V)
+* **Constant Voltage** - Third phase of the charging process where the battery is kept at the fully charged voltage and current is slowly decreased to the *end of charge current*.
 
 #### Get charger status 
 You can find out what stage the charger is in by calling the `getChargeStatus()` method.
@@ -104,24 +104,42 @@ It will return a value of `ChargeStatus` which can be one of the above:
 This library allows you to change the following charging parameters of the charging process. Please be careful with these and make sure they are supported by the battery you are using as the wrong values might damage your board or the battery. 
 
 ##### Charge Voltage
-This is the voltage that your battery is charged with:
-`charger.setChargeVoltage(ChargeVoltage::V_3_80);`
+Set the voltage that your battery is charged with:
 
-**ChargeVoltage** is an enum with values ranging from `ChargeVoltage::V_3_50` to `ChargeVoltage::V_4_44` in steps of 0.02V, (`V_3_50`, `V_3_52`, ..., `V_3_42`, `V_4_44`)
+```cpp
+charger.setChargeVoltage(ChargeVoltage::V_3_80);
+```
+
+*ChargeVoltage* is an enum with values ranging from `ChargeVoltage::V_3_50` to `ChargeVoltage::V_4_44` in steps of 0.02V, (`V_3_50`, `V_3_52`, ..., `V_3_42`, `V_4_44`)
 
 ##### Charge Current
-This is the current used in the constant charging phase. 
-`charger.setChargeCurrent(ChargeCurrent::I_500_mA);`
+Set the current used in the constant charging phase. 
 
-**ChargeCurrent** is an enum with value ranging from `ChargeCurrent::I_100_mA` to `ChargeCurrent::I_100_mA` in steps of 50mA (`I_100_mA`, `I_150_mA`, ... `I_950_mA`, `I_1000_mA`).
+
+```cpp
+charger.setChargeCurrent(ChargeCurrent::I_500_mA);
+```
+
+*ChargeCurrent* is an enum with value ranging from `ChargeCurrent::I_100_mA` to `ChargeCurrent::I_100_mA` in steps of 50mA. (`I_100_mA`, `I_150_mA`, ... `I_950_mA`, `I_1000_mA`).
 
 ##### End of Charge Current
 This is the current used in the end-of-charge phase where the voltage is kept at 4.2V. 
-`charger.setEndOfChargeCurrent(EndOfChargeCurrent::I_5_mA);`
 
-**EndOfChargeCurrent** is an enum with the following values (`I_5_mA`, `I_10_mA`, `I_20_mA`, `I_30_mA`, `I_50_mA`. ).
+```cpp
+charger.setEndOfChargeCurrent(EndOfChargeCurrent::I_5_mA);
+```
+
+*EndOfChargeCurrent* is an enum with the following values (`I_5_mA`, `I_10_mA`, `I_20_mA`, `I_30_mA`, `I_50_mA`).
 
 #### Board
+
+
+
 ##### Nicla vision
+
+
 ##### Portenta C33
+The Portenta C33 board offers the most flexibility in power delivery out of the three boards. 
+
+
 ##### Portenta H7

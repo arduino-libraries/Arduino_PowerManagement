@@ -1,5 +1,9 @@
 #include "PowerManagement.h"
 
+
+/**
+ * @brief constructor for the PowerManagement 
+*/
 PowerManagement::PowerManagement(){
     #if defined(ARDUINO_PORTENTA_C33)
     static PF1550_IO_C33          io(&Wire3, PF1550_I2C_DEFAULT_ADDR);
@@ -17,6 +21,9 @@ PowerManagement::PowerManagement(){
     this -> battery = new Battery();   
 }
 
+/**
+ * @brief start communication with the PMIC chip and the power gauge. 
+*/
 void PowerManagement::begin(){
     this -> pPMIC -> begin();
     this -> battery -> begin();
@@ -26,6 +33,7 @@ void PowerManagement::begin(){
 Board PowerManagement::getBoard() {
     return *board; // Return the dereferenced board pointer (actual Board instance)
 }
+
 
 Battery PowerManagement::getBattery() {
     return *battery; // Return the dereferenced battery pointer (actual Battery instance)

@@ -162,11 +162,6 @@ class Battery {
         */
         unsigned int readReportedCapacity();
 
-        /**
-         * @brief Reads the reported capacity of the battery.
-         * @return The reported capacity in milliampere-hours (mAh).
-        */
-
     private:
           #if defined(ARDUINO_PORTENTA_C33)
                 TwoWire *  _wire = &Wire3;

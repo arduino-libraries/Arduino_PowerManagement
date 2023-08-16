@@ -11,21 +11,70 @@
 
 class Board {
     public:
+        /**
+         * @brief Default constructor for the Board class.
+        */
         Board();
+
+        /**
+         * @brief Constructor for the Board class with a PF1550 PMIC instance.
+         * @param _pPMIC Pointer to the PF1550 PMIC instance.
+        */
         Board(PF1550 * _pPMIC);
+
+        /**
+         * @brief Check if the board is powered through USB.
+         * @return True if powered through USB, false otherwise.
+        */
         bool isUSBPowered();
+
+        /**
+         * @brief Check if the board is powered by the battery.
+         * @return True if powered by the battery, false otherwise.
+        */
         bool isBatteryPowered();
+
+        /**
+         * @brief Set the external power lane switch state.
+         * @param on True to turn on the switch, false to turn it off.
+         */
         void setExternalSwitch(bool on);
-        bool setExternalVoltage(float v); // SW2
+
+        /**
+         * @brief Set the voltage for the external power rail.
+         * @param v Voltage value to set. (as float)
+         * @return True if successful, false otherwise.
+        */
+        bool setExternalVoltage(float v); 
     
         #if defined(ARDUINO_NICLA_VISION)
+        /**
+         * @brief Set the camera power rail switch state on Nicla Vision.
+         * @param on True to turn on the switches, false to turn them off.
+        */
         void setCameraSwitch(bool on); 
         #endif 
 
         #if defined(ARDUINO_PORTENTA_C33)
+        /**
+         * @brief Set the communication power rail switch state on Portenta C33
+         * @param on True to turn on the switches, false to turn them off.
+        */
         void setCommunicationSwitch(bool on);
-        bool setAnalogVoltage(float v); // LDO1
-        bool setReferenceVoltage(float v); // LDO2
+        
+        /**
+         * @brief Set the analog voltage on Portenta C33.
+         * @param v Voltage value to set (as float).
+         * @return True if successful, false otherwise.
+        */
+        bool setAnalogVoltage(float v);
+
+        /**
+         * @brief Set the reference voltage on Portenta C33.
+         * @param v Voltage value to set (as float).
+         * @return True if successful, false otherwise.
+        */
+        bool setReferenceVoltage(float v);
         #endif
         
      
