@@ -44,14 +44,15 @@ bool Board::setExternalVoltage(float v) {
 
 #if defined(ARDUINO_NICLA_VISION)
 void Board::setCameraSwitch(bool on) {
-        if(on)
+        if(on){
             this -> pPMIC -> getControlPointer() -> turnLDO1On(Ldo1Mode::Normal);
             this -> pPMIC -> getControlPointer() -> turnLDO2On(Ldo2Mode::Normal);
             this -> pPMIC -> getControlPointer() -> turnLDO3On(Ldo3Mode::Normal);
-        else
+        } else {
             this -> pPMIC -> getControlPointer() -> turnLDO1Off(Ldo1Mode::Normal);
             this -> pPMIC -> getControlPointer() -> turnLDO2Off(Ldo2Mode::Normal);
             this -> pPMIC -> getControlPointer() -> turnLDO3Off(Ldo3Mode::Normal);
+        }
 }
 #endif
 

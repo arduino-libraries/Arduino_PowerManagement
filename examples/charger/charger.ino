@@ -1,7 +1,7 @@
 /*
 Charger Demo
 
-This sketch demonstrates how to write charging parameters, read charger state and monitor charging using the PowerManagement library:
+This sketch demonstrates how to write charging parameters,read charger state and monitor charging using the PowerManagement library:
 * In the setup() function, it sets the charging parameters
 * In the loop() functionit prints the battery's voltage, current, percentage and the charger's state allowing you to monitor charging. 
 
@@ -41,18 +41,19 @@ void setup() {
 
   battery = manager.getBattery();
   charger = manager.getCharger();
-
-  charger.setChargeCurrent(ChargeCurrent::I_500_mA);
-  charger.setChargeVoltage(ChargeVoltage::V_3_80);
-  charger.setEndOfChargeCurrent(EndOfChargeCurrent::I_5_mA);
-  charger.setMaxInputCurrent(MaxInputCurrent::I_100_mA);
+ 
+  #if !defined(ARDUINO_NICLA_VISION)
+    charger.setChargeCurrent(ChargeCurrent::I_200_mA);
+    charger.setChargeVoltage(ChargeVoltage::V_3_80);
+    charger.setEndOfChargeCurrent(EndOfChargeCurrent::I_5_mA);
+  #endif
 }
 
 void loop(){
     ChargeStatus status = charger.getChargeStatus();
 
     Serial.print("* Voltage: ");
-    Serial.println(String(battery.readVoltageAvg()) + "mV");
+    Serial.println(String(battery.readVoltage()) + "mV");
 
     Serial.print("* Current: ");
     Serial.println(String(battery.readCurrent()) + " mA");

@@ -213,11 +213,11 @@ void setup() {
   charger = manager.getCharger();
 
 
-  charger.setChargeCurrent(ChargeCurrent::I_500_mA);
-  charger.setChargeVoltage(ChargeVoltage::V_3_80);
-  charger.setEndOfChargeCurrent(EndOfChargeCurrent::I_5_mA);
-  charger.setMaxInputCurrent(MaxInputCurrent::I_100_mA);
-
+  #if !defined(ARDUINO_NICLA_VISION)
+    charger.setChargeCurrent(ChargeCurrent::I_200_mA);
+    charger.setChargeVoltage(ChargeVoltage::V_3_80);
+    charger.setEndOfChargeCurrent(EndOfChargeCurrent::I_5_mA);
+  #endif
 }
 
 void loop() {

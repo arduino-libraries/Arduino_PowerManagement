@@ -190,3 +190,6 @@ board.setCameraSwitch(false);
 
 **NOTE:** Any change to the power rails persists even if the board is disconnected from power. Make sure you design your solution accordingly. 
 
+## Known limitations 
+* Charging parameters cannot be changed on Nicla Vision
+* Charging is not supported on Portenta C33 

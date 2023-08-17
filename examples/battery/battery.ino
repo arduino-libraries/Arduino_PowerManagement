@@ -62,5 +62,7 @@ void loop(){
     Serial.print("* Time-to-empty: ");
     Serial.println(String(battery.readTimeToEmpty()) + "s");
 
+    Serial.println();
+
     delay(1000);
 }

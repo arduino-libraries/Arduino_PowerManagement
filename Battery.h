@@ -121,6 +121,18 @@ class Battery {
         unsigned int readVoltageAvg();
 
         /**
+         * @brief Reads the instantaneous current of the battery.
+         * @return The instantaneous current in miliamperes (mA)
+        */
+        int readCurrent();
+
+        /**
+         * @brief Reads the average current of the battery.
+         * @return The average current in millivolts (mV). 
+        */
+        int readCurrentAvg();
+
+        /**
          * @brief Reads the current temperature of the battery.
          * @return The current temperature in degrees Celsius.
         */

@@ -33,16 +33,9 @@ Additionaly, it showcases how you can change the analog and reference voltages, 
        - Turning off the communication switch.
        - Printing battery status again.
 
-
-  Notes:
-  - This sketch is designed for educational purposes and demonstrates how to use power management and WiFi scanning features.
-  - Ensure that you have the correct board selected in the Arduino IDE and that the required libraries are properly installed before uploading the sketch.
 */
-#include <WiFiC3.h>
 
-
-#include <Arduino_PMIC.h>
-#include "wireUtils.h"
+#include "PowerManagement.h"
 #include <WiFiC3.h>
 
 PowerManagement manager = PowerManagement();
@@ -51,7 +44,7 @@ Board board;
 Charger charger;
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   while (!Serial) {
     ; // wait for serial port to connect
   }
@@ -61,17 +54,31 @@ void setup() {
   board = manager.getBoard();
   charger = manager.getCharger();
 
-  board.setAnalogVoltage(1.80);
-  board.setReferenceVoltage(1.80);
+   // check for the WiFi module:
+  if (WiFi.status() == WL_NO_MODULE) {
+    Serial.println("Communication with WiFi module failed!");
+    // don't continue
+    while (true);
+  }
+
+  String fv = WiFi.firmwareVersion();
+  if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
+    Serial.println("Please upgrade the firmware");
+  }
+
+
+
+  //board.setAnalogVoltage(1.80);
+  //board.setReferenceVoltage(1.80);
 
   // Enable the communication switch (adjust rail name if needed)
-  board.setCommunicationSwitch(true);
+ // board.setCommunicationSwitch(true);
 
   // Scan and list available networks
   listNetworks();
 
   // Print how much current is pulled from the battery
-  Serial.println("Current: " + String(battery.readCurrentAvg()));
+  Serial.println("Current before: " + String(battery.readCurrentAvg()));
 
   // Turn off the communication switch
   board.setCommunicationSwitch(false);
@@ -79,7 +86,7 @@ void setup() {
   delay(5000);
 
   // Print how much current is pulled from the battery
-  Serial.println("Current: " + String(battery.readCurrentAvg()));
+  Serial.println("Current after: " + String(battery.readCurrentAvg()));
 
 
 }
