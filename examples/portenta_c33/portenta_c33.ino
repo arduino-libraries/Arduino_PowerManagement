@@ -44,8 +44,8 @@ Board board;
 Charger charger;
 
 void setup() {
-  Serial.begin(115200);
-  while (!Serial) {
+  Serial1.begin(115200);
+  while (!Serial1) {
     ; // wait for serial port to connect
   }
 
@@ -56,14 +56,14 @@ void setup() {
 
    // check for the WiFi module:
   if (WiFi.status() == WL_NO_MODULE) {
-    Serial.println("Communication with WiFi module failed!");
+    Serial1.println("Communication with WiFi module failed!");
     // don't continue
     while (true);
   }
 
   String fv = WiFi.firmwareVersion();
   if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
-    Serial.println("Please upgrade the firmware");
+    Serial1.println("Please upgrade the firmware");
   }
 
 
@@ -75,45 +75,48 @@ void setup() {
  // board.setCommunicationSwitch(true);
 
   // Scan and list available networks
-  listNetworks();
+
 
   // Print how much current is pulled from the battery
-  Serial.println("Current before: " + String(battery.readCurrentAvg()));
-
-  // Turn off the communication switch
-  board.setCommunicationSwitch(false);
-
-  delay(5000);
-
-  // Print how much current is pulled from the battery
-  Serial.println("Current after: " + String(battery.readCurrentAvg()));
 
 
 }
 
 void loop() {
-  // Your main loop code here (if needed)
+  Serial1.println("Current before: " + String(battery.readCurrent()));
+
+  delay(2000);
+  
+  listNetworks();
+
+  // Turn off the communication switch
+  board.setCommunicationSwitch(false);
+  delay(2000);
+  // Print how much current is pulled from the battery
+  Serial1.println("Current after: " + String(battery.readCurrent()));
+
 }
 
 void listNetworks() {
-  Serial.println("Scanning available networks...");
+  Serial1.println("Scanning available networks...");
   int numSsid = WiFi.scanNetworks();
   if (numSsid == -1) {
-    Serial.println("Couldn't get a WiFi connection");
+    Serial1.println("Couldn't get a WiFi connection");
     return;
   }
 
-  Serial.print("Number of available networks: ");
-  Serial.println(numSsid);
+  Serial1.print("Number of available networks: ");
+  Serial1.println(numSsid);
 
   for (int thisNet = 0; thisNet < numSsid; thisNet++) {
-    Serial.print(thisNet);
-    Serial.print(") ");
-    Serial.print(WiFi.SSID(thisNet));
-    Serial.print("\tSignal: ");
-    Serial.print(WiFi.RSSI(thisNet));
-    Serial.print(" dBm");
+    Serial1.print(thisNet);
+    Serial1.print(") ");
+    Serial1.print(WiFi.SSID(thisNet));
+    Serial1.print("\tSignal: ");
+    Serial1.print(WiFi.RSSI(thisNet));
+    Serial1.print(" dBm");
 
   }
+  Serial1.println();
 }
 

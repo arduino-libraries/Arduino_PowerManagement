@@ -47,6 +47,8 @@ void Battery::begin(){
   }
 }
 
+
+
 unsigned int Battery::readVoltage(){
   return readRegister16(this->_wire, DEVICE_ADDRESS, VCELL_REG) * VOLTAGE_MULTIPLIER;
 
