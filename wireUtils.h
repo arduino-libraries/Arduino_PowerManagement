@@ -9,7 +9,7 @@
 #define toHighByte(w)             ((uint8_t) ((w) >> 8))
 #define toUint16(highB, lowB)     ((uint16_t)((uint8_t)highB << 8) + (uint8_t)lowB)
 #define BV(bit)                   (1 <<(bit))
-#define setBit(byte, bit)         (byte |= BV(bit))
+//#define setBit(byte, bit)         (byte |= BV(bit))
 #define clearBit(byte, bit)       (byte &= ~BV(bit))
 #define toggleBit(byte, bit)      (byte ^= BV(bit))
 

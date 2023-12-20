@@ -56,6 +56,8 @@ class Board {
         #endif 
 
         #if defined(ARDUINO_PORTENTA_C33)
+        void lowPowerMode(bool on);
+
         /**
          * @brief Set the communication power rail switch state on Portenta C33
          * @param on True to turn on the switches, false to turn them off.
