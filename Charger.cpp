@@ -3,7 +3,9 @@
 
 Charger::Charger(){}
 
-Charger::Charger(PF1550* _pPMIC) : pPMIC(_pPMIC) {}
+Charger::Charger(PF1550* _pPMIC) : pPMIC(_pPMIC) {
+
+}
 
 void Charger::setChargeCurrent(ChargeCurrent i) {
     pPMIC -> getControlPointer() -> setFastChargeCurrent(i);
@@ -34,6 +36,9 @@ bool Charger::disableCharger(){
 ChargeStatus Charger::getChargeStatus(){
     uint16_t reg_val = this -> pPMIC ->  readPMICreg(Register::CHARGER_CHG_SNS);
     uint16_t bits3to0 = extractBits(reg_val, 0, 3);
+
+    uint16_t temp_reg = this -> pPMIC ->  readPMICreg(Register::CHARGER_THM_REG_CNFG);
+    Serial.println(temp_reg, HEX);
 
     switch (bits3to0) {
         case 0:

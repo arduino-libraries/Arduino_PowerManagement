@@ -109,6 +109,12 @@ class Battery {
         void begin();
 
         /**
+         * @brief Checks if a battery is connected to the system. 
+         * @return True if a battery has been connected, false otherwise
+        */
+        boolean isConnected();
+
+        /**
          * @brief Reads the current voltage of the battery.
          * @return The current voltage in millivolts (mV).
         */

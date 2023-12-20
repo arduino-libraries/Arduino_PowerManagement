@@ -192,4 +192,3 @@ board.setCameraSwitch(false);
 
 ## Known limitations 
 * Charging parameters cannot be changed on Nicla Vision
-* Charging is not supported on Portenta C33 

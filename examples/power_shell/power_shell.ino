@@ -27,47 +27,47 @@ void printChargerStatus(){
 
         switch (status) {
         case PRECHARGE:
-            Serial1.println("precharge");
+            Serial.println("precharge");
             // Additional code specific to precharge
             break;
         case FAST_CHARGE_CC:
-            Serial1.println("fast-charge constant current");
+            Serial.println("fast-charge constant current");
             // Additional code specific to fast-charge CC
             break;
         case FAST_CHARGE_CV:
-            Serial1.println("fast-charge constant voltage");
+            Serial.println("fast-charge constant voltage");
             // Additional code specific to fast-charge CV
             break;
         case END_OF_CHARGE:
-            Serial1.println("end-of-charge");
+            Serial.println("end-of-charge");
             // Additional code specific to end-of-charge
             break;
         case DONE:
-            Serial1.println("done");
+            Serial.println("done");
             // Additional code specific to done
             break;
         case TIMER_FAULT:
-            Serial1.println("timer fault");
+            Serial.println("timer fault");
             // Additional code specific to timer fault
             break;
         case THERMISTOR_SUSPEND:
-            Serial1.println("thermistor suspend");
+            Serial.println("thermistor suspend");
             // Additional code specific to thermistor suspend
             break;
         case OFF:
-            Serial1.println("off");
+            Serial.println("off");
             // Additional code specific to off
             break;
         case BATTERY_OVERVOLTAGE:
-            Serial1.println("overvoltage condition");
+            Serial.println("overvoltage condition");
             // Additional code specific to battery overvoltage condition
             break;
         case LINEAR_ONLY:
-            Serial1.println("disabled");
+            Serial.println("disabled");
             // Additional code specific to linear only
             break;
         default:
-            Serial1.println("unknown");
+            Serial.println("unknown");
             // Additional code for handling unknown status
             break;
     }
@@ -75,17 +75,17 @@ void printChargerStatus(){
 
 void status(){
     
-  Serial1.println("BOARD: \n--------------------------");
-  Serial1.print("* Powered by usb: "); Serial1.println(board.isUSBPowered());
-  Serial1.print("* Powered by battery: "); Serial1.println(board.isBatteryPowered()); 
-  Serial1.println();
+  Serial.println("BOARD: \n--------------------------");
+  Serial.print("* Powered by usb: "); Serial.println(board.isUSBPowered());
+  Serial.print("* Powered by battery: "); Serial.println(board.isBatteryPowered()); 
+  Serial.println();
   
-  Serial1.println("CHARGER: \n--------------------------");
-  Serial1.print("* Charger status: "); printChargerStatus();
-  Serial1.println();
+  Serial.println("CHARGER: \n--------------------------");
+  Serial.print("* Charger status: "); printChargerStatus();
+  Serial.println();
 
-  Serial1.println("BATTERY: \n--------------------------");
-  Serial1.println(
+  Serial.println("BATTERY: \n--------------------------");
+  Serial.println(
     "* Voltage: " + String(battery.readVoltageAvg()) + "mV \n" +
     "* Current: " + String(battery.readCurrent()) + "mA \n" + 
     "* Percentage: " + String(battery.readPercentage()) + "% \n" +
@@ -102,39 +102,39 @@ void setRailVoltage(std::vector<String> args){
 
   if(rail == "C33_reference"){
     #if defined(ARDUINO_PORTENTA_C33)
-      if(board.setReferenceVoltage(voltage)) Serial1.println("Succesfully changed reference voltage");
-      else Serial1.println("Failed to set reference voltage");
+      if(board.setReferenceVoltage(voltage)) Serial.println("Succesfully changed reference voltage");
+      else Serial.println("Failed to set reference voltage");
     #else
-      Serial1.println("Current board is not an arduino portenta c33");
+      Serial.println("Current board is not an arduino portenta c33");
     #endif
   } else if (rail == "C33_analog"){
     #if defined(ARDUINO_PORTENTA_C33)
-      if(board.setAnalogVoltage(voltage)) Serial1.println("Succesfully set analog voltage");
-      else Serial1.println("Failed to set analog voltage");
+      if(board.setAnalogVoltage(voltage)) Serial.println("Succesfully set analog voltage");
+      else Serial.println("Failed to set analog voltage");
     #else
-      Serial1.println("Current board is not an arduino portenta c33");
+      Serial.println("Current board is not an arduino portenta c33");
     #endif
 
   } else if (rail == "C33_external"){
     #if defined(ARDUINO_PORTENTA_C33)
-      if(board.setExternalVoltage(voltage)) Serial1.println("Succesfully set external voltage");
-      else Serial1.println("Failed to set external voltage");
+      if(board.setExternalVoltage(voltage)) Serial.println("Succesfully set external voltage");
+      else Serial.println("Failed to set external voltage");
     #else
-      Serial1.println("Current board is not an arduino portenta c33");
+      Serial.println("Current board is not an arduino portenta c33");
     #endif
 
   } else if (rail == "H7_external"){
     #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
       board.setExternalVoltage(voltage);
     #else
-      Serial1.println("Current board is not an arduino portenta h7");
+      Serial.println("Current board is not an arduino portenta h7");
     #endif
 
   } else if (rail == "nicla_external"){
     #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
       board.setExternalVoltage(voltage);
     #else
-      Serial1.println("Current board is not an arduino nicla vision");
+      Serial.println("Current board is not an arduino nicla vision");
     #endif
 
   }
@@ -148,62 +148,62 @@ void toggleRail(std::vector<String> args){
     #if defined(ARDUINO_PORTENTA_C33)
       board.setExternalSwitch(on);
     #else
-      Serial1.println("Current board is not an arduino portenta c33");
+      Serial.println("Current board is not an arduino portenta c33");
     #endif
 
   } else if (rail == "C33_communication"){
     #if defined(ARDUINO_PORTENTA_C33)
       board.setCommunicationSwitch(on);
     #else
-      Serial1.println("Current board is not an arduino portenta c33");
+      Serial.println("Current board is not an arduino portenta c33");
     #endif
 
   } else if (rail == "H7_external"){
     #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
       board.setExternalSwitch(on);
     #else
-      Serial1.println("Current board is not an arduino portenta h7");
+      Serial.println("Current board is not an arduino portenta h7");
     #endif
 
   } else if (rail == "nicla_external"){
     #if defined(ARDUINO_NICLA_VISION)
      board.setExternalSwitch(on);
     #else
-      Serial1.println("Current board is not an arduino nicla vision");
+      Serial.println("Current board is not an arduino nicla vision");
     #endif
 
   } else if (rail == "nicla_camera"){
     #if defined(ARDUINO_NICLA_VISION)
      board.setCameraSwitch(on);
     #else
-      Serial1.println("Current board is not an arduino nicla vision");
+      Serial.println("Current board is not an arduino nicla vision");
     #endif
   }
 }
 
 void toggleCharger(std::vector<String> args){
   bool on = atoi(args[1].c_str()) == 1;
-  Serial1.println(on);
+  Serial.println(on);
 
 
   if(on){
     if(charger.enableCharger()){
-      Serial1.println("> Charger enabled");
+      Serial.println("> Charger enabled");
     } else {
-      Serial1.println("> Error enabling charger");
+      Serial.println("> Error enabling charger");
     }
 
   } else {
     charger.disableCharger();
-    Serial1.println("> Charger disabled");
+    Serial.println("> Charger disabled");
   }
 }
 
 
 
 void setup() {
-  Serial1.begin(115200);
-  while (!Serial1);
+  Serial.begin(115200);
+  while (!Serial);
 
   manager = PowerManagement();
   manager.begin();
@@ -215,14 +215,14 @@ void setup() {
 
   #if !defined(ARDUINO_NICLA_VISION)
     charger.setChargeCurrent(ChargeCurrent::I_200_mA);
-    charger.setChargeVoltage(ChargeVoltage::V_3_80);
+    charger.setChargeVoltage(ChargeVoltage::V_4_20);
     charger.setEndOfChargeCurrent(EndOfChargeCurrent::I_5_mA);
   #endif
 }
 
 void loop() {
-  if (Serial1.available() > 0) {
-    String input = Serial1.readString();
+  if (Serial.available() > 0) {
+    String input = Serial.readString();
     input.trim();
     std::vector<String> args = splitString(input);
 
@@ -238,10 +238,10 @@ void loop() {
         status();
 
       } else {
-        Serial1.println("Unknown command: " + command);
+        Serial.println("Unknown command: " + command);
       }
 
-      Serial1.println();
+      Serial.println();
     }
   }
 }

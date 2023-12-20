@@ -4,6 +4,8 @@
 #define CAPACITY 200
 #define V_EMPTY 3000
 
+#define BATTERY_STATUS_BIT 3 
+
 #include "Battery.h"
 
 Battery::Battery() {
@@ -48,58 +50,106 @@ void Battery::begin(){
 }
 
 
+bool Battery::isConnected(){
+  uint16_t statusRegister = readRegister16(this->_wire, DEVICE_ADDRESS, STATUS_REG);
+  Serial.println("Insertion bit: " +  String(getBitFromOffset(statusRegister, BATTERY_STATUS_BIT)));
+  //replaceRegisterBits(this->_wire, DEVICE_ADDRESS, STATUS_REG, 0, 0x01, 11);
+  Serial.println("Removal bit: " + String(getBitFromOffset(statusRegister, BATTERY_STATUS_BIT)));
+  //replaceRegisterBits(this->_wire, DEVICE_ADDRESS, STATUS_REG, 0, 0x01, 15);
+  return getBitFromOffset(statusRegister, BATTERY_STATUS_BIT) == 0;
+}
+
 
 unsigned int Battery::readVoltage(){
-  return readRegister16(this->_wire, DEVICE_ADDRESS, VCELL_REG) * VOLTAGE_MULTIPLIER;
-
+  if(isConnected()){
+    return readRegister16(this->_wire, DEVICE_ADDRESS, VCELL_REG) * VOLTAGE_MULTIPLIER;
+  } else {
+    return 0;
+  }
 }
 
 unsigned int Battery::readVoltageAvg(){
-  return readRegister16(this->_wire, DEVICE_ADDRESS, AVG_VCELL_REG) * VOLTAGE_MULTIPLIER;
+  if(isConnected()){
+      return readRegister16(this->_wire, DEVICE_ADDRESS, AVG_VCELL_REG) * VOLTAGE_MULTIPLIER;
+  } else {
+    return 0;
+  }
 }
 
 int Battery::readTemp(){
-  return readRegister16(this->_wire, DEVICE_ADDRESS, TEMP_REG) >> 8;
-
+  if(isConnected()){
+    return readRegister16(this->_wire, DEVICE_ADDRESS, TEMP_REG) >> 8;
+  } else {
+    return 0;
+  }
 }
 
 int Battery::readTempAvg(){
-  return readRegister16(this->_wire, DEVICE_ADDRESS, AVG_TA_REG) >> 8;
-
+  if(isConnected()){
+    return readRegister16(this->_wire, DEVICE_ADDRESS, AVG_TA_REG) >> 8;
+  } else {
+    return 0;
+  }
+  
 }
 
 int Battery::readCurrent(){
-  return (int16_t)readRegister16(this->_wire, DEVICE_ADDRESS, CURRENT_REG) * CURRENT_MULTIPLIER;
-
+  if(isConnected()){
+    return (int16_t)readRegister16(this->_wire, DEVICE_ADDRESS, CURRENT_REG) * CURRENT_MULTIPLIER;
+  } else {
+    return 0;
+  }
 }
 
 int Battery::readCurrentAvg(){
-  return (int16_t)readRegister16(this->_wire, DEVICE_ADDRESS, AVG_CURRENT_REG) * CURRENT_MULTIPLIER;
-
+  if(isConnected()){
+      return (int16_t)readRegister16(this->_wire, DEVICE_ADDRESS, AVG_CURRENT_REG) * CURRENT_MULTIPLIER;
+  } else {
+    return 0;
+  }
 }
 
 unsigned int Battery::readPercentage(){
-  return readRegister16(this->_wire, DEVICE_ADDRESS, AV_SOC_REG) >> 8;
+  if(isConnected()){
+      return readRegister16(this->_wire, DEVICE_ADDRESS, AV_SOC_REG) >> 8;
+  } else {
+    return 0;
+  }
+
 }
 
-unsigned int Battery::readTimeToEmpty()
-{
-  return readRegister16(this->_wire, DEVICE_ADDRESS, TTE_REG) * TIME_MULTIPLIER / 60000;
+unsigned int Battery::readTimeToEmpty(){
+  if(isConnected()){
+     return readRegister16(this->_wire, DEVICE_ADDRESS, TTE_REG) * TIME_MULTIPLIER / 60000;
+  } else {
+    return 0;
+  }
+ 
 }
 
-unsigned int Battery::readTimeToFull()
-{
-  return readRegister16(this->_wire, DEVICE_ADDRESS, TTF_REG) * (TIME_MULTIPLIER / 60000);
+unsigned int Battery::readTimeToFull(){
+  if(isConnected()){
+    return readRegister16(this->_wire, DEVICE_ADDRESS, TTF_REG) * (TIME_MULTIPLIER / 60000);
+  } else {
+    return 0;
+  }
+ 
 }
 
-unsigned int Battery::readRemainingCapacity()
-{
-  return readRegister16(this->_wire, DEVICE_ADDRESS, REP_CAP_REG) * CAP_MULTIPLIER;
+unsigned int Battery::readRemainingCapacity(){
+  if(isConnected()){
+    return readRegister16(this->_wire, DEVICE_ADDRESS, REP_CAP_REG) * CAP_MULTIPLIER;
+  } else {
+    return 0;
+  }
 }
 
-unsigned int Battery::readReportedCapacity()
-{
-  return readRegister16(this->_wire, DEVICE_ADDRESS, FULL_CAP_REP_REG) * CAP_MULTIPLIER;
+unsigned int Battery::readReportedCapacity(){
+  if(isConnected()){
+    return readRegister16(this->_wire, DEVICE_ADDRESS, FULL_CAP_REP_REG) * CAP_MULTIPLIER;
+  } else {
+    return 0;
+  }
 }
 
 

@@ -25,7 +25,7 @@ PowerManagement::PowerManagement(){
  * @brief start communication with the PMIC chip and the power gauge. 
 */
 void PowerManagement::begin(){
-    this -> pPMIC -> begin();
+    Serial.println("Is this properly initialised:" + String(this -> pPMIC -> begin()));
     this -> battery -> begin();
 }
 

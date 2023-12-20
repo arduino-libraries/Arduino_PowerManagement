@@ -16,6 +16,7 @@ bool Board::isUSBPowered() {
 bool Board::isBatteryPowered() {
     uint8_t reg_val = this -> pPMIC ->  readPMICreg(Register::CHARGER_BATT_SNS);
     uint8_t batPower = extractBits(reg_val, 0, 2);
+    Serial.println(batPower);
     return batPower == 0;
 }
 
