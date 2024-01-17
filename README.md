@@ -168,6 +168,8 @@ board.setCommunicationSwitch(false);
 **NOTE:** This command turns off the power to the Secure Element as well, so if you would like to connect your board to Ethernet you will lose access to secure communications. 
 
 
+
+
 To change the reference voltage (AREF) use this method:
 ```cpp
 board.setReferenceVoltage(1.80);
