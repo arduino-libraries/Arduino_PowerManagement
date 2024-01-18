@@ -1,0 +1,27 @@
+name: Render Documentation
+
+on:
+  push:
+    paths:
+      - ".github/workflows/render-documentation.ya?ml"
+      - "examples/**"
+      - "src/**"
+  pull_request:
+    paths:
+      - ".github/workflows/render-documentation.ya?ml"
+      - "examples/**"
+      - "src/**"
+  workflow_dispatch:
+      
+jobs:
+  render-docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: sebromero/render-docs-github-action@main
+      with:
+        source-path: './src'
+        target-path: './docs/api.md'

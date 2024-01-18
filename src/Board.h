@@ -64,11 +64,9 @@ class Board {
         #endif 
 
         #if defined(ARDUINO_PORTENTA_C33)
-        void enableWakeupFromPin(uint8_t pin);
+        void enableWakeupFromPin(uint8_t pin, PinState state);
 
         void enableWakeupFromRTC();
-
-        void delay(long ms);
 
         bool sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)());
         

@@ -44,8 +44,7 @@ void setup() {
     if (!RTC.isRunning()) RTC.setTime(initial_time);
     board.sleepFor(0, 0, 10, alarmCallback);
 
-    
-    charger.disableCharger();
+
 
     Serial.begin(115200);
     //while(!Serial);
