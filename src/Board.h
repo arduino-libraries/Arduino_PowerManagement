@@ -52,19 +52,12 @@ class Board {
          * @return True if successful, false otherwise.
         */
         bool setExternalVoltage(float v); 
-
-  
-
     
-        #if defined(ARDUINO_NICLA_VISION)
         /**
          * @brief Set the camera power rail switch state on Nicla Vision.
          * @param on True to turn on the switches, false to turn them off.
         */
         void setCameraSwitch(bool on); 
-        #endif 
-
-        #if defined(ARDUINO_PORTENTA_C33)
 
         /**
          * Enables wake-up of the device from a specified pin (A0, A1, A2, A3, A4, A5, D4, D7 )
@@ -232,4 +225,4 @@ static inline uint8_t getRailVoltage(float voltage, int context) {
 }
 
 
-#endif
+

@@ -46,10 +46,8 @@ bool Board::setExternalVoltage(float v) {
 }
 
 
-
-
-#if defined(ARDUINO_NICLA_VISION)
 void Board::setCameraSwitch(bool on) {
+    #if defined(ARDUINO_NICLA_VISION)
         if(on){
             this -> pPMIC -> getControlPointer() -> turnLDO1On(Ldo1Mode::Normal);
             this -> pPMIC -> getControlPointer() -> turnLDO2On(Ldo2Mode::Normal);
@@ -59,23 +57,31 @@ void Board::setCameraSwitch(bool on) {
             this -> pPMIC -> getControlPointer() -> turnLDO2Off(Ldo2Mode::Normal);
             this -> pPMIC -> getControlPointer() -> turnLDO3Off(Ldo3Mode::Normal);
         }
+    #else 
+        #
+    #endif
 }
-#endif
 
-#if defined(ARDUINO_PORTENTA_C33)
-
-    void Board::enableWakeupFromPin(uint8_t pin, PinStatus direction){
+void Board::enableWakeupFromPin(uint8_t pin, PinStatus direction){
+    #if defined(ARDUINO_PORTENTA_C33)
         pLowPower -> enableWakeupFromPin(pin, direction);
-    }
+    #else 
+        #
+    #endif
+}
 
-    void Board::enableWakeupFromRTC(){
+void Board::enableWakeupFromRTC(){
+    #if defined(ARDUINO_PORTENTA_C33)
         pLowPower -> enableWakeupFromRTC();
-    }
+    #else 
+        #
+    #endif
+}
 
 
-    bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)(), RTClock * rtc){
-    {
-        
+
+bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)(), RTClock * rtc){
+    #if defined(ARDUINO_PORTENTA_C33)    
                 RTCTime currentTime;
                 if (!rtc -> getTime(currentTime)) {
                     Serial.println("Failed to get current time"); 
@@ -103,19 +109,30 @@ void Board::setCameraSwitch(bool on) {
                 }
                 delay(1);
 
-                pLowPower -> deepSleep();
+
 
                 return true;
-        }
-    }
+    #else 
+        #
+    #endif
+}
+    
 
-    void Board::sleepUntilWakeupEvent(){
+void Board::sleepUntilWakeupEvent(){
+    #if defined(ARDUINO_PORTENTA_C33)
         pLowPower -> sleep();
-    }
+    #else 
+        #
+    #endif
+}
 
-    void Board::deepSleepUntilWakeupEvent(){
+void Board::deepSleepUntilWakeupEvent(){
+    #if defined(ARDUINO_PORTENTA_C33)
         pLowPower -> deepSleep();
-    }
+    #else 
+        #
+    #endif
+}
 
     void Board::turnPeripheralsOff(){
             this -> pPMIC -> getControlPointer() -> turnLDO1Off(Ldo1Mode::Normal);
@@ -199,5 +216,4 @@ void Board::setCameraSwitch(bool on) {
         }
     }
 
-#endif
 

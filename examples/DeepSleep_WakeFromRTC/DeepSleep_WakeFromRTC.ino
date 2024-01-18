@@ -21,12 +21,7 @@ static void alarmCallback()
 }
 
 
-
-
-
-
 void setup() {
-
     RTC.begin();
     
     manager = PowerManagement();
@@ -42,15 +37,10 @@ void setup() {
         board.sleepFor(0, 0, 1, &alarmCallback, &RTC);
     }
 
-
-
     pinMode(LED_BUILTIN, OUTPUT);
     digitalWrite(LED_BUILTIN, LOW);
 
  
-
-
-
 }
 
 void loop(){
