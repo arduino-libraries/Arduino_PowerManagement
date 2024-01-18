@@ -1,3 +1,4 @@
+# Arduino PowerManagement Documentation
 
 ## Usage 
 
@@ -21,7 +22,8 @@ void setup(){
 }
 ```
 
-### Battery
+
+## Battery
 The battery object contains methods to read battery usage and health metrics. You can get current and average values for voltage, percentage, current and time as well as an estimated of the time left to charge completely and time left to discharge. 
 
 ```cpp
@@ -48,7 +50,7 @@ Serial.println(String(battery.readTimeToEmpty()) + "s");
 
 ```
 
-### Charger 
+## Charger 
 Charging a LiPo battery is done in three stages. This library allows you to monitor what charging stage we are in as well as control some of the chagring parameters. 
 
 * **Pre-charge** - First phase of the charging process where the battery is charged at a low constant current and is slowly increased until it reaches the full *charge current*
@@ -103,7 +105,7 @@ charger.setEndOfChargeCurrent(EndOfChargeCurrent::I_5_mA);
 
 *EndOfChargeCurrent* is an enum with the following values (`I_5_mA`, `I_10_mA`, `I_20_mA`, `I_30_mA`, `I_50_mA`).
 
-### Board
+## Board
 The PF1550 power management IC has three LDO regulators, and three DCDC converters, each of these have a configurable voltage range and can be turned on and off. 
 The implementation of these regulators and the power rails rails differs from board to board, for example on the Nicla Vision, some of the rails are dedicated to the voltages required by the camera, while on the Portenta H7 some of these rails are dedicated to the rich USB-C functionality.
 
@@ -153,7 +155,6 @@ board.setAnalogVoltage();
 The analog voltage can be set to any of the following values: 0.75V, 0.80V, 0.85V, 0.90V, 0.95V, 1.00V, 1.05V, 1.10V, 1.15V, 1.20V, 1.25V, 1.30V, 1.35V, 1.40V, 1.45V, 1.50V, 1.80V, 1.90V, 2.00V, 2.10V, 2.20V, 2.30V, 2.40V, 2.50V, 2.60V, 2.70V, 2.80V, 2.90V, 3.00V, 3.10V, 3.20V, 3.30V. Any value outside this range or with different steps will not be accepted by the library.
 
 
-
 #### Nicla Vision
 On the Nicla Vision board you can turn the rails that power the cameras and ToF sensor on and off: 
 ```cpp
@@ -162,5 +163,5 @@ board.setCameraSwitch(false);
 
 **NOTE:** Any change to the power rails persists even if the board is disconnected from power. Make sure you design your solution accordingly. 
 
-## Known limitations 
-* Charging parameters cannot be changed on Nicla Vision
+### Sleep Modes 
+

@@ -1,6 +1,7 @@
 #ifndef BOARD_H
 #define BOARD_H
 
+#include <Arduino.h>
 #include <Arduino_PMIC.h>
 #include "wireUtils.h"
 #include "RTC.h"
@@ -64,22 +65,55 @@ class Board {
         #endif 
 
         #if defined(ARDUINO_PORTENTA_C33)
-        void enableWakeupFromPin(uint8_t pin, PinState state);
 
+        /**
+         * Enables wake-up of the device from a specified pin (A0, A1, A2, A3, A4, A5, D4, D7 )
+         * @param pin The pin number used for waking up the device.
+         * @param direction The direction of the interrupt that will wake up the device. (RISING, FALLING)
+         */
+        void enableWakeupFromPin(uint8_t pin, PinStatus state);
+
+        /**
+         * Enables wake-up of the device from the RTC.
+         */
         void enableWakeupFromRTC();
 
-        bool sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)());
+
+        /**
+         * @brief Put the device in sleep mode for a specified amount of time.
+         * @param hours The number of hours to sleep.
+         * @param minutes The number of minutes to sleep.
+         * @param seconds The number of seconds to sleep.
+         * @param callbackFunction The function to call when the device wakes up.
+         * @param RTC The RTC instance to use for the sleep function.
+         * @return True if successful, false otherwise.
+        */
+        bool sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)(), RTClock * rtc);
+
         
+        /**
+         * @brief Put the device into sleep mode until a wakeup event occurs.
+         */
         void sleepUntilWakeupEvent();
 
-        void standBy();
+        /**
+         * @brief Put the device into deep sleep mode until a wakeup event occurs.
+         */
+        void deepSleepUntilWakeupEvent();
 
+
+        /**
+         * @brief Turn the peripherals on Portenta C33 (ADC, RGB LED, Secure Element, Wifi and Bluetooth) off.
+        */
         void turnPeripheralsOff();
 
+        /**
+         * @brief Turn the peripherals on Portenta C33 back on. (ADC, RGB LED, Secure Element, Wifi and Bluetooth)
+        */
         void turnPeripheralsOn();
 
         /**
-         * @brief Set the communication power rail switch state on Portenta C33
+         * @brief Set the communication power rail switch state on Portenta C33 (Wifi, Bluetooth and Secure Element)
          * @param on True to turn on the switches, false to turn them off.
         */
         void setCommunicationSwitch(bool on);

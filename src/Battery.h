@@ -118,67 +118,52 @@ class Battery {
          * @brief Reads the current voltage of the battery.
          * @return The current voltage in millivolts (mV).
         */
-        unsigned int readVoltage();
+        unsigned int voltage();
 
         /**
          * @brief Reads the average voltage of the battery.
          * @return The average voltage in millivolts (mV). 
         */
-        unsigned int readVoltageAvg();
+        unsigned int voltageAverage();
 
         /**
          * @brief Reads the instantaneous current of the battery.
          * @return The instantaneous current in miliamperes (mA)
         */
-        int readCurrent();
+        int current();
 
         /**
          * @brief Reads the average current of the battery.
          * @return The average current in millivolts (mV). 
         */
-        int readCurrentAvg();
+        int currentAverage();
 
         /**
          * @brief Reads the current temperature of the battery.
          * @return The current temperature in degrees Celsius.
         */
-        int readTemp();
+        int temperature();
 
         /**
          * @brief Reads the average temperature of the battery.
          * @return The current temperature in degrees Celsius.
         */
-        int readTempAvg();
+        int temperatureAverage();
         
         /**
          * @brief Reads the battery's state of charge (SOC).
          * @return The state of charge as a percentage.
         */
-        unsigned int readPercentage();
+        unsigned int percentage();
 
-        /**
-         * @brief Reads the estimated time to empty (discharge) of the battery.
-         * @return The estimated time to empty in minutes.
-        */
-        unsigned int readTimeToEmpty();
-
-        /**
-         * @brief Reads the estimated time to full (charge) of the battery.
-         * @return The estimated time to full in minutes.
-        */
-        unsigned int readTimeToFull();
 
         /**
          * @brief Reads the remaining capacity of the battery.
          * @return The remaining capacity in milliampere-hours (mAh).
         */
-        unsigned int readRemainingCapacity();
+        unsigned int remainingCapacity();
 
-        /**
-         * @brief Reads the reported capacity of the battery.
-         * @return The reported capacity in milliampere-hours (mAh).
-        */
-        unsigned int readReportedCapacity();
+
 
     private:
           #if defined(ARDUINO_PORTENTA_C33)

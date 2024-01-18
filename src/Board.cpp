@@ -64,25 +64,25 @@ void Board::setCameraSwitch(bool on) {
 
 #if defined(ARDUINO_PORTENTA_C33)
 
-    void Board::enableWakeupFromPin(uint8_t pin){
-        pLowPower -> enableWakeupFromPin(pin);
+    void Board::enableWakeupFromPin(uint8_t pin, PinStatus direction){
+        pLowPower -> enableWakeupFromPin(pin, direction);
     }
 
     void Board::enableWakeupFromRTC(){
         pLowPower -> enableWakeupFromRTC();
     }
 
-    void Board::delay(long ms){
-        pLowPower -> delay(ms);
-    }
 
-    bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)()){
+    bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)(), RTClock * rtc){
     {
         
                 RTCTime currentTime;
-                if (!RTC.getTime(currentTime)) {
+                if (!rtc -> getTime(currentTime)) {
+                    Serial.println("Failed to get current time"); 
                     return false; // Failed to get current time
                 }
+                delay(1);
+
 
                 // Convert current time to UNIX timestamp and add the desired interval
                 time_t currentTimestamp = currentTime.getUnixTime();
@@ -98,20 +98,21 @@ void Board::setCameraSwitch(bool on) {
                 match.addMatchHour();   // Trigger the alarm when the hours match
 
                 // Set the alarm callback (assuming you have a callback function named alarmCallback)
-                if (!RTC.setAlarmCallback(callbackFunction, alarmTime, match)) {
+                if (!rtc -> setAlarmCallback(callbackFunction, alarmTime, match)) {
                     return false; // Failed to set the alarm
                 }
+                delay(1);
 
                 return true;
         }
     }
 
     void Board::sleepUntilWakeupEvent(){
-        pLowPower -> deepSleep();
+        pLowPower -> sleep();
     }
 
-    void Board::standBy(){
-
+    void Board::deepSleepUntilWakeupEvent(){
+        pLowPower -> deepSleep();
     }
 
     void Board::turnPeripheralsOff(){

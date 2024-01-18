@@ -73,13 +73,13 @@ public:
      * @brief Enable the charger.
      * @return True if successful, false otherwise.
      */
-    bool enableCharger();
+    bool enable();
 
     /**
      * @brief Disable the charger.
      * @return True if successful, false otherwise.
      */
-    bool disableCharger();
+    bool disable();
 
 private:
     PF1550* pPMIC; /**< Pointer to the PF1550 PMIC instance. */

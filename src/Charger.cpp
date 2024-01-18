@@ -23,12 +23,12 @@ void Charger::setMaxInputCurrent(MaxInputCurrent i) {
     pPMIC -> getControlPointer() -> setInputCurrentLimit(i);
 }
 
-bool Charger::enableCharger(){
+bool Charger::enable(){
     pPMIC -> writePMICreg(Register::CHARGER_CHG_OPER, 0x02);
     return pPMIC->readPMICreg(Register::CHARGER_CHG_OPER) == 0x02;
 }
 
-bool Charger::disableCharger(){
+bool Charger::disable(){
     pPMIC -> writePMICreg(Register::CHARGER_CHG_OPER, 0x01);
     return pPMIC->readPMICreg(Register::CHARGER_CHG_OPER) == 0x01;
 }

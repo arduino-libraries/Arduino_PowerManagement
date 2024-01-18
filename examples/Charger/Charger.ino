@@ -41,7 +41,7 @@ void setup() {
 
   battery = manager.getBattery();
   charger = manager.getCharger();
-  charger.enableCharger();
+  charger.enable();
   #if !defined(ARDUINO_NICLA_VISION)
     charger.setChargeCurrent(ChargeCurrent::I_200_mA);
     charger.setChargeVoltage(ChargeVoltage::V_3_80);

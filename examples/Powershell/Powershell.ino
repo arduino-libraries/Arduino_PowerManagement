@@ -187,14 +187,14 @@ void toggleCharger(std::vector<String> args){
 
 
   if(on){
-    if(charger.enableCharger()){
+    if(charger.enable()){
       Serial.println("> Charger enabled");
     } else {
       Serial.println("> Error enabling charger");
     }
 
   } else {
-    charger.disableCharger();
+    charger.disable();
     Serial.println("> Charger disabled");
   }
 }

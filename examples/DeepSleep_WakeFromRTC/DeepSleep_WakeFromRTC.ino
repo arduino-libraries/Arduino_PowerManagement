@@ -14,9 +14,9 @@ Charger charger;
 static void alarmCallback()
 {   
     board.turnPeripheralsOn();
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(500);
     digitalWrite(LED_BUILTIN, HIGH);
+    delay(500);
+    digitalWrite(LED_BUILTIN, LOW);
     board.turnPeripheralsOff();
     lowPower.deepSleep();
 }
@@ -27,27 +27,34 @@ static void alarmCallback()
 
 
 void setup() {
-    lowPower = LowPower();
-    lowPower.enableWakeupFromRTC();
+
+    RTC.begin();
+    
 
     manager = PowerManagement();
     manager.begin();
     board = manager.getBoard();
     charger = manager.getCharger();
 
+    lowPower = LowPower();
+    lowPower.enableWakeupFromRTC();
+
+   
+    if (!RTC.isRunning()) {
+        RTC.setTime(initial_time);
+        board.sleepFor(0, 0, 1, &alarmCallback, &RTC);
+    }
+
+
     board.turnPeripheralsOn();
-    charger.disableCharger();
 
     pinMode(LED_BUILTIN, OUTPUT);
+    digitalWrite(LED_BUILTIN, LOW);
 
-    RTC.begin();
-    if (!RTC.isRunning()) RTC.setTime(initial_time);
-    board.sleepFor(0, 0, 10, alarmCallback);
-
+ 
 
 
-    Serial.begin(115200);
-    //while(!Serial);
+
 }
 
 void loop(){

@@ -1,7 +1,7 @@
 
 #include "Arduino.h"
-#include "PowerManagement.h"
-#include "LowPower.h"
+#include "Arduino_PowerManagement.h"
+
 
 #define WAKE_PIN A3
 #define SLEEP_PIN 0
@@ -20,9 +20,9 @@ void setup() {
 
     attachInterrupt(digitalPinToInterrupt(SLEEP_PIN), sleep, RISING);
 
-    board.enableWakeupFromPin(WAKE_PIN);
-    //board.turnPeripheralsOn();
-    charger.disableCharger();
+    board.enableWakeupFromPin(WAKE_PIN, RISING);
+    board.turnPeripheralsOn();
+    charger.disable();
 
     pinMode(LED_BUILTIN, OUTPUT);
 }
