@@ -16,17 +16,14 @@
 | [`Battery`](#class_battery_1a36a6234c583e3b3506f4a77e3eb49989) | Constructor for the [Battery](#class_battery) class. |
 | [`begin`](#class_battery_1ae22175033a63ac6cf222973f2498d193) | Initializes the battery communication and configuration. |
 | [`isConnected`](#class_battery_1a9473c4a4583abea991268d0818f19dbe) | Checks if a battery is connected to the system. |
-| [`readVoltage`](#class_battery_1acd8af093394d3e3924177a04691c8bce) | Reads the current voltage of the battery. |
-| [`readVoltageAvg`](#class_battery_1a1922eebd2c523fbc8840b43f35ed0f86) | Reads the average voltage of the battery. |
-| [`readCurrent`](#class_battery_1a0e0fa178fc254bc51e2cfdc5993e7e6f) | Reads the instantaneous current of the battery. |
-| [`readCurrentAvg`](#class_battery_1a8db47947e4b0861604a9031e139ccf0b) | Reads the average current of the battery. |
-| [`readTemp`](#class_battery_1a089a732a1d40554234e6b655ec3a65f8) | Reads the current temperature of the battery. |
-| [`readTempAvg`](#class_battery_1ad9772edbb9968cd893ae0b8839ff876c) | Reads the average temperature of the battery. |
-| [`readPercentage`](#class_battery_1a86b221882856ca03f28999ceaff3d16d) | Reads the battery's state of charge (SOC). |
-| [`readTimeToEmpty`](#class_battery_1a5608f7ff0c966235988d2a38b966c033) | Reads the estimated time to empty (discharge) of the battery. |
-| [`readTimeToFull`](#class_battery_1a210a64027d2cc7db2a360901e6c8957f) | Reads the estimated time to full (charge) of the battery. |
-| [`readRemainingCapacity`](#class_battery_1a9fb236afa18c5d688e44f196a63adf4e) | Reads the remaining capacity of the battery. |
-| [`readReportedCapacity`](#class_battery_1ab519831bdfb5f6230e94393dc155adee) | Reads the reported capacity of the battery. |
+| [`voltage`](#class_battery_1a00b9ab137ea97c46da061537473b409f) | Reads the current voltage of the battery. |
+| [`voltageAverage`](#class_battery_1ad25a5eae3bc9c879fa673c29c4f2c524) | Reads the average voltage of the battery. |
+| [`current`](#class_battery_1acc60fb79f995897dbcad56535b4ddc7f) | Reads the instantaneous current of the battery. |
+| [`currentAverage`](#class_battery_1a4f7e36bc2d78754a9f3bf13f18ed16f2) | Reads the average current of the battery. |
+| [`temperature`](#class_battery_1a9769b18902c4576c3ed7405c7e58bbea) | Reads the current temperature of the battery. |
+| [`temperatureAverage`](#class_battery_1a898ee9d9492aee01489db146e8df163d) | Reads the average temperature of the battery. |
+| [`percentage`](#class_battery_1ae95736b1cd05268257937a00b20a707b) | Reads the battery's state of charge (SOC). |
+| [`remainingCapacity`](#class_battery_1afd66687ef99d7d2c88a501fa9dfaf579) | Reads the remaining capacity of the battery. |
 
 ## Members
 
@@ -62,10 +59,10 @@ Checks if a battery is connected to the system.
 True if a battery has been connected, false otherwise
 <hr />
 
-### `readVoltage` <a id="class_battery_1acd8af093394d3e3924177a04691c8bce" class="anchor"></a>
+### `voltage` <a id="class_battery_1a00b9ab137ea97c46da061537473b409f" class="anchor"></a>
 
 ```cpp
-public unsigned int readVoltage()
+public unsigned int voltage()
 ```
 
 Reads the current voltage of the battery.
@@ -74,10 +71,10 @@ Reads the current voltage of the battery.
 The current voltage in millivolts (mV).
 <hr />
 
-### `readVoltageAvg` <a id="class_battery_1a1922eebd2c523fbc8840b43f35ed0f86" class="anchor"></a>
+### `voltageAverage` <a id="class_battery_1ad25a5eae3bc9c879fa673c29c4f2c524" class="anchor"></a>
 
 ```cpp
-public unsigned int readVoltageAvg()
+public unsigned int voltageAverage()
 ```
 
 Reads the average voltage of the battery.
@@ -86,10 +83,10 @@ Reads the average voltage of the battery.
 The average voltage in millivolts (mV).
 <hr />
 
-### `readCurrent` <a id="class_battery_1a0e0fa178fc254bc51e2cfdc5993e7e6f" class="anchor"></a>
+### `current` <a id="class_battery_1acc60fb79f995897dbcad56535b4ddc7f" class="anchor"></a>
 
 ```cpp
-public int readCurrent()
+public int current()
 ```
 
 Reads the instantaneous current of the battery.
@@ -98,10 +95,10 @@ Reads the instantaneous current of the battery.
 The instantaneous current in miliamperes (mA)
 <hr />
 
-### `readCurrentAvg` <a id="class_battery_1a8db47947e4b0861604a9031e139ccf0b" class="anchor"></a>
+### `currentAverage` <a id="class_battery_1a4f7e36bc2d78754a9f3bf13f18ed16f2" class="anchor"></a>
 
 ```cpp
-public int readCurrentAvg()
+public int currentAverage()
 ```
 
 Reads the average current of the battery.
@@ -110,10 +107,10 @@ Reads the average current of the battery.
 The average current in millivolts (mV).
 <hr />
 
-### `readTemp` <a id="class_battery_1a089a732a1d40554234e6b655ec3a65f8" class="anchor"></a>
+### `temperature` <a id="class_battery_1a9769b18902c4576c3ed7405c7e58bbea" class="anchor"></a>
 
 ```cpp
-public int readTemp()
+public int temperature()
 ```
 
 Reads the current temperature of the battery.
@@ -122,10 +119,10 @@ Reads the current temperature of the battery.
 The current temperature in degrees Celsius.
 <hr />
 
-### `readTempAvg` <a id="class_battery_1ad9772edbb9968cd893ae0b8839ff876c" class="anchor"></a>
+### `temperatureAverage` <a id="class_battery_1a898ee9d9492aee01489db146e8df163d" class="anchor"></a>
 
 ```cpp
-public int readTempAvg()
+public int temperatureAverage()
 ```
 
 Reads the average temperature of the battery.
@@ -134,10 +131,10 @@ Reads the average temperature of the battery.
 The current temperature in degrees Celsius.
 <hr />
 
-### `readPercentage` <a id="class_battery_1a86b221882856ca03f28999ceaff3d16d" class="anchor"></a>
+### `percentage` <a id="class_battery_1ae95736b1cd05268257937a00b20a707b" class="anchor"></a>
 
 ```cpp
-public unsigned int readPercentage()
+public unsigned int percentage()
 ```
 
 Reads the battery's state of charge (SOC).
@@ -146,52 +143,16 @@ Reads the battery's state of charge (SOC).
 The state of charge as a percentage.
 <hr />
 
-### `readTimeToEmpty` <a id="class_battery_1a5608f7ff0c966235988d2a38b966c033" class="anchor"></a>
+### `remainingCapacity` <a id="class_battery_1afd66687ef99d7d2c88a501fa9dfaf579" class="anchor"></a>
 
 ```cpp
-public unsigned int readTimeToEmpty()
-```
-
-Reads the estimated time to empty (discharge) of the battery.
-
-#### Returns
-The estimated time to empty in minutes.
-<hr />
-
-### `readTimeToFull` <a id="class_battery_1a210a64027d2cc7db2a360901e6c8957f" class="anchor"></a>
-
-```cpp
-public unsigned int readTimeToFull()
-```
-
-Reads the estimated time to full (charge) of the battery.
-
-#### Returns
-The estimated time to full in minutes.
-<hr />
-
-### `readRemainingCapacity` <a id="class_battery_1a9fb236afa18c5d688e44f196a63adf4e" class="anchor"></a>
-
-```cpp
-public unsigned int readRemainingCapacity()
+public unsigned int remainingCapacity()
 ```
 
 Reads the remaining capacity of the battery.
 
 #### Returns
 The remaining capacity in milliampere-hours (mAh).
-<hr />
-
-### `readReportedCapacity` <a id="class_battery_1ab519831bdfb5f6230e94393dc155adee" class="anchor"></a>
-
-```cpp
-public unsigned int readReportedCapacity()
-```
-
-Reads the reported capacity of the battery.
-
-#### Returns
-The reported capacity in milliampere-hours (mAh).
 <hr />
 
 # class `Board` <a id="class_board" class="anchor"></a>
@@ -297,8 +258,8 @@ True if successful, false otherwise.
 | [`setEndOfChargeCurrent`](#class_charger_1af700e2c163f75f25173b3db85054edb5) | Set the end-of-charge current. |
 | [`setMaxInputCurrent`](#class_charger_1a7e6894f37c7d4a4554fd634a0d7405cc) | Set the maximum input current. |
 | [`getChargeStatus`](#class_charger_1a0c1c368e7b7cef05f9491efc4a576cb8) | Get the current charging status. |
-| [`enableCharger`](#class_charger_1aaf1b927bdc15214b64913fddf88f0208) | Enable the charger. |
-| [`disableCharger`](#class_charger_1a1584e0507a90236a72f56cf298cf77b5) | Disable the charger. |
+| [`enable`](#class_charger_1a6e7a92f5fb4ae1f016ff13d5c716a81f) | Enable the charger. |
+| [`disable`](#class_charger_1aa87840314777bb23a58cbead63407707) | Disable the charger. |
 
 ## Members
 
@@ -384,10 +345,10 @@ Get the current charging status.
 Charging status enum value (ChargeStatus).
 <hr />
 
-### `enableCharger` <a id="class_charger_1aaf1b927bdc15214b64913fddf88f0208" class="anchor"></a>
+### `enable` <a id="class_charger_1a6e7a92f5fb4ae1f016ff13d5c716a81f" class="anchor"></a>
 
 ```cpp
-public bool enableCharger()
+public bool enable()
 ```
 
 Enable the charger.
@@ -396,10 +357,10 @@ Enable the charger.
 True if successful, false otherwise.
 <hr />
 
-### `disableCharger` <a id="class_charger_1a1584e0507a90236a72f56cf298cf77b5" class="anchor"></a>
+### `disable` <a id="class_charger_1aa87840314777bb23a58cbead63407707" class="anchor"></a>
 
 ```cpp
-public bool disableCharger()
+public bool disable()
 ```
 
 Disable the charger.
