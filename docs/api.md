@@ -167,6 +167,17 @@ The remaining capacity in milliampere-hours (mAh).
 | [`isBatteryPowered`](#class_board_1a80a62c172bea4a16b6983f204380f92b) | Check if the board is powered by the battery. |
 | [`setExternalSwitch`](#class_board_1ae6128ca6cfee4780699646ded2971c10) | Set the external power lane switch state. |
 | [`setExternalVoltage`](#class_board_1ac85a176efa19e65c688fcb27b5170000) | Set the voltage for the external power rail. |
+| [`setCameraSwitch`](#class_board_1abfb2f9501dbcd20ebc0a2da9db0c8b86) | Set the camera power rail switch state on Nicla Vision. |
+| [`enableWakeupFromPin`](#class_board_1a001bd0741f8dc4d1827f4726089cbb4c) | Enables wake-up of the device from a specified pin (A0, A1, A2, A3, A4, A5, D4, D7 )  |
+| [`enableWakeupFromRTC`](#class_board_1ae158d0367a2851d1f1f560bcca784412) | Enables wake-up of the device from the RTC. |
+| [`sleepFor`](#class_board_1a966bcfa00c60eaf3b0a1aa89d1deea9d) | Put the device in sleep mode for a specified amount of time. |
+| [`sleepUntilWakeupEvent`](#class_board_1a1d23524e0bfeb7282fa465f3834027e1) | Put the device into sleep mode until a wakeup event occurs. |
+| [`deepSleepUntilWakeupEvent`](#class_board_1aa0f7c55bf12f52374a2694aff110836b) | Put the device into deep sleep mode until a wakeup event occurs. |
+| [`turnPeripheralsOff`](#class_board_1a8e78bbbcc6638a365e30d2d846ddb2a7) | Turn the peripherals on Portenta C33 (ADC, RGB LED, Secure Element, Wifi and Bluetooth) off. |
+| [`turnPeripheralsOn`](#class_board_1adba07ed1d75e90fe5d2ebdca75c9a2a8) | Turn the peripherals on Portenta C33 back on. (ADC, RGB LED, Secure Element, Wifi and Bluetooth) |
+| [`setCommunicationSwitch`](#class_board_1a446d0b15dc91554c1e6102e655adc837) | Set the communication power rail switch state on Portenta C33 (Wifi, Bluetooth and Secure Element) |
+| [`setAnalogVoltage`](#class_board_1a02fc8e3eb090a4ee5fb0b3f482e52b1f) | Set the analog voltage on Portenta C33. |
+| [`setReferenceVoltage`](#class_board_1ae76e10f866abc11788e7bffa770c4567) | Set the reference voltage on Portenta C33. |
 
 ## Members
 
@@ -238,6 +249,145 @@ Set the voltage for the external power rail.
 
 #### Parameters
 * `v` Voltage value to set. (as float) 
+
+#### Returns
+True if successful, false otherwise.
+<hr />
+
+### `setCameraSwitch` <a id="class_board_1abfb2f9501dbcd20ebc0a2da9db0c8b86" class="anchor"></a>
+
+```cpp
+public void setCameraSwitch(bool on)
+```
+
+Set the camera power rail switch state on Nicla Vision.
+
+#### Parameters
+* `on` True to turn on the switches, false to turn them off.
+<hr />
+
+### `enableWakeupFromPin` <a id="class_board_1a001bd0741f8dc4d1827f4726089cbb4c" class="anchor"></a>
+
+```cpp
+public void enableWakeupFromPin(uint8_t pin, PinStatus state)
+```
+
+Enables wake-up of the device from a specified pin (A0, A1, A2, A3, A4, A5, D4, D7 ) 
+#### Parameters
+* `pin` The pin number used for waking up the device. 
+
+* `direction` The direction of the interrupt that will wake up the device. (RISING, FALLING)
+<hr />
+
+### `enableWakeupFromRTC` <a id="class_board_1ae158d0367a2851d1f1f560bcca784412" class="anchor"></a>
+
+```cpp
+public void enableWakeupFromRTC()
+```
+
+Enables wake-up of the device from the RTC.
+<hr />
+
+### `sleepFor` <a id="class_board_1a966bcfa00c60eaf3b0a1aa89d1deea9d" class="anchor"></a>
+
+```cpp
+public bool sleepFor(int hours, int minutes, int seconds, void(*)() callbackFunction, RTClock * rtc)
+```
+
+Put the device in sleep mode for a specified amount of time.
+
+#### Parameters
+* `hours` The number of hours to sleep. 
+
+* `minutes` The number of minutes to sleep. 
+
+* `seconds` The number of seconds to sleep. 
+
+* `callbackFunction` The function to call when the device wakes up. 
+
+* `RTC` The RTC instance to use for the sleep function. 
+
+#### Returns
+True if successful, false otherwise.
+<hr />
+
+### `sleepUntilWakeupEvent` <a id="class_board_1a1d23524e0bfeb7282fa465f3834027e1" class="anchor"></a>
+
+```cpp
+public void sleepUntilWakeupEvent()
+```
+
+Put the device into sleep mode until a wakeup event occurs.
+
+<hr />
+
+### `deepSleepUntilWakeupEvent` <a id="class_board_1aa0f7c55bf12f52374a2694aff110836b" class="anchor"></a>
+
+```cpp
+public void deepSleepUntilWakeupEvent()
+```
+
+Put the device into deep sleep mode until a wakeup event occurs.
+
+<hr />
+
+### `turnPeripheralsOff` <a id="class_board_1a8e78bbbcc6638a365e30d2d846ddb2a7" class="anchor"></a>
+
+```cpp
+public void turnPeripheralsOff()
+```
+
+Turn the peripherals on Portenta C33 (ADC, RGB LED, Secure Element, Wifi and Bluetooth) off.
+
+<hr />
+
+### `turnPeripheralsOn` <a id="class_board_1adba07ed1d75e90fe5d2ebdca75c9a2a8" class="anchor"></a>
+
+```cpp
+public void turnPeripheralsOn()
+```
+
+Turn the peripherals on Portenta C33 back on. (ADC, RGB LED, Secure Element, Wifi and Bluetooth)
+
+<hr />
+
+### `setCommunicationSwitch` <a id="class_board_1a446d0b15dc91554c1e6102e655adc837" class="anchor"></a>
+
+```cpp
+public void setCommunicationSwitch(bool on)
+```
+
+Set the communication power rail switch state on Portenta C33 (Wifi, Bluetooth and Secure Element)
+
+#### Parameters
+* `on` True to turn on the switches, false to turn them off.
+<hr />
+
+### `setAnalogVoltage` <a id="class_board_1a02fc8e3eb090a4ee5fb0b3f482e52b1f" class="anchor"></a>
+
+```cpp
+public bool setAnalogVoltage(float v)
+```
+
+Set the analog voltage on Portenta C33.
+
+#### Parameters
+* `v` Voltage value to set (as float). 
+
+#### Returns
+True if successful, false otherwise.
+<hr />
+
+### `setReferenceVoltage` <a id="class_board_1ae76e10f866abc11788e7bffa770c4567" class="anchor"></a>
+
+```cpp
+public bool setReferenceVoltage(float v)
+```
+
+Set the reference voltage on Portenta C33.
+
+#### Parameters
+* `v` Voltage value to set (as float). 
 
 #### Returns
 True if successful, false otherwise.
