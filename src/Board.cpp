@@ -103,6 +103,8 @@ void Board::setCameraSwitch(bool on) {
                 }
                 delay(1);
 
+                pLowPower -> deepSleep();
+
                 return true;
         }
     }

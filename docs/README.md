@@ -163,5 +163,110 @@ board.setCameraSwitch(false);
 
 **NOTE:** Any change to the power rails persists even if the board is disconnected from power. Make sure you design your solution accordingly. 
 
-### Sleep Modes 
+## Low Power Functionality
+
+
+
+### Sleep 
+* **Function**: Reduces the microcontroller's power usage to about half of its normal consumption.
+* **Effect**: Upon waking up from this mode, the execution of your program resumes exactly where it stopped. This is particularly useful for applications that require a quick resume with minimal power savings.
+* **Wake-Up Triggers**: The board can be configured to wake up either from an RTC alarm or an external interrupt pin.
+  
+### Deep Sleep
+* **Function**: Significantly reduces power usage to approximately 100uA (when all peripherals are off), making it ideal for long-term, battery-dependent operations.
+* **Effect**: Unlike Sleep Mode, waking up from Deep Sleep Mode restarts the board, triggering the void setup() function. This behavior is suitable for scenarios where a full reset is acceptable or desired upon waking up.
+* **Wake-Up Triggers**: The board can be configured to wake up either from an RTC alarm or an external interrupt pin.
+
+
+### Selecting a wakeup source
+The wakeup source can be one of the deep-sleep enabled wakeup pins, and an RTC Alarm. You can select multiple pins or the RTC alarm to wake up the board. 
+
+#### Wakeup Pins
+This feature can be used when you want to wake up the board from external stimuli, such as sensors or user input. Some sensors have an interupt pin that you can connect to one of the wakeup pins (eg: most motion sensors), while some output voltage on a pin, (eg: Passive Infrared Sensors or user buttons).
+To select a wakeup pin just call `board.setWakeupPin(<pin_number>, <direction>)`. The direction can be either **RISING** if you want to wake up when voltage is applied to a pin, or **FALLING** if you want to wake when no voltage is applied anymore. 
+Here is a list of the usable interrupts: 
+
+| Arduino Pin | MCU PIN | IRQ     |
+|-------------|---------|---------|
+| A0          | P006    | IRQ11|
+| A1          | P005    | IRQ10|
+| A2          | P004    | IRQ9 |
+| A3          | P002    | IRQ8 |
+| A4          | P001    | IRQ7 |
+| A5          | P015    | IRQ13|
+| D4          | P401    | IRQ5 |
+| D7          | P402    | IRQ4 |
+
+> [!IMPORTANT]  
+> Not all IRQs are created equal, the number of the IRQ represents it's priority. (IRQ0 being the highest priority and IRQ15 the lowest). Be careful when selecting your IRQ pin to make sure the board behaves as expected.
+
+#### RTC Alarm
+This feature is particularly useful when you want to set the board to wake up at specific times. You can use this in conjunction with the [RTC library](). 
+To make your board wake up on an RTC alarm you simply need to call `board.setWakeupRTC()` and it will enable that functionality. Check out [this example]() for more details about setting up the RTC. 
+
+To simplify things, we have added a convenience function in `Board` called `sleepFor`. This method takes a number of hours, minutes and seconds as a parameter, as well as pointers to the callback function and the RTC instance.
+Here's an example of how to set the RTC to wake the board up from deep sleep every second. 
+
+```cpp
+#include "RTC.h"
+#include "Arduino_Portenta_C33_LowPower.h"
+
+...
+
+static void alarmCallback()
+{   
+ ...
+}
+
+void setup() {
+
+    RTC.begin();
+    
+    manager = PowerManagement();
+    manager.begin();
+    board = manager.getBoard();
+    charger = manager.getCharger();
+
+    lowPower = LowPower();
+    lowPower.enableWakeupFromRTC();
+
+   
+    if (!RTC.isRunning()) {
+        RTC.setTime(initial_time);
+        board.sleepFor(0, 0, 1, &alarmCallback, &RTC);
+    }
+}
+
+void loop(){
+    board.deepSleepUntilwakeupEvent();
+}
+```
+
+### Send the board to sleep
+* `board.sleepUntilwakeupEvent();` - Sends the board into the sleep state, where it consumes about ~6mA without peripherals and ~18mA with peripherals. 
+* `board.deepSleepUntilwakeupEvent();` - Sends the board into the deep sleep state, where it consumes around ~100uA without peripherals and 12 with peripherals 
+
+
+### Toggle peripherals
+* `board.turnPeripheralsOff();` - Turn the peripherals on Portenta C33 (ADC, RGB LED, Secure Element, Wifi and Bluetooth) off.
+* `board.turnPeripheralsOn();` - Turns them back on. 
+
+### Low Power Measurements 
+Here's an overview of the reduction in power usage that you can expect from this library. The screenshots below are taken from the nRF Power Profiler application using a Nordic PPK2 while running the blink sketch on the same board. 
+
+#### Without power optimisations
+![](https://raw.githubusercontent.com/cristidragomir97/Arduino_Portenta_C33_LowPower/main/extras/results/normal_usage_blink.png)
+
+#### Sleep (ADC, RGB LED, Secure Element, Wifi and Bluetooth off)
+![](https://raw.githubusercontent.com/cristidragomir97/Arduino_Portenta_C33_LowPower/main/extras/results/sleep_no_peripherals.png)
+
+#### Deep Sleep (ADC, RGB LED, Secure Element, Wifi and Bluetooth off)
+![](https://raw.githubusercontent.com/cristidragomir97/Arduino_Portenta_C33_LowPower/main/extras/results/deep_sleep_no_peripherals.png)
+
+#### Sleep (ADC, RGB LED, Secure Element, Wifi and Bluetooth on)
+![](https://raw.githubusercontent.com/cristidragomir97/Arduino_Portenta_C33_LowPower/main/extras/results/sleep_peripherals_on.png)
+
+#### Deep Sleep (ADC, RGB LED, Secure Element, Wifi and Bluetooth on)
+![](https://raw.githubusercontent.com/cristidragomir97/Arduino_Portenta_C33_LowPower/main/extras/results/deep_sleep_peripherals_on.png)
+
 
