@@ -17,6 +17,11 @@ PowerManagement::PowerManagement(){
     this->battery = new Battery();
 }
 
+PowerManagement::~PowerManagement(){
+    delete this->pPMIC;
+    delete this->board;
+    delete this->charger;
+    delete this->battery;
 }
 
 bool PowerManagement::begin(){
