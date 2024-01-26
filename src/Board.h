@@ -24,9 +24,9 @@ class Board {
 
         /**
          * @brief Constructor for the Board class with a PF1550 PMIC instance.
-         * @param _pPMIC Pointer to the PF1550 PMIC instance.
+         * @param pmic Pointer to the PF1550 PMIC instance.
         */
-        Board(PF1550 * _pPMIC);
+        Board(PF1550 * pmic);
 
         /**
          * @brief Check if the board is powered through USB.
@@ -51,18 +51,19 @@ class Board {
         // TODO: Document allowed values for the voltage parameter
         /**
          * @brief Set the voltage for the external power rail.
-         * @param v Voltage value to set. (as float)
+         * @param voltage Voltage value to set. (as float)
          * @return True if successful, false otherwise.
         */
-        bool setExternalVoltage(float v); 
+        bool setExternalVoltage(float voltage); 
     
         // TODO: Find a better name for this function. e.g. setCameraEnabled or setCameraPowerEnabled
         /**
-         * @brief Set the camera power rail switch state on Nicla Vision.
-         * @param on True to turn on the switches, false to turn them off.
+         * @brief Set the camera power rail switch state on boards with a built-in camera.
+         * @param enabled True to turn on the switches, false to turn them off.
         */
-        void setCameraSwitch(bool on); 
+        void setCameraSwitch(bool enabled); 
 
+        // TODO: Second parameter is apparently not direction but state. Hmm...
         /**
          * Enables wake-up of the device from a specified pin (A0, A1, A2, A3, A4, A5, D4, D7 )
          * @param pin The pin number used for waking up the device.
@@ -126,25 +127,25 @@ class Board {
         // TODO: Document allowed values for the voltage parameter
         /**
          * @brief Set the analog voltage on Portenta C33.
-         * @param v Voltage value to set (as float).
+         * @param voltage Voltage value to set (as float).
          * @return True if successful, false otherwise.
         */
-        bool setAnalogVoltage(float v);
+        bool setAnalogVoltage(float voltage);
 
         // TODO: Explain what the voltage reference is used for.
         // TODO: Document allowed values for the voltage parameter
         /**
          * @brief Set the reference voltage on Portenta C33.
-         * @param v Voltage value to set (as float).
+         * @param voltage Voltage value to set (as float).
          * @return True if successful, false otherwise.
         */
-        bool setReferenceVoltage(float v);
+        bool setReferenceVoltage(float voltage);
         #endif
         
      
 
     private:
-        PF1550 * pPMIC;
+        PF1550 * pmic;
         
         #if defined(ARDUINO_PORTENTA_C33)
         LowPower * pLowPower;
