@@ -41,8 +41,6 @@ bool Battery::begin(){
       }
       */
 
-
-      Serial.println("done");
       writeRegister16(this->wire, DEVICE_ADDRESS, HIB_CFG_REG, tempHibCfgReg); // Restore Original HibCFG value
       replaceRegisterBits(this->wire, DEVICE_ADDRESS, STATUS_REG, 0, 0x01, POR_BIT);
   }
