@@ -17,11 +17,11 @@ PowerManagement::PowerManagement(){
     this->battery = new Battery();
 }
 
-void PowerManagement::begin(){
-    Serial.println("Is this properly initialised:" + String(this -> pPMIC -> begin()));
-    this -> battery -> begin();
 }
 
+bool PowerManagement::begin(){
+    return this->pPMIC->begin() == 0 && this->battery->begin();
+}
 
 Board PowerManagement::getBoard() {
     return *board;

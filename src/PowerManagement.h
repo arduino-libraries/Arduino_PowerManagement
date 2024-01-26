@@ -19,8 +19,9 @@ class PowerManagement{
 
         /**
          * @brief start communication with the PMIC chip and the power gauge. 
+         * @returns true if the initialization was successful, false otherwise
         */
-        void begin();
+        bool begin();
         
         /**
          * @brief returns the initialised instance of the Board class

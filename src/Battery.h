@@ -106,7 +106,7 @@ class Battery {
         /**
          * @brief Initializes the battery communication and configuration.
         */
-        void begin();
+        bool begin();
 
         /**
          * @brief Checks if a battery is connected to the system. 
