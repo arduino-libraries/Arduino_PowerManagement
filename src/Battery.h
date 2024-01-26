@@ -156,14 +156,11 @@ class Battery {
         */
         unsigned int percentage();
 
-
         /**
          * @brief Reads the remaining capacity of the battery.
          * @return The remaining capacity in milliampere-hours (mAh).
         */
         unsigned int remainingCapacity();
-
-
 
     private:
           #if defined(ARDUINO_PORTENTA_C33)
