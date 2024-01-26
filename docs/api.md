@@ -14,7 +14,7 @@
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 | [`Battery`](#class_battery_1a36a6234c583e3b3506f4a77e3eb49989) | Constructor for the [Battery](#class_battery) class. |
-| [`begin`](#class_battery_1ae22175033a63ac6cf222973f2498d193) | Initializes the battery communication and configuration. |
+| [`begin`](#class_battery_1abe2e94712b9e846f38f63884f6f995ef) | Initializes the battery communication and configuration. |
 | [`isConnected`](#class_battery_1a9473c4a4583abea991268d0818f19dbe) | Checks if a battery is connected to the system. |
 | [`voltage`](#class_battery_1a00b9ab137ea97c46da061537473b409f) | Reads the current voltage of the battery. |
 | [`voltageAverage`](#class_battery_1ad25a5eae3bc9c879fa673c29c4f2c524) | Reads the average voltage of the battery. |
@@ -37,10 +37,10 @@ Constructor for the [Battery](#class_battery) class.
 
 <hr />
 
-### `begin` <a id="class_battery_1ae22175033a63ac6cf222973f2498d193" class="anchor"></a>
+### `begin` <a id="class_battery_1abe2e94712b9e846f38f63884f6f995ef" class="anchor"></a>
 
 ```cpp
-public void begin()
+public bool begin()
 ```
 
 Initializes the battery communication and configuration.
@@ -162,12 +162,12 @@ The remaining capacity in milliampere-hours (mAh).
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 | [`Board`](#class_board_1a9ee491d4fea680cf69b033374a9fdfcb) | Default constructor for the [Board](#class_board) class. |
-| [`Board`](#class_board_1af301b08c1cc0ee86c31985d204d1e53c) | Constructor for the [Board](#class_board) class with a PF1550 PMIC instance. |
+| [`Board`](#class_board_1a46e7c2305b38070b01a5714449021b5c) | Constructor for the [Board](#class_board) class with a PF1550 PMIC instance. |
 | [`isUSBPowered`](#class_board_1aa53bea8ac0404de8a7389484a61937ae) | Check if the board is powered through USB. |
 | [`isBatteryPowered`](#class_board_1a80a62c172bea4a16b6983f204380f92b) | Check if the board is powered by the battery. |
 | [`setExternalSwitch`](#class_board_1ae6128ca6cfee4780699646ded2971c10) | Set the external power lane switch state. |
-| [`setExternalVoltage`](#class_board_1ac85a176efa19e65c688fcb27b5170000) | Set the voltage for the external power rail. |
-| [`setCameraSwitch`](#class_board_1abfb2f9501dbcd20ebc0a2da9db0c8b86) | Set the camera power rail switch state on Nicla Vision. |
+| [`setExternalVoltage`](#class_board_1ad92e1939e565023016b210ce6aae68b6) | Set the voltage for the external power rail. |
+| [`setCameraSwitch`](#class_board_1a261c8f71d544ba289f0b7b06e073c0de) | Set the camera power rail switch state on boards with a built-in camera. |
 | [`enableWakeupFromPin`](#class_board_1a001bd0741f8dc4d1827f4726089cbb4c) | Enables wake-up of the device from a specified pin (A0, A1, A2, A3, A4, A5, D4, D7 )  |
 | [`enableWakeupFromRTC`](#class_board_1ae158d0367a2851d1f1f560bcca784412) | Enables wake-up of the device from the RTC. |
 | [`sleepFor`](#class_board_1a966bcfa00c60eaf3b0a1aa89d1deea9d) | Put the device in sleep mode for a specified amount of time. |
@@ -176,8 +176,8 @@ The remaining capacity in milliampere-hours (mAh).
 | [`turnPeripheralsOff`](#class_board_1a8e78bbbcc6638a365e30d2d846ddb2a7) | Turn the peripherals on Portenta C33 (ADC, RGB LED, Secure Element, Wifi and Bluetooth) off. |
 | [`turnPeripheralsOn`](#class_board_1adba07ed1d75e90fe5d2ebdca75c9a2a8) | Turn the peripherals on Portenta C33 back on. (ADC, RGB LED, Secure Element, Wifi and Bluetooth) |
 | [`setCommunicationSwitch`](#class_board_1a446d0b15dc91554c1e6102e655adc837) | Set the communication power rail switch state on Portenta C33 (Wifi, Bluetooth and Secure Element) |
-| [`setAnalogVoltage`](#class_board_1a02fc8e3eb090a4ee5fb0b3f482e52b1f) | Set the analog voltage on Portenta C33. |
-| [`setReferenceVoltage`](#class_board_1ae76e10f866abc11788e7bffa770c4567) | Set the reference voltage on Portenta C33. |
+| [`setAnalogVoltage`](#class_board_1a4843e23a437247f5f9db49fb8cdce8ea) | Set the analog voltage on Portenta C33. |
+| [`setReferenceVoltage`](#class_board_1a8feb9efc5439c8fec5139f66484200b5) | Set the reference voltage on Portenta C33. |
 
 ## Members
 
@@ -191,16 +191,16 @@ Default constructor for the [Board](#class_board) class.
 
 <hr />
 
-### `Board` <a id="class_board_1af301b08c1cc0ee86c31985d204d1e53c" class="anchor"></a>
+### `Board` <a id="class_board_1a46e7c2305b38070b01a5714449021b5c" class="anchor"></a>
 
 ```cpp
-public Board(PF1550 * _pPMIC)
+public Board(PF1550 * pmic)
 ```
 
 Constructor for the [Board](#class_board) class with a PF1550 PMIC instance.
 
 #### Parameters
-* `_pPMIC` Pointer to the PF1550 PMIC instance.
+* `pmic` Pointer to the PF1550 PMIC instance.
 <hr />
 
 ### `isUSBPowered` <a id="class_board_1aa53bea8ac0404de8a7389484a61937ae" class="anchor"></a>
@@ -239,31 +239,31 @@ Set the external power lane switch state.
 * `on` True to turn on the switch, false to turn it off.
 <hr />
 
-### `setExternalVoltage` <a id="class_board_1ac85a176efa19e65c688fcb27b5170000" class="anchor"></a>
+### `setExternalVoltage` <a id="class_board_1ad92e1939e565023016b210ce6aae68b6" class="anchor"></a>
 
 ```cpp
-public bool setExternalVoltage(float v)
+public bool setExternalVoltage(float voltage)
 ```
 
 Set the voltage for the external power rail.
 
 #### Parameters
-* `v` Voltage value to set. (as float) 
+* `voltage` Voltage value to set. (as float) 
 
 #### Returns
 True if successful, false otherwise.
 <hr />
 
-### `setCameraSwitch` <a id="class_board_1abfb2f9501dbcd20ebc0a2da9db0c8b86" class="anchor"></a>
+### `setCameraSwitch` <a id="class_board_1a261c8f71d544ba289f0b7b06e073c0de" class="anchor"></a>
 
 ```cpp
-public void setCameraSwitch(bool on)
+public void setCameraSwitch(bool enabled)
 ```
 
-Set the camera power rail switch state on Nicla Vision.
+Set the camera power rail switch state on boards with a built-in camera.
 
 #### Parameters
-* `on` True to turn on the switches, false to turn them off.
+* `enabled` True to turn on the switches, false to turn them off.
 <hr />
 
 ### `enableWakeupFromPin` <a id="class_board_1a001bd0741f8dc4d1827f4726089cbb4c" class="anchor"></a>
@@ -363,31 +363,31 @@ Set the communication power rail switch state on Portenta C33 (Wifi, Bluetooth a
 * `on` True to turn on the switches, false to turn them off.
 <hr />
 
-### `setAnalogVoltage` <a id="class_board_1a02fc8e3eb090a4ee5fb0b3f482e52b1f" class="anchor"></a>
+### `setAnalogVoltage` <a id="class_board_1a4843e23a437247f5f9db49fb8cdce8ea" class="anchor"></a>
 
 ```cpp
-public bool setAnalogVoltage(float v)
+public bool setAnalogVoltage(float voltage)
 ```
 
 Set the analog voltage on Portenta C33.
 
 #### Parameters
-* `v` Voltage value to set (as float). 
+* `voltage` Voltage value to set (as float). 
 
 #### Returns
 True if successful, false otherwise.
 <hr />
 
-### `setReferenceVoltage` <a id="class_board_1ae76e10f866abc11788e7bffa770c4567" class="anchor"></a>
+### `setReferenceVoltage` <a id="class_board_1a8feb9efc5439c8fec5139f66484200b5" class="anchor"></a>
 
 ```cpp
-public bool setReferenceVoltage(float v)
+public bool setReferenceVoltage(float voltage)
 ```
 
 Set the reference voltage on Portenta C33.
 
 #### Parameters
-* `v` Voltage value to set (as float). 
+* `voltage` Voltage value to set (as float). 
 
 #### Returns
 True if successful, false otherwise.
@@ -402,11 +402,11 @@ True if successful, false otherwise.
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 | [`Charger`](#class_charger_1a386eef9a5c151f3e5eb3ee67a0aeb0cb) | Default constructor. |
-| [`Charger`](#class_charger_1ab7a66c8e07b9893bf588e1d970cfa572) | Constructor with PMIC instance. |
-| [`setChargeCurrent`](#class_charger_1ac201e063885cc09e5bee43e215aead23) | Set the charging current. |
-| [`setChargeVoltage`](#class_charger_1a67fb56239f6314d960a4939b36236e07) | Set the charging voltage. |
-| [`setEndOfChargeCurrent`](#class_charger_1af700e2c163f75f25173b3db85054edb5) | Set the end-of-charge current. |
-| [`setMaxInputCurrent`](#class_charger_1a7e6894f37c7d4a4554fd634a0d7405cc) | Set the maximum input current. |
+| [`Charger`](#class_charger_1a941c1c93e7cca4055cb1b85c19c43824) | Constructor with PMIC instance. |
+| [`setChargeCurrent`](#class_charger_1a5e2414a885c3d48a4767c725c1f734bb) | Set the charging current. |
+| [`setChargeVoltage`](#class_charger_1aa3c52bef06f8d1069cc10b1829e4e878) | Set the charging voltage. |
+| [`setEndOfChargeCurrent`](#class_charger_1a9a68b14cc28c160ba366cfc4eda4d0a0) | Set the end-of-charge current. |
+| [`setMaxInputCurrent`](#class_charger_1a416c1837d233388c02399b4d43c42a25) | Set the maximum input current. |
 | [`getChargeStatus`](#class_charger_1a0c1c368e7b7cef05f9491efc4a576cb8) | Get the current charging status. |
 | [`enable`](#class_charger_1a6e7a92f5fb4ae1f016ff13d5c716a81f) | Enable the charger. |
 | [`disable`](#class_charger_1aa87840314777bb23a58cbead63407707) | Disable the charger. |
@@ -423,64 +423,64 @@ Default constructor.
 
 <hr />
 
-### `Charger` <a id="class_charger_1ab7a66c8e07b9893bf588e1d970cfa572" class="anchor"></a>
+### `Charger` <a id="class_charger_1a941c1c93e7cca4055cb1b85c19c43824" class="anchor"></a>
 
 ```cpp
-public Charger(PF1550 * _pPMIC)
+public Charger(PF1550 * pmic)
 ```
 
 Constructor with PMIC instance.
 
 #### Parameters
-* `_pPMIC` Pointer to the PF1550 PMIC instance.
+* `pmic` Pointer to the PF1550 PMIC instance.
 <hr />
 
-### `setChargeCurrent` <a id="class_charger_1ac201e063885cc09e5bee43e215aead23" class="anchor"></a>
+### `setChargeCurrent` <a id="class_charger_1a5e2414a885c3d48a4767c725c1f734bb" class="anchor"></a>
 
 ```cpp
-public void setChargeCurrent(ChargeCurrent i)
+public void setChargeCurrent(ChargeCurrent current)
 ```
 
 Set the charging current.
 
 #### Parameters
-* `i` Charging current enum value (ChargeCurrent).
+* `current` Charging current enum value (ChargeCurrent).
 <hr />
 
-### `setChargeVoltage` <a id="class_charger_1a67fb56239f6314d960a4939b36236e07" class="anchor"></a>
+### `setChargeVoltage` <a id="class_charger_1aa3c52bef06f8d1069cc10b1829e4e878" class="anchor"></a>
 
 ```cpp
-public void setChargeVoltage(ChargeVoltage v)
+public void setChargeVoltage(ChargeVoltage voltage)
 ```
 
 Set the charging voltage.
 
 #### Parameters
-* `v` Charging voltage enum value (ChargeVoltage).
+* `voltage` Charging voltage enum value (ChargeVoltage).
 <hr />
 
-### `setEndOfChargeCurrent` <a id="class_charger_1af700e2c163f75f25173b3db85054edb5" class="anchor"></a>
+### `setEndOfChargeCurrent` <a id="class_charger_1a9a68b14cc28c160ba366cfc4eda4d0a0" class="anchor"></a>
 
 ```cpp
-public void setEndOfChargeCurrent(EndOfChargeCurrent i)
+public void setEndOfChargeCurrent(EndOfChargeCurrent current)
 ```
 
 Set the end-of-charge current.
 
 #### Parameters
-* `i` End-of-charge current enum value (EndOfChargeCurrent).
+* `current` End-of-charge current enum value (EndOfChargeCurrent).
 <hr />
 
-### `setMaxInputCurrent` <a id="class_charger_1a7e6894f37c7d4a4554fd634a0d7405cc" class="anchor"></a>
+### `setMaxInputCurrent` <a id="class_charger_1a416c1837d233388c02399b4d43c42a25" class="anchor"></a>
 
 ```cpp
-public void setMaxInputCurrent(MaxInputCurrent i)
+public void setMaxInputCurrent(MaxInputCurrent current)
 ```
 
 Set the maximum input current.
 
 #### Parameters
-* `i` Maximum input current enum value (MaxInputCurrent).
+* `current` Maximum input current enum value (MaxInputCurrent).
 <hr />
 
 ### `getChargeStatus` <a id="class_charger_1a0c1c368e7b7cef05f9491efc4a576cb8" class="anchor"></a>
@@ -526,7 +526,7 @@ True if successful, false otherwise.
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 | [`PowerManagement`](#class_power_management_1acc41d5c24cf751f6924e62c4e602f5b3) | constructor for the [PowerManagement](#class_power_management) |
-| [`begin`](#class_power_management_1ace2dda7f9dd9536b5cfcd6d91ece7f2f) | start communication with the PMIC chip and the power gauge. |
+| [`begin`](#class_power_management_1a65bcff4dceb0effedd04b20be2e6695e) | start communication with the PMIC chip and the power gauge. |
 | [`getBoard`](#class_power_management_1ad732d749ad09d03eff4523b617ec7e7f) | returns the initialised instance of the [Board](#class_board) class |
 | [`getBattery`](#class_power_management_1aec3b949e2c9904113a7c406ac7019e00) | returns the initialised instance of the [Battery](#class_battery) class |
 | [`getCharger`](#class_power_management_1ae77d117118b803ba4d35132ab4d5270e) | returns the initialised instance of the [Charger](#class_charger) class |
@@ -543,14 +543,16 @@ constructor for the [PowerManagement](#class_power_management)
 
 <hr />
 
-### `begin` <a id="class_power_management_1ace2dda7f9dd9536b5cfcd6d91ece7f2f" class="anchor"></a>
+### `begin` <a id="class_power_management_1a65bcff4dceb0effedd04b20be2e6695e" class="anchor"></a>
 
 ```cpp
-public void begin()
+public bool begin()
 ```
 
 start communication with the PMIC chip and the power gauge.
 
+#### Returns
+true if the initialization was successful, false otherwise
 <hr />
 
 ### `getBoard` <a id="class_power_management_1ad732d749ad09d03eff4523b617ec7e7f" class="anchor"></a>
@@ -562,7 +564,7 @@ public Board getBoard()
 returns the initialised instance of the [Board](#class_board) class
 
 #### Returns
-returns the dereferenced board pointer (actual [Board](#class_board) instance)
+the dereferenced board pointer (actual [Board](#class_board) instance)
 <hr />
 
 ### `getBattery` <a id="class_power_management_1aec3b949e2c9904113a7c406ac7019e00" class="anchor"></a>
@@ -574,7 +576,7 @@ public Battery getBattery()
 returns the initialised instance of the [Battery](#class_battery) class
 
 #### Returns
-returns the dereferenced bbattery pointer (actual [Battery](#class_battery) instance)
+the dereferenced battery pointer (actual [Battery](#class_battery) instance)
 <hr />
 
 ### `getCharger` <a id="class_power_management_1ae77d117118b803ba4d35132ab4d5270e" class="anchor"></a>
@@ -586,6 +588,6 @@ public Charger getCharger()
 returns the initialised instance of the [Charger](#class_charger) class
 
 #### Returns
-returns the dereferenced charger pointer (actual [Charger](#class_charger) instance)
+the dereferenced charger pointer (actual [Charger](#class_charger) instance)
 <hr />
 
