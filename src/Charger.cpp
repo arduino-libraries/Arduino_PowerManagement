@@ -3,41 +3,41 @@
 
 Charger::Charger(){}
 
-Charger::Charger(PF1550* _pPMIC) : pPMIC(_pPMIC) {
-
+Charger::Charger(PF1550* pmic) : pmic(pmic) {
 }
 
-void Charger::setChargeCurrent(ChargeCurrent i) {
-    pPMIC -> getControlPointer() -> setFastChargeCurrent(i);
+void Charger::setChargeCurrent(ChargeCurrent current) {
+    pmic -> getControlPointer() -> setFastChargeCurrent(current);
 }
 
-void Charger::setChargeVoltage(ChargeVoltage v) {
-    pPMIC -> getControlPointer() -> setFastChargeVoltage(v);
+void Charger::setChargeVoltage(ChargeVoltage voltage) {
+    pmic -> getControlPointer() -> setFastChargeVoltage(voltage);
 }
 
-void Charger::setEndOfChargeCurrent(EndOfChargeCurrent i) {
-    pPMIC -> getControlPointer() -> setEndOfChargeCurrent(i);
+void Charger::setEndOfChargeCurrent(EndOfChargeCurrent current) {
+    pmic -> getControlPointer() -> setEndOfChargeCurrent(current);
 }
 
 void Charger::setMaxInputCurrent(MaxInputCurrent i) {
-    pPMIC -> getControlPointer() -> setInputCurrentLimit(i);
+    pmic -> getControlPointer() -> setInputCurrentLimit(current);
 }
 
 bool Charger::enable(){
-    pPMIC -> writePMICreg(Register::CHARGER_CHG_OPER, 0x02);
-    return pPMIC->readPMICreg(Register::CHARGER_CHG_OPER) == 0x02;
+    pmic -> writePMICreg(Register::CHARGER_CHG_OPER, 0x02);
+    return pmic->readPMICreg(Register::CHARGER_CHG_OPER) == 0x02;
 }
 
 bool Charger::disable(){
-    pPMIC -> writePMICreg(Register::CHARGER_CHG_OPER, 0x01);
-    return pPMIC->readPMICreg(Register::CHARGER_CHG_OPER) == 0x01;
+    pmic -> writePMICreg(Register::CHARGER_CHG_OPER, 0x01);
+    return pmic->readPMICreg(Register::CHARGER_CHG_OPER) == 0x01;
 }
 
 ChargeStatus Charger::getChargeStatus(){
-    uint16_t reg_val = this -> pPMIC ->  readPMICreg(Register::CHARGER_CHG_SNS);
+    uint16_t reg_val = this -> pmic ->  readPMICreg(Register::CHARGER_CHG_SNS);
     uint16_t bits3to0 = extractBits(reg_val, 0, 3);
 
-    uint16_t temp_reg = this -> pPMIC ->  readPMICreg(Register::CHARGER_THM_REG_CNFG);
+    // TODO: Unused variable
+    uint16_t temp_reg = this -> pmic ->  readPMICreg(Register::CHARGER_THM_REG_CNFG);
 
 
     switch (bits3to0) {

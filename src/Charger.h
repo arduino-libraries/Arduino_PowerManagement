@@ -40,35 +40,35 @@ public:
 
     /**
      * @brief Constructor with PMIC instance.
-     * @param _pPMIC Pointer to the PF1550 PMIC instance.
+     * @param pmic Pointer to the PF1550 PMIC instance.
      */
-    Charger(PF1550* _pPMIC);
+    Charger(PF1550* pmic);
 
     /**
      * @brief Set the charging current.
-     * @param i Charging current enum value (ChargeCurrent).
+     * @param current Charging current enum value (ChargeCurrent).
      */
-    void setChargeCurrent(ChargeCurrent i);
+    void setChargeCurrent(ChargeCurrent current);
 
     /**
      * @brief Set the charging voltage.
-     * @param v Charging voltage enum value (ChargeVoltage).
+     * @param voltage Charging voltage enum value (ChargeVoltage).
      */
-    void setChargeVoltage(ChargeVoltage v);
+    void setChargeVoltage(ChargeVoltage voltage);
 
     /**
      * @brief Set the end-of-charge current.
-     * @param i End-of-charge current enum value (EndOfChargeCurrent).
+     * @param current End-of-charge current enum value (EndOfChargeCurrent).
      */
-    void setEndOfChargeCurrent(EndOfChargeCurrent i);
+    void setEndOfChargeCurrent(EndOfChargeCurrent current);
 
     // TODO: Explain what is the input current. Input to the charger? Input to the battery? both?
     // Why is this setting useful?
     /**
      * @brief Set the maximum input current.
-     * @param i Maximum input current enum value (MaxInputCurrent).
+     * @param current Maximum input current enum value (MaxInputCurrent).
      */
-    void setMaxInputCurrent(MaxInputCurrent i);
+    void setMaxInputCurrent(MaxInputCurrent current);
 
     /**
      * @brief Get the current charging status.
@@ -92,5 +92,5 @@ public:
     bool disable();
 
 private:
-    PF1550* pPMIC; /**< Pointer to the PF1550 PMIC instance. */
+    PF1550* pmic; /**< Pointer to the PF1550 PMIC instance. */
 };
