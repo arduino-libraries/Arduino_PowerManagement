@@ -11,13 +11,9 @@
 #include "Battery.h"
 
 Battery::Battery() {
-
-
-
 }
 
-void Battery::begin(){
-
+bool Battery::begin(){
     if(readBitFromRegister(this->wire, DEVICE_ADDRESS, STATUS_REG, POR_BIT)){
 
       uint16_t tempHibCfgReg = readRegister16(this->wire, DEVICE_ADDRESS, HIB_CFG_REG);
