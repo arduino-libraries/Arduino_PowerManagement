@@ -164,10 +164,10 @@ class Battery {
 
     private:
           #if defined(ARDUINO_PORTENTA_C33)
-                TwoWire *  _wire = &Wire3;
+                TwoWire *  wire = &Wire3;
             #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
-                TwoWire * _wire = &Wire1;
+                TwoWire * wire = &Wire1;
             #elif defined(ARDUINO_NICLA_VISION) 
-                TwoWire * _wire = &Wire1;
+                TwoWire * wire = &Wire1;
             #endif
 };
