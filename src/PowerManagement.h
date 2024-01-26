@@ -23,18 +23,24 @@ class PowerManagement{
         */
         bool begin();
         
+        // TODO: Improve documentation e.g. explain what to do with the returned object
+        // I'd avoid to talk about pointers here, since the user doesn't need to know about them        
         /**
          * @brief returns the initialised instance of the Board class
          * @returns the dereferenced board pointer (actual Board instance)
         */
         Board getBoard();
         
+        // TODO: Improve documentation e.g. explain what to do with the returned object
+        // I'd avoid to talk about pointers here, since the user doesn't need to know about them
         /**
          * @brief returns the initialised instance of the Battery class
          * @returns the dereferenced battery pointer (actual Battery instance)
         */
         Battery getBattery();
         
+        // TODO: Improve documentation e.g. explain what to do with the returned object
+        // I'd avoid to talk about pointers here, since the user doesn't need to know about them
         /** 
          * @brief returns the initialised instance of the Charger class
          * @returns the dereferenced charger pointer (actual Charger instance)

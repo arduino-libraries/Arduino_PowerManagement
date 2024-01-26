@@ -74,6 +74,7 @@ void Board::enableWakeupFromRTC(){
     #if defined(ARDUINO_PORTENTA_C33)
         pLowPower -> enableWakeupFromRTC();
     #else 
+        // TODO: What is happening here?
         #
     #endif
 }
@@ -113,6 +114,7 @@ bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callback
 
                 return true;
     #else 
+        // TODO: What is happening here?
         #
     #endif
 }
@@ -122,6 +124,7 @@ void Board::sleepUntilWakeupEvent(){
     #if defined(ARDUINO_PORTENTA_C33)
         pLowPower -> sleep();
     #else 
+        // TODO: What is happening here? 
         #
     #endif
 }
@@ -130,6 +133,7 @@ void Board::deepSleepUntilWakeupEvent(){
     #if defined(ARDUINO_PORTENTA_C33)
         pLowPower -> deepSleep();
     #else 
+        // TODO: What is happening here?
         #
     #endif
 }
@@ -155,7 +159,8 @@ void Board::deepSleepUntilWakeupEvent(){
             this -> pPMIC -> getControlPointer() ->  turnSw1Off(Sw1Mode::Sleep);
             this -> pPMIC -> getControlPointer() ->  turnSw1Off(Sw1Mode::Standby);
 
-            Wire3.end();
+        // TODO: Is it always on Wire3?
+        Wire3.end();
     }
 
     void Board::turnPeripheralsOn(){
@@ -195,6 +200,8 @@ void Board::deepSleepUntilWakeupEvent(){
         if (voltage_reg != 0xFF){
             this -> pPMIC ->  writePMICreg(Register::PMIC_LDO1_VOLT, voltage_reg);
             if(this -> pPMIC ->  readPMICreg(Register::PMIC_LDO1_VOLT) == voltage_reg)
+        // TODO: Use a constant instead of 0xFF
+        // TODO: Simplify boolean logic. Use catch clause and return directly the value of the comparison
                 return true;
             else 
                 return false;
@@ -208,6 +215,8 @@ void Board::deepSleepUntilWakeupEvent(){
         if (voltage_reg != 0xFF){
             this -> pPMIC ->  writePMICreg(Register::PMIC_LDO2_VOLT, voltage_reg);
             if(this -> pPMIC ->  readPMICreg(Register::PMIC_LDO2_VOLT) == voltage_reg)
+        // TODO: Use a constant instead of 0xFF
+        // TODO: Simplify boolean logic. Use catch clause and return directly the value of the comparison
                 return true;
             else 
                 return false;

@@ -40,12 +40,15 @@ class Board {
         */
         bool isBatteryPowered();
 
+        // TODO: I don't understand what this function does.
         /**
          * @brief Set the external power lane switch state.
          * @param on True to turn on the switch, false to turn it off.
          */
         void setExternalSwitch(bool on);
 
+        // TODO: What is the external power rail?
+        // TODO: Document allowed values for the voltage parameter
         /**
          * @brief Set the voltage for the external power rail.
          * @param v Voltage value to set. (as float)
@@ -53,6 +56,7 @@ class Board {
         */
         bool setExternalVoltage(float v); 
     
+        // TODO: Find a better name for this function. e.g. setCameraEnabled or setCameraPowerEnabled
         /**
          * @brief Set the camera power rail switch state on Nicla Vision.
          * @param on True to turn on the switches, false to turn them off.
@@ -71,7 +75,7 @@ class Board {
          */
         void enableWakeupFromRTC();
 
-
+        // TODO: Shall we provide a convenience function to instantiate the RTC object?
         /**
          * @brief Put the device in sleep mode for a specified amount of time.
          * @param hours The number of hours to sleep.
@@ -83,34 +87,43 @@ class Board {
         */
         bool sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)(), RTClock * rtc);
 
-        
+        // TODO: Explain wake up events and add references
+        // TODO: Explain difference between sleep and deep sleep
         /**
          * @brief Put the device into sleep mode until a wakeup event occurs.
          */
         void sleepUntilWakeupEvent();
 
+        // TODO: Explain wake up events and add references
+        // TODO: Explain difference between sleep and deep sleep
         /**
          * @brief Put the device into deep sleep mode until a wakeup event occurs.
          */
         void deepSleepUntilWakeupEvent();
 
-
+        // TODO: Can we add a parameter to select what peripherals to turn off? Default: all
         /**
          * @brief Turn the peripherals on Portenta C33 (ADC, RGB LED, Secure Element, Wifi and Bluetooth) off.
         */
         void turnPeripheralsOff();
 
+        // TODO: Again, can we provide a paramter to selectively turn on peripherals? Default: all
         /**
          * @brief Turn the peripherals on Portenta C33 back on. (ADC, RGB LED, Secure Element, Wifi and Bluetooth)
         */
         void turnPeripheralsOn();
 
+        // TODO: Not sure why we talk about switches. I'd rather talk about peripherals or choose a better name
+        // e.g. powerCommunicationPeripherals or setCommunicationPeripheralsPower
+        // Might be redundant if we apply the feedback above to turnPeripheralsOn/Off
         /**
          * @brief Set the communication power rail switch state on Portenta C33 (Wifi, Bluetooth and Secure Element)
          * @param on True to turn on the switches, false to turn them off.
         */
         void setCommunicationSwitch(bool on);
         
+        // TODO: Not sure what this function does.
+        // TODO: Document allowed values for the voltage parameter
         /**
          * @brief Set the analog voltage on Portenta C33.
          * @param v Voltage value to set (as float).
@@ -118,6 +131,8 @@ class Board {
         */
         bool setAnalogVoltage(float v);
 
+        // TODO: Explain what the voltage reference is used for.
+        // TODO: Document allowed values for the voltage parameter
         /**
          * @brief Set the reference voltage on Portenta C33.
          * @param v Voltage value to set (as float).
@@ -137,6 +152,7 @@ class Board {
         
 };
 
+// TODO: Move to cpp file
 static inline uint8_t getRailVoltage(float voltage, int context) {
     switch (context) {
         case 1: // LDO1
@@ -221,6 +237,7 @@ static inline uint8_t getRailVoltage(float voltage, int context) {
             break;
     }
     
+    // TODO: Better to use -1 as error code. Then the return type should be int8_t
     return 0xFF;
 }
 

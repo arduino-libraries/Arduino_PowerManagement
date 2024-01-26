@@ -6,6 +6,11 @@ typedef IFastCharge ChargeCurrent;
 typedef IEndOfCharge EndOfChargeCurrent;
 typedef IInputCurrentLimit MaxInputCurrent;
 
+
+// TODO: Explain these enums.
+// TODO: Avoid abbreviations in enum names.
+// TODO: Avoid all caps in enum names. Use CamelCase instead.
+// TODO: Use enum class instead of enum.
 /**
  * Enum representing different charging statuses.
  */
@@ -57,6 +62,8 @@ public:
      */
     void setEndOfChargeCurrent(EndOfChargeCurrent i);
 
+    // TODO: Explain what is the input current. Input to the charger? Input to the battery? both?
+    // Why is this setting useful?
     /**
      * @brief Set the maximum input current.
      * @param i Maximum input current enum value (MaxInputCurrent).
@@ -69,12 +76,15 @@ public:
      */
     ChargeStatus getChargeStatus();
 
+    // TODO: Enables charging or just enables the charger?
+    // TODO: Explain charging behaviour, what's the default charging current, etc.
     /**
      * @brief Enable the charger.
      * @return True if successful, false otherwise.
      */
     bool enable();
 
+    // TODO: Enables charging or just enables the charger?
     /**
      * @brief Disable the charger.
      * @return True if successful, false otherwise.

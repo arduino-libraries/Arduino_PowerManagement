@@ -2,7 +2,11 @@
 #include "Wire.h"
 #include "wireUtils.h"
 
+// TODO: Move to cpp file so it doesn't pollute the global namespace
 #define DEVICE_ADDRESS 0x36
+
+// TODO: Explain where these values come from
+// TODO: Document values
 
 // corrections
 #define VOLTAGE_MULTIPLIER (1.25 / 16)
@@ -96,6 +100,7 @@
  * @brief Battery class definition and member function declarations.
 */
 
+// TODO: Add documentation for the class instead of the file
 class Battery {
     public: 
         /**
@@ -114,42 +119,51 @@ class Battery {
         */
         boolean isConnected();
 
+        // TODO: Explain what range to expect from the voltage
         /**
          * @brief Reads the current voltage of the battery.
          * @return The current voltage in millivolts (mV).
         */
         unsigned int voltage();
 
+        // TODO: What is an average voltage? Explain the time range of the average voltage
+        // TODO: Maybe better to call this averageVoltage
         /**
          * @brief Reads the average voltage of the battery.
          * @return The average voltage in millivolts (mV). 
         */
         unsigned int voltageAverage();
 
+        // TODO: Explain what is instantaneous current
         /**
          * @brief Reads the instantaneous current of the battery.
          * @return The instantaneous current in miliamperes (mA)
         */
         int current();
 
+        // TODO: Maybe better to call this averageCurrent
         /**
          * @brief Reads the average current of the battery.
          * @return The average current in millivolts (mV). 
         */
         int currentAverage();
 
+        // TODO: Discuss if temperature is floating point or integer
         /**
          * @brief Reads the current temperature of the battery.
          * @return The current temperature in degrees Celsius.
         */
         int temperature();
 
+        // TODO: Explain the time range of the average temperature
+        // TODO: Maybe better to call this averageTemperature
         /**
          * @brief Reads the average temperature of the battery.
          * @return The current temperature in degrees Celsius.
         */
         int temperatureAverage();
         
+        // TODO: Is this based on voltage? Please explain
         /**
          * @brief Reads the battery's state of charge (SOC).
          * @return The state of charge as a percentage.

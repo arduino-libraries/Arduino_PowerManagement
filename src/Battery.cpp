@@ -1,6 +1,8 @@
 #ifndef Battery_H
 #define Battery_H
 
+// TODO: Use better names for the constants
+// TODO: Document the constants
 #define CAPACITY 200
 #define V_EMPTY 3000
 
@@ -34,6 +36,7 @@ void Battery::begin(){
 
       writeRegister16(this->wire, DEVICE_ADDRESS, MODEL_CFG_REG, 0x8000);                    // Write ModelCFG
 
+      // TODO: Is this code still needed?
       // do not continue until ModelCFG.Refresh==0
       /*
       while (readBitFromRegister(this->wire, DEVICE_ADDRESS, MODEL_CFG_REG, MODEL_CFG_REFRESH_BIT)==0) {
@@ -55,7 +58,7 @@ bool Battery::isConnected(){
   return getBitFromOffset(statusRegister, BATTERY_STATUS_BIT) == 0;
 }
 
-
+// TODO: Probably better to use -1 as error code
 unsigned int Battery::voltage(){
   if(isConnected()){
     return readRegister16(this->wire, DEVICE_ADDRESS, VCELL_REG) * VOLTAGE_MULTIPLIER;
@@ -64,6 +67,7 @@ unsigned int Battery::voltage(){
   }
 }
 
+// TODO: Probably better to use -1 as error code
 unsigned int Battery::voltageAverage(){
   if(isConnected()){
       return readRegister16(this->wire, DEVICE_ADDRESS, AVG_VCELL_REG) * VOLTAGE_MULTIPLIER;
@@ -72,6 +76,7 @@ unsigned int Battery::voltageAverage(){
   }
 }
 
+// TODO: Probably better to use -1 as error code
 int Battery::temperature(){
   if(isConnected()){
     return readRegister16(this->wire, DEVICE_ADDRESS, TEMP_REG) >> 8;
@@ -80,6 +85,7 @@ int Battery::temperature(){
   }
 }
 
+// TODO: Probably better to use -1 as error code
 int Battery::temperatureAverage(){
   if(isConnected()){
     return readRegister16(this->wire, DEVICE_ADDRESS, AVG_TA_REG) >> 8;
@@ -89,6 +95,7 @@ int Battery::temperatureAverage(){
   
 }
 
+// TODO: Probably better to use -1 as error code
 int Battery::current(){
   if(isConnected()){
     return (int16_t)readRegister16(this->wire, DEVICE_ADDRESS, CURRENT_REG) * CURRENT_MULTIPLIER;
@@ -97,6 +104,7 @@ int Battery::current(){
   }
 }
 
+// TODO: Probably better to use -1 as error code
 int Battery::currentAverage(){
   if(isConnected()){
       return (int16_t)readRegister16(this->wire, DEVICE_ADDRESS, AVG_CURRENT_REG) * CURRENT_MULTIPLIER;
@@ -105,6 +113,7 @@ int Battery::currentAverage(){
   }
 }
 
+// TODO: Probably better to use -1 as error code but then the return type should be int
 unsigned int Battery::percentage(){
   if(isConnected()){
       return readRegister16(this->wire, DEVICE_ADDRESS, AV_SOC_REG) >> 8;
@@ -114,7 +123,7 @@ unsigned int Battery::percentage(){
 
 }
 
-
+// TODO: Probably better to use -1 as error code but then the return type should be int
 unsigned int Battery::remainingCapacity(){
   if(isConnected()){
     return readRegister16(this->wire, DEVICE_ADDRESS, REP_CAP_REG) * CAP_MULTIPLIER;
