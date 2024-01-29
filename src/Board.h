@@ -148,7 +148,7 @@ class Board {
         PF1550 * pmic;
         
         #if defined(ARDUINO_PORTENTA_C33)
-        LowPower * pLowPower;
+        LowPower * lowPower;
         #endif
         
 };
