@@ -18,7 +18,7 @@ void Charger::setEndOfChargeCurrent(EndOfChargeCurrent current) {
     pmic -> getControlPointer() -> setEndOfChargeCurrent(current);
 }
 
-void Charger::setMaxInputCurrent(MaxInputCurrent i) {
+void Charger::setMaxInputCurrent(MaxInputCurrent current) {
     pmic -> getControlPointer() -> setInputCurrentLimit(current);
 }
 
