@@ -526,6 +526,7 @@ True if successful, false otherwise.
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 | [`PowerManagement`](#class_power_management_1acc41d5c24cf751f6924e62c4e602f5b3) | constructor for the [PowerManagement](#class_power_management) |
+| [`~PowerManagement`](#class_power_management_1a3d8e868a9d3eb39a971f1cfe901119df) | destructor for the [PowerManagement](#class_power_management) |
 | [`begin`](#class_power_management_1a65bcff4dceb0effedd04b20be2e6695e) | start communication with the PMIC chip and the power gauge. |
 | [`getBoard`](#class_power_management_1ad732d749ad09d03eff4523b617ec7e7f) | returns the initialised instance of the [Board](#class_board) class |
 | [`getBattery`](#class_power_management_1aec3b949e2c9904113a7c406ac7019e00) | returns the initialised instance of the [Battery](#class_battery) class |
@@ -540,6 +541,16 @@ public PowerManagement()
 ```
 
 constructor for the [PowerManagement](#class_power_management)
+
+<hr />
+
+### `~PowerManagement` <a id="class_power_management_1a3d8e868a9d3eb39a971f1cfe901119df" class="anchor"></a>
+
+```cpp
+public ~PowerManagement()
+```
+
+destructor for the [PowerManagement](#class_power_management)
 
 <hr />
 
