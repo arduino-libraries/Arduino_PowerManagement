@@ -171,6 +171,7 @@ The remaining capacity in milliampere-hours (mAh).
 | [`enableWakeupFromPin`](#class_board_1a001bd0741f8dc4d1827f4726089cbb4c) | Enables wake-up of the device from a specified pin (A0, A1, A2, A3, A4, A5, D4, D7 )  |
 | [`enableWakeupFromRTC`](#class_board_1ae158d0367a2851d1f1f560bcca784412) | Enables wake-up of the device from the RTC. |
 | [`sleepFor`](#class_board_1a966bcfa00c60eaf3b0a1aa89d1deea9d) | Put the device in sleep mode for a specified amount of time. |
+| [`sleepFor`](#class_board_1a31c46d510bbf14e372e019b8789afd3b) | Put the device in sleep mode for a specified amount of time. |
 | [`sleepUntilWakeupEvent`](#class_board_1a1d23524e0bfeb7282fa465f3834027e1) | Put the device into sleep mode until a wakeup event occurs. |
 | [`deepSleepUntilWakeupEvent`](#class_board_1aa0f7c55bf12f52374a2694aff110836b) | Put the device into deep sleep mode until a wakeup event occurs. |
 | [`turnPeripheralsOff`](#class_board_1a8e78bbbcc6638a365e30d2d846ddb2a7) | Turn the peripherals on Portenta C33 (ADC, RGB LED, Secure Element, Wifi and Bluetooth) off. |
@@ -306,6 +307,27 @@ Put the device in sleep mode for a specified amount of time.
 * `callbackFunction` The function to call when the device wakes up. 
 
 * `RTC` The RTC instance to use for the sleep function. 
+
+#### Returns
+True if successful, false otherwise.
+<hr />
+
+### `sleepFor` <a id="class_board_1a31c46d510bbf14e372e019b8789afd3b" class="anchor"></a>
+
+```cpp
+public bool sleepFor(int hours, int minutes, int seconds, void(*)() callbackFunction)
+```
+
+Put the device in sleep mode for a specified amount of time.
+
+#### Parameters
+* `hours` The number of hours to sleep. 
+
+* `minutes` The number of minutes to sleep. 
+
+* `seconds` The number of seconds to sleep. 
+
+* `callbackFunction` The function to call when the device wakes up. 
 
 #### Returns
 True if successful, false otherwise.
