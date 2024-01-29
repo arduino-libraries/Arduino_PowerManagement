@@ -83,9 +83,7 @@ void Board::enableWakeupFromRTC(){
 
 bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)()){
     RTC.begin();
-    RTCTime currentTime;
-    RTC->getTime(currentTime);
-    // ...
+    this->sleepFor(hours, minutes, seconds, callbackFunction, &RTC);
 }
 
 bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)(), RTClock * rtc){
