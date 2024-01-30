@@ -35,7 +35,7 @@ void loop() {
     if(sleepFlag){
         sleepFlag = false;
 
-        //board.turnPeripheralsOff();
+        //board.setAllPeripheralsPower(false);
         board.sleepUntilWakeupEvent();
     } else {
 

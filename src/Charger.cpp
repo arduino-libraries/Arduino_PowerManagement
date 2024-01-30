@@ -18,7 +18,7 @@ void Charger::setEndOfChargeCurrent(EndOfChargeCurrent current) {
     pmic -> getControlPointer() -> setEndOfChargeCurrent(current);
 }
 
-void Charger::setMaxInputCurrent(MaxInputCurrent i) {
+void Charger::setInputCurrentLimit(InputCurrentLimit current) {
     pmic -> getControlPointer() -> setInputCurrentLimit(current);
 }
 
@@ -34,34 +34,28 @@ bool Charger::disable(){
 
 ChargeStatus Charger::getChargeStatus(){
     uint16_t reg_val = this -> pmic ->  readPMICreg(Register::CHARGER_CHG_SNS);
-    uint16_t bits3to0 = extractBits(reg_val, 0, 3);
-
-    // TODO: Unused variable
-    uint16_t temp_reg = this -> pmic ->  readPMICreg(Register::CHARGER_THM_REG_CNFG);
-
-
-    switch (bits3to0) {
+    switch (extractBits(reg_val, 0, 3)) {
         case 0:
-            return PRECHARGE;
+            return ChargeStatus::PreCharge;
         case 1:
-            return FAST_CHARGE_CC;
+            return ChargeStatus::FastChargeConstantCurrent;
         case 2:
-            return FAST_CHARGE_CV;
+            return ChargeStatus::FastChargeConstantVoltage;
         case 3:
-            return END_OF_CHARGE;
+            return ChargeStatus::EndOfCharge;
         case 4:
-            return DONE;
+            return ChargeStatus::Done;
         case 6:
-            return TIMER_FAULT;
+            return ChargeStatus::TimerFaultError;
         case 7:
-            return THERMISTOR_SUSPEND;
+            return ChargeStatus::ThermistorSuspendError;
         case 8:
-            return OFF;
+            return ChargeStatus::ChargerDisabled;
         case 9:
-            return BATTERY_OVERVOLTAGE;
+            return ChargeStatus::BatteryOvervoltageError;
         case 12:
-            return LINEAR_ONLY;
+            return ChargeStatus::ChargerBypassMode;
         default:
-            return NONE;
+            return ChargeStatus::None;
     }
 }

@@ -6,7 +6,9 @@
 #include "Board.h"
 #include "Battery.h"
 #include "Charger.h"
-#include <Arduino_PF1550.h>
+#include <Arduino_PMIC.h>
+
+
 
 
 
@@ -17,33 +19,30 @@ class PowerManagement{
          */
         PowerManagement();
 
+        
+        ~PowerManagement();
+
         /**
          * @brief start communication with the PMIC chip and the power gauge. 
          * @returns true if the initialization was successful, false otherwise
-        */
+         */
         bool begin();
         
-        // TODO: Improve documentation e.g. explain what to do with the returned object
-        // I'd avoid to talk about pointers here, since the user doesn't need to know about them        
         /**
-         * @brief returns the initialised instance of the Board class
-         * @returns the dereferenced board pointer (actual Board instance)
-        */
+         * @brief This class centralizes control over the power distribution within the board. It allows users to enable or disable specific power rails, and send the board into low-power modes. 
+         * @returns the Board object.
+         */
         Board getBoard();
-        
-        // TODO: Improve documentation e.g. explain what to do with the returned object
-        // I'd avoid to talk about pointers here, since the user doesn't need to know about them
+
         /**
-         * @brief returns the initialised instance of the Battery class
-         * @returns the dereferenced battery pointer (actual Battery instance)
-        */
+         * @brief Dedicated to battery management, this class enables real-time monitoring of battery usage and health. 
+         * @returns the Battery object. 
+         */
         Battery getBattery();
         
-        // TODO: Improve documentation e.g. explain what to do with the returned object
-        // I'd avoid to talk about pointers here, since the user doesn't need to know about them
         /** 
-         * @brief returns the initialised instance of the Charger class
-         * @returns the dereferenced charger pointer (actual Charger instance)
+         * @brief Focused on battery charging dynamics, this class provides a detailed insight into charging parameters.
+         * @returns the Charger object. 
          */
         Charger getCharger();
 

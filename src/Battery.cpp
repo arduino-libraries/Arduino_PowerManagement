@@ -1,128 +1,113 @@
 #ifndef Battery_H
 #define Battery_H
 
-// TODO: Use better names for the constants
-// TODO: Document the constants
-#define CAPACITY 200
-#define V_EMPTY 3000
 
-#define BATTERY_STATUS_BIT 3 
 
 #include "Battery.h"
 
 Battery::Battery() {
 }
 
-bool Battery::begin(){
-    if(readBitFromRegister(this->wire, DEVICE_ADDRESS, STATUS_REG, POR_BIT)){
+Battery::Battery(int capacityInMilliAmpereHours, int emptyVoltageInMilliVolts) {
+  batteryCapacityInMiliampereHours = capacityInMilliAmpereHours;
+  batteryEmptyVoltage = emptyVoltageInMilliVolts;
+}
 
-      uint16_t tempHibCfgReg = readRegister16(this->wire, DEVICE_ADDRESS, HIB_CFG_REG);
+bool Battery::begin(){
+    if(readBitFromRegister(this->wire, fuelGaugeAddress, STATUS_REG, POR_BIT)){
+
+      uint16_t tempHibCfgReg = readRegister16(this->wire, fuelGaugeAddress, HIB_CFG_REG);
 
       // release from hibernation
-      writeRegister16(this->wire, DEVICE_ADDRESS, SOFT_WAKEUP_REG, 0x90); // Exit Hibernate Mode step 1
-      writeRegister16(this->wire, DEVICE_ADDRESS, HIB_CFG_REG, 0x0);      // Exit Hibernate Mode step 2
-      writeRegister16(this->wire, DEVICE_ADDRESS, SOFT_WAKEUP_REG, 0x0);  // Exit Hibernate Mode step 3
+      writeRegister16(this->wire, fuelGaugeAddress, SOFT_WAKEUP_REG, 0x90); // Exit Hibernate Mode step 1
+      writeRegister16(this->wire, fuelGaugeAddress, HIB_CFG_REG, 0x0);      // Exit Hibernate Mode step 2
+      writeRegister16(this->wire, fuelGaugeAddress, SOFT_WAKEUP_REG, 0x0);  // Exit Hibernate Mode step 3
 
 
       // set battery configuration
-      writeRegister16(this->wire, DEVICE_ADDRESS, V_EMPTY_REG, (uint16_t)(V_EMPTY / VOLTAGE_MULTIPLIER)); 
-      writeRegister16(this->wire, DEVICE_ADDRESS, DESIGN_CAP_REG, (uint16_t)(CAPACITY / CAP_MULTIPLIER));
-      writeRegister16(this->wire, DEVICE_ADDRESS, I_CHG_TERM_REG, (uint16_t)(101 / CURRENT_MULTIPLIER));
+      writeRegister16(this->wire, fuelGaugeAddress, V_EMPTY_REG, (uint16_t)(batteryEmptyVoltage / VOLTAGE_MULTIPLIER)); 
+      writeRegister16(this->wire, fuelGaugeAddress, DESIGN_CAP_REG, (uint16_t)(batteryCapacityInMiliampereHours / CAP_MULTIPLIER));
+      writeRegister16(this->wire, fuelGaugeAddress, I_CHG_TERM_REG, (uint16_t)(101 / CURRENT_MULTIPLIER));
 
 
-      writeRegister16(this->wire, DEVICE_ADDRESS, MODEL_CFG_REG, 0x8000);                    // Write ModelCFG
+      writeRegister16(this->wire, fuelGaugeAddress, MODEL_CFG_REG, 0x8000);                    // Write ModelCFG
 
-      // TODO: Is this code still needed?
-      // do not continue until ModelCFG.Refresh==0
-      /*
-      while (readBitFromRegister(this->wire, DEVICE_ADDRESS, MODEL_CFG_REG, MODEL_CFG_REFRESH_BIT)==0) {
-         delay(10);
-         Serial.println("waiting for config to be set");
-      }
-      */
 
-      writeRegister16(this->wire, DEVICE_ADDRESS, HIB_CFG_REG, tempHibCfgReg); // Restore Original HibCFG value
-      replaceRegisterBits(this->wire, DEVICE_ADDRESS, STATUS_REG, 0, 0x01, POR_BIT);
+      writeRegister16(this->wire, fuelGaugeAddress, HIB_CFG_REG, tempHibCfgReg); // Restore Original HibCFG value
+      replaceRegisterBits(this->wire, fuelGaugeAddress, STATUS_REG, 0, 0x01, POR_BIT);
   }
 }
 
 
 bool Battery::isConnected(){
-  uint16_t statusRegister = readRegister16(this->wire, DEVICE_ADDRESS, STATUS_REG);
+  uint16_t statusRegister = readRegister16(this->wire, fuelGaugeAddress, STATUS_REG);
   return getBitFromOffset(statusRegister, BATTERY_STATUS_BIT) == 0;
 }
 
-// TODO: Probably better to use -1 as error code
-unsigned int Battery::voltage(){
+
+int Battery::voltage(){
   if(isConnected()){
-    return readRegister16(this->wire, DEVICE_ADDRESS, VCELL_REG) * VOLTAGE_MULTIPLIER;
+    return readRegister16(this->wire, fuelGaugeAddress, VCELL_REG) * VOLTAGE_MULTIPLIER;
   } else {
-    return 0;
+    return -1;
   }
 }
 
-// TODO: Probably better to use -1 as error code
-unsigned int Battery::voltageAverage(){
+unsigned int Battery::averageVoltage(){
   if(isConnected()){
-      return readRegister16(this->wire, DEVICE_ADDRESS, AVG_VCELL_REG) * VOLTAGE_MULTIPLIER;
+      return readRegister16(this->wire, fuelGaugeAddress, AVG_VCELL_REG) * VOLTAGE_MULTIPLIER;
   } else {
-    return 0;
+    return -1;
   }
 }
 
-// TODO: Probably better to use -1 as error code
 int Battery::temperature(){
   if(isConnected()){
-    return readRegister16(this->wire, DEVICE_ADDRESS, TEMP_REG) >> 8;
+    return readRegister16(this->wire, fuelGaugeAddress, TEMP_REG) >> 8;
   } else {
-    return 0;
+    return -1;
   }
 }
 
-// TODO: Probably better to use -1 as error code
 int Battery::temperatureAverage(){
   if(isConnected()){
-    return readRegister16(this->wire, DEVICE_ADDRESS, AVG_TA_REG) >> 8;
+    return readRegister16(this->wire, fuelGaugeAddress, AVG_TA_REG) >> 8;
   } else {
-    return 0;
+    return -1;
   }
   
 }
 
-// TODO: Probably better to use -1 as error code
 int Battery::current(){
   if(isConnected()){
-    return (int16_t)readRegister16(this->wire, DEVICE_ADDRESS, CURRENT_REG) * CURRENT_MULTIPLIER;
+    return (int16_t)readRegister16(this->wire, fuelGaugeAddress, CURRENT_REG) * CURRENT_MULTIPLIER;
   } else {
-    return 0;
+    return -1;
   }
 }
 
-// TODO: Probably better to use -1 as error code
-int Battery::currentAverage(){
+int Battery::averageCurrent(){
   if(isConnected()){
-      return (int16_t)readRegister16(this->wire, DEVICE_ADDRESS, AVG_CURRENT_REG) * CURRENT_MULTIPLIER;
+      return (int16_t)readRegister16(this->wire, fuelGaugeAddress, AVG_CURRENT_REG) * CURRENT_MULTIPLIER;
   } else {
-    return 0;
+    return -1;
   }
 }
 
-// TODO: Probably better to use -1 as error code but then the return type should be int
-unsigned int Battery::percentage(){
+int Battery::percentage(){
   if(isConnected()){
-      return readRegister16(this->wire, DEVICE_ADDRESS, AV_SOC_REG) >> 8;
+      return readRegister16(this->wire, fuelGaugeAddress, AV_SOC_REG) >> 8;
   } else {
-    return 0;
+    return -1;
   }
 
 }
 
-// TODO: Probably better to use -1 as error code but then the return type should be int
-unsigned int Battery::remainingCapacity(){
+ int Battery::remainingCapacity(){
   if(isConnected()){
-    return readRegister16(this->wire, DEVICE_ADDRESS, REP_CAP_REG) * CAP_MULTIPLIER;
+    return readRegister16(this->wire, fuelGaugeAddress, REP_CAP_REG) * CAP_MULTIPLIER;
   } else {
-    return 0;
+    return -1;
   }
 }
 

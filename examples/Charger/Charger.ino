@@ -64,34 +64,34 @@ void loop(){
     Serial.print("* Charger state :");
 
     switch (status) {
-        case PRECHARGE:
+        case PreCharge:
             Serial.println("precharge");
             break;
-        case FAST_CHARGE_CC:
+        case FastChargeConstantCurrent:
             Serial.println("fast-charge constant current");
             break;
-        case FAST_CHARGE_CV:
+        case FastChargeConstantVoltage:
             Serial.println("fast-charge constant voltage");
             break;
-        case END_OF_CHARGE:
+        case EndOfCharge:
             Serial.println("end-of-charge");
             break;
-        case DONE:
+        case Done:
             Serial.println("done");
             break;
-        case TIMER_FAULT:
+        case TimerFaultError:
             Serial.println("timer fault");
             break;
-        case THERMISTOR_SUSPEND:
+        case ThermistorSuspendError:
             Serial.println("thermistor suspend");
             break;
-        case OFF:
+        case ChargerDisabled:
             Serial.println("off");
             break;
-        case BATTERY_OVERVOLTAGE:
+        case BatteryOvervoltageError:
             Serial.println("overvoltage condition");
             break;
-        case LINEAR_ONLY:
+        case ChargerBypassMode:
             Serial.println("disabled");
             break;
         default:
