@@ -6,8 +6,19 @@ Board::Board() {}
 Board::Board(PF1550 * pmic) {
     this -> pPMIC = pmic;
     #if defined(ARDUINO_PORTENTA_C33)
-    this -> pLowPower = new LowPower();
-    #endif
+        this -> pLowPower = new LowPower();
+    #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
+        this -> pLowPower = LowPowerPortentaH7::getInstance();
+
+        if (CM7_CPUID == HAL_GetCurrentCPUID())
+        {
+            if (lowPowerCode::success != LowPower.checkOptionBytes()) {
+                LowPower.prepareOptionBytes();
+            }
+        }
+
+
+    #endif 
 }
 
 
@@ -64,23 +75,36 @@ void Board::setCameraPowerEnabled(bool on) {
 void Board::enableWakeupFromPin(uint8_t pin, PinStatus direction){
     #if defined(ARDUINO_PORTENTA_C33) 
         pLowPower->enableWakeupFromPin(pin, direction);
-    #else 
-        #warning "This feature is currently only supported on the Portenta C33 board"
     #endif
 }
+
+#if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
+void Board::enableWakeupFromPin(){
+    
+    if(standbyType == 0){
+        standbyType = lowPowerStandbyType::untilPinActivity;
+    } else if (standbyType == lowPowerStandbyType::untilRTCAlarm){
+        standbyType = lowPowerStandbyType::untilBoth;
+    }
+}
+#endif
 
 void Board::enableWakeupFromRTC(){
     #if defined(ARDUINO_PORTENTA_C33)
         pLowPower->enableWakeupFromRTC();
-    #else 
-        #warning "This feature is currently only supported on the Portenta C33 board"
+    #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
+        if(standbyType == 0){
+            standbyType = lowPowerStandbyType::untilRTCAlarm;
+        } else if (standbyType == lowPowerStandbyType::untilPinActivity){
+            standbyType = lowPowerStandbyType::untilBoth;
+        }
     #endif
 }
 
 
 
 bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)(), RTClock * rtc){
-    #if defined(ARDUINO_PORTENTA_C33)    
+
         RTCTime currentTime;
         if (!rtc -> getTime(currentTime)) {
             Serial.println("Failed to get current time"); 
@@ -108,25 +132,25 @@ bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callback
         }
         delay(1);
         return true;
-    #else 
-        #warning "This method is currently only supported on the Portenta C33 board"
+}
+
+bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)()){
+    #if defined(ARDUINO_PORTENTA_C33)
+        return this -> sleepFor(hours, minutes, seconds, callbackFunction, &RTC);
     #endif
 }
     
 
 void Board::sleepUntilWakeupEvent(){
-    #if defined(ARDUINO_PORTENTA_C33)
-        pLowPower -> sleep();
-    #else
-        #warning "This method is currently only supported on the Portenta C33 board"
-    #endif
+    pLowPower -> sleep();
 }
 
 void Board::deepSleepUntilWakeupEvent(){
     #if defined(ARDUINO_PORTENTA_C33)
         pLowPower -> deepSleep();
-    #else 
-        #warning "This method is currently only supported on the Portenta C33 board"
+    #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
+        pLowPower -> allowDeepSleep();
+        pLowPower -> standbyM7(standbyType, 10U);
     #endif
 }
 

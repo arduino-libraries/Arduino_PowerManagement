@@ -12,11 +12,11 @@ Charger charger;
 
 static void alarmCallback()
 {   
-    board.setAllPeripheralsPower(true);
+    //board.setAllPeripheralsPower(true);
     digitalWrite(LED_BUILTIN, HIGH);
-    delay(5000);
+    delay(500);
     digitalWrite(LED_BUILTIN, LOW);
-    board.setAllPeripheralsPower(false);
+    //board.setAllPeripheralsPower(false);
     board.deepSleepUntilWakeupEvent();
 }
 
@@ -44,7 +44,7 @@ void setup() {
 }
 
 void loop(){
-    board.setAllPeripheralsPower(false);
+    //board.setAllPeripheralsPower(false);
     board.deepSleepUntilWakeupEvent();
 }
 
