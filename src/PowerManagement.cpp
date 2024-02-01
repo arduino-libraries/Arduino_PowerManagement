@@ -17,7 +17,7 @@ PowerManagement::PowerManagement(){
     this->battery = new Battery();
 }
 
-PowerManagement::~PowerManagement(){
+ PowerManagement::~PowerManagement(){
     delete this->pPMIC;
     delete this->board;
     delete this->charger;

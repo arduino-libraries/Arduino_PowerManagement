@@ -4,28 +4,80 @@
 typedef VFastCharge ChargeVoltage;
 typedef IFastCharge ChargeCurrent;
 typedef IEndOfCharge EndOfChargeCurrent;
-typedef IInputCurrentLimit MaxInputCurrent;
+typedef IInputCurrentLimit InputCurrentLimit;
 
 
-// TODO: Explain these enums.
-// TODO: Avoid abbreviations in enum names.
-// TODO: Avoid all caps in enum names. Use CamelCase instead.
-// TODO: Use enum class instead of enum.
+
 /**
- * Enum representing different charging statuses.
+ * Enum representing different states of charging. 
+ * @see #None
+ * @see #PreCharge
+ * @see #FastChargeConstantCurrent
+ * @see #FastChargeConstantVoltage
+ * @see #EndOfCharge
+ * @see #Done
+ * @see #TimerFaultError
+ * @see #ThermistorSuspendError
+ * @see #ChargerDisabled
+ * @see #BatteryOvervoltageError
+ * @see #ChargerBypassMode
  */
-enum ChargeStatus {
-    NONE = -1,
-    PRECHARGE = 0,
-    FAST_CHARGE_CC = 1,
-    FAST_CHARGE_CV = 2,
-    END_OF_CHARGE = 3,
-    DONE = 4,
-    TIMER_FAULT = 6,
-    THERMISTOR_SUSPEND = 7,
-    OFF = 8,
-    BATTERY_OVERVOLTAGE = 9,
-    LINEAR_ONLY = 12
+
+enum class ChargeStatus {
+    /**
+     * Provided by the registers, not used. 
+     */
+    None = -1,
+
+    /**
+     * First stage of the charging process, prepares battery for the charging process.
+     */
+    PreCharge = 0,
+
+    /**
+     * Second phase of the charging process where the battery is charging in constant current mode until it reaches the voltage where the it's considered fully charged. (4.2V)
+     */
+    FastChargeConstantCurrent = 1,
+
+    /**
+     * Third phase of the charging process where the battery is kept at the fully charged voltage and current is slowly decreased to the end of charge current.
+     */
+    FastChargeConstantVoltage = 2,
+
+    /**
+     * If the battery is still connected, the charger will ensure it's kept at 4.2V by topping up the voltage to avoid self discharge.
+     */
+    EndOfCharge = 3,
+
+    /** 
+     * Battery is fully charged
+     */
+    Done = 4,
+    
+    /** 
+     * The timer that is monitoring the charge status has encountered an error.
+     */
+    TimerFaultError = 6,
+    
+    /** 
+     * Charging was suspended due to overheating
+     */
+    ThermistorSuspendError = 7,
+    
+    /** 
+     * Charger is disabled
+     */
+    ChargerDisabled = 8,
+    
+    /** 
+     *  Charging was suspended due to an overvoltage fault
+     */
+    BatteryOvervoltageError = 9,
+    
+    /** 
+     * The charger is bypassed completely and the USB voltage is powering the board
+     */
+    ChargerBypassMode = 12
 };
 
 /**
@@ -62,13 +114,11 @@ public:
      */
     void setEndOfChargeCurrent(EndOfChargeCurrent current);
 
-    // TODO: Explain what is the input current. Input to the charger? Input to the battery? both?
-    // Why is this setting useful?
     /**
-     * @brief Set the maximum input current.
-     * @param current Maximum input current enum value (MaxInputCurrent).
+     * @brief The input current limit (ILIM) safeguards the device by preventing overcurrent, ensuring the charging current is within safe levels for the battery, and adapting to the maximum current the power source can provide, allowing you to charge and use the system at the same time. 
+     * @param current Maximum input current enum value (InputCurrentLimit).
      */
-    void setMaxInputCurrent(MaxInputCurrent current);
+    void setInputCurrentLimit(InputCurrentLimit current);
 
     /**
      * @brief Get the current charging status.
@@ -76,17 +126,15 @@ public:
      */
     ChargeStatus getChargeStatus();
 
-    // TODO: Enables charging or just enables the charger?
-    // TODO: Explain charging behaviour, what's the default charging current, etc.
     /**
-     * @brief Enable the charger.
+     * @brief Enables the charging functionality with either the default settings or the last saved parameters, depending on what was set previously. 
      * @return True if successful, false otherwise.
      */
     bool enable();
 
-    // TODO: Enables charging or just enables the charger?
+
     /**
-     * @brief Disable the charger.
+     * @brief Disable the charging functionality.
      * @return True if successful, false otherwise.
      */
     bool disable();

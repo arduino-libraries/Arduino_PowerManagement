@@ -12,11 +12,11 @@ Charger charger;
 
 static void alarmCallback()
 {   
-    board.turnPeripheralsOn();
+    board.setAllPeripheralsPower(true);
     digitalWrite(LED_BUILTIN, HIGH);
     delay(5000);
     digitalWrite(LED_BUILTIN, LOW);
-    board.turnPeripheralsOff();
+    board.setAllPeripheralsPower(false);
     board.deepSleepUntilWakeupEvent();
 }
 
@@ -29,7 +29,7 @@ void setup() {
     board = manager.getBoard();
 
     board.enableWakeupFromRTC();
-    board.turnPeripheralsOn();
+    board.setAllPeripheralsPower(true);
 
    
     if (!RTC.isRunning()) {
@@ -44,7 +44,7 @@ void setup() {
 }
 
 void loop(){
-    board.turnPeripheralsOff();
+    board.setAllPeripheralsPower(false);
     board.deepSleepUntilWakeupEvent();
 }
 

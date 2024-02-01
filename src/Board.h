@@ -10,9 +10,10 @@
 #include "Arduino_Portenta_C33_LowPower.h"
 #endif
 
-#define CONTEXT_LDO1 1
 #define CONTEXT_LDO2 2
 #define CONTEXT_SW 3 
+
+constexpr int emptyRegister = 0xFF;
 
 
 class Board {
@@ -40,43 +41,41 @@ class Board {
         */
         bool isBatteryPowered();
 
-        // TODO: I don't understand what this function does.
         /**
-         * @brief Set the external power lane switch state.
-         * @param on True to turn on the switch, false to turn it off.
+         * Set the voltage for the external power rail.
+         * This lane powers the pin labeled 3V3 on the board.
+         * @param on True to enable this power rail, false to disable it.
          */
-        void setExternalSwitch(bool on);
+        void setExternalPowerEnabled(bool on);
 
-        // TODO: What is the external power rail?
-        // TODO: Document allowed values for the voltage parameter
+
         /**
-         * @brief Set the voltage for the external power rail.
-         * @param voltage Voltage value to set. (as float)
+         * Set the voltage for the external power rail.
+         * This lane powers the pin labeled 3V3 on the board.
+         * @param voltage float value of the voltage value to set. `voltage` has to be one of the following (1.10, 1.20, 1.35, 1.50, 1.80, 2.50, 3.00 and 3.30)
          * @return True if successful, false otherwise.
         */
         bool setExternalVoltage(float voltage); 
     
-        // TODO: Find a better name for this function. e.g. setCameraEnabled or setCameraPowerEnabled
+  
         /**
-         * @brief Set the camera power rail switch state on boards with a built-in camera.
+         * @brief Set the camera power rail switch direction on boards with a built-in camera.
          * @param enabled True to turn on the switches, false to turn them off.
         */
-        void setCameraSwitch(bool enabled); 
+        void setCameraPowerEnabled(bool enabled); 
 
-        // TODO: Second parameter is apparently not direction but state. Hmm...
         /**
          * Enables wake-up of the device from a specified pin (A0, A1, A2, A3, A4, A5, D4, D7 )
          * @param pin The pin number used for waking up the device.
          * @param direction The direction of the interrupt that will wake up the device. (RISING, FALLING)
          */
-        void enableWakeupFromPin(uint8_t pin, PinStatus state);
+        void enableWakeupFromPin(uint8_t pin, PinStatus direction);
 
         /**
          * Enables wake-up of the device from the RTC.
          */
         void enableWakeupFromRTC();
 
-        // TODO: Shall we provide a convenience function to instantiate the RTC object?
         /**
          * @brief Put the device in sleep mode for a specified amount of time.
          * @param hours The number of hours to sleep.
@@ -100,53 +99,44 @@ class Board {
 
         // TODO: Explain wake up events and add references
         // TODO: Explain difference between sleep and deep sleep
+
         /**
-         * @brief Put the device into sleep mode until a wakeup event occurs.
+         * Put the device into sleep mode until a wakeup event occurs. 
+         * This sleep mode is ideal for applications requiring periodic wake-ups or brief intervals of inactivity and reduces consumption to a range between 6mA and 18mA depending on the state of the peripherals. 
+         * This sleep mode resumes the operation from the last operation.
+         * A wakeup event can be an interrupt on a pin or the RTC, depending on what you set with enableWakeupFromPin() and enableWakeupFromRTC().
          */
         void sleepUntilWakeupEvent();
 
-        // TODO: Explain wake up events and add references
-        // TODO: Explain difference between sleep and deep sleep
         /**
-         * @brief Put the device into deep sleep mode until a wakeup event occurs.
+         * Put the device into deep sleep mode until a wakeup event occurs.
+         * For scenarios demanding drastic power conservation, the Deep Sleep Mode significantly reduces the board's power usage to range between 90uA and 11mA depending on the state of the peripherals. 
+         * This mode restarts the board on wakeup, effectively running the setup() function again.
+         * A wakeup event can be an interrupt on a pin or the RTC, depending on what you set with enableWakeupFromPin() and enableWakeupFromRTC().
          */
         void deepSleepUntilWakeupEvent();
 
-        // TODO: Can we add a parameter to select what peripherals to turn off? Default: all
         /**
          * @brief Turn the peripherals on Portenta C33 (ADC, RGB LED, Secure Element, Wifi and Bluetooth) off.
         */
-        void turnPeripheralsOff();
+        void setAllPeripheralsPower(bool on);
 
-        // TODO: Again, can we provide a paramter to selectively turn on peripherals? Default: all
         /**
-         * @brief Turn the peripherals on Portenta C33 back on. (ADC, RGB LED, Secure Element, Wifi and Bluetooth)
-        */
-        void turnPeripheralsOn();
-
-        // TODO: Not sure why we talk about switches. I'd rather talk about peripherals or choose a better name
-        // e.g. powerCommunicationPeripherals or setCommunicationPeripheralsPower
-        // Might be redundant if we apply the feedback above to turnPeripheralsOn/Off
-        /**
-         * @brief Set the communication power rail switch state on Portenta C33 (Wifi, Bluetooth and Secure Element)
+         * @brief Set the communication power rail switch direction on Portenta C33 (Wifi, Bluetooth and Secure Element)
          * @param on True to turn on the switches, false to turn them off.
         */
-        void setCommunicationSwitch(bool on);
+        void setCommunicationPeripheralsPower(bool on);
         
-        // TODO: Not sure what this function does.
-        // TODO: Document allowed values for the voltage parameter
         /**
-         * @brief Set the analog voltage on Portenta C33.
-         * @param voltage Voltage value to set (as float).
-         * @return True if successful, false otherwise.
+         * @brief Set the analog digital converter power rail switch direction on Portenta C33.
+         * @param on True to turn on the switches, false to turn them off.
         */
-        bool setAnalogVoltage(float voltage);
+        void setAnalogDigitalConverterPower(bool on);
 
-        // TODO: Explain what the voltage reference is used for.
-        // TODO: Document allowed values for the voltage parameter
         /**
-         * @brief Set the reference voltage on Portenta C33.
-         * @param voltage Voltage value to set (as float).
+         * @brief Set the reference voltage on Portenta C33. This value is used by the ADC to convert analog values to digital values.
+         * This can be particularly useful to increase the accuracy of the ADC when working with low voltages
+         * @param voltage float value of the voltage value to set. It can be any value between 1.80V and 3.30V in steps of 0.10V. Any value outside this range or with different steps will not be accepted by the library.
          * @return True if successful, false otherwise.
         */
         bool setReferenceVoltage(float voltage);
@@ -155,102 +145,10 @@ class Board {
      
 
     private:
-        PF1550 * pmic;
-        
+        PF1550 * pPMIC;
+        static uint8_t getRailVoltage(float voltage, int context);
         #if defined(ARDUINO_PORTENTA_C33)
         LowPower * lowPower;
         #endif
         
 };
-
-// TODO: Move to cpp file
-static inline uint8_t getRailVoltage(float voltage, int context) {
-    switch (context) {
-        case 1: // LDO1
-            if (voltage == 0.75f) return static_cast<uint8_t>(Ldo1Voltage::V_0_75);
-            else if (voltage == 0.80f) return static_cast<uint8_t>(Ldo1Voltage::V_0_80);
-            else if (voltage == 0.85f) return static_cast<uint8_t>(Ldo1Voltage::V_0_85);
-            else if (voltage == 0.90f) return static_cast<uint8_t>(Ldo1Voltage::V_0_90);
-            else if (voltage == 0.95f) return static_cast<uint8_t>(Ldo1Voltage::V_0_95);
-            else if (voltage == 1.00f) return static_cast<uint8_t>(Ldo1Voltage::V_1_00);
-            else if (voltage == 1.05f) return static_cast<uint8_t>(Ldo1Voltage::V_1_05);
-            else if (voltage == 1.10f) return static_cast<uint8_t>(Ldo1Voltage::V_1_10);
-            else if (voltage == 1.15f) return static_cast<uint8_t>(Ldo1Voltage::V_1_15);
-            else if (voltage == 1.20f) return static_cast<uint8_t>(Ldo1Voltage::V_1_20);
-            else if (voltage == 1.25f) return static_cast<uint8_t>(Ldo1Voltage::V_1_25);
-            else if (voltage == 1.30f) return static_cast<uint8_t>(Ldo1Voltage::V_1_30);
-            else if (voltage == 1.35f) return static_cast<uint8_t>(Ldo1Voltage::V_1_35);
-            else if (voltage == 1.40f) return static_cast<uint8_t>(Ldo1Voltage::V_1_40);
-            else if (voltage == 1.45f) return static_cast<uint8_t>(Ldo1Voltage::V_1_45);
-            else if (voltage == 1.50f) return static_cast<uint8_t>(Ldo1Voltage::V_1_50);
-            else if (voltage == 1.80f) return static_cast<uint8_t>(Ldo1Voltage::V_1_80);
-            else if (voltage == 1.90f) return static_cast<uint8_t>(Ldo1Voltage::V_1_90);
-            else if (voltage == 2.00f) return static_cast<uint8_t>(Ldo1Voltage::V_2_00);
-            else if (voltage == 2.10f) return static_cast<uint8_t>(Ldo1Voltage::V_2_10);
-            else if (voltage == 2.20f) return static_cast<uint8_t>(Ldo1Voltage::V_2_20);
-            else if (voltage == 2.30f) return static_cast<uint8_t>(Ldo1Voltage::V_2_30);
-            else if (voltage == 2.40f) return static_cast<uint8_t>(Ldo1Voltage::V_2_40);
-            else if (voltage == 2.50f) return static_cast<uint8_t>(Ldo1Voltage::V_2_50);
-            else if (voltage == 2.60f) return static_cast<uint8_t>(Ldo1Voltage::V_2_60);
-            else if (voltage == 2.70f) return static_cast<uint8_t>(Ldo1Voltage::V_2_70);
-            else if (voltage == 2.80f) return static_cast<uint8_t>(Ldo1Voltage::V_2_80);
-            else if (voltage == 2.90f) return static_cast<uint8_t>(Ldo1Voltage::V_2_90);
-            else if (voltage == 3.00f) return static_cast<uint8_t>(Ldo1Voltage::V_3_00);
-            else if (voltage == 3.10f) return static_cast<uint8_t>(Ldo1Voltage::V_3_10);
-            else if (voltage == 3.20f) return static_cast<uint8_t>(Ldo1Voltage::V_3_20);
-            else if (voltage == 3.30f) return static_cast<uint8_t>(Ldo1Voltage::V_3_30);
-            break;
-            
-        case 2: // LDO2
-            if (voltage == 1.80f) return static_cast<uint8_t>(Ldo2Voltage::V_1_80);
-            else if (voltage == 1.90f) return static_cast<uint8_t>(Ldo2Voltage::V_1_90);
-            else if (voltage == 2.00f) return static_cast<uint8_t>(Ldo2Voltage::V_2_00);
-            else if (voltage == 2.10f) return static_cast<uint8_t>(Ldo2Voltage::V_2_10);
-            else if (voltage == 2.20f) return static_cast<uint8_t>(Ldo2Voltage::V_2_20);
-            else if (voltage == 2.30f) return static_cast<uint8_t>(Ldo2Voltage::V_2_30);
-            else if (voltage == 2.40f) return static_cast<uint8_t>(Ldo2Voltage::V_2_40);
-            else if (voltage == 2.50f) return static_cast<uint8_t>(Ldo2Voltage::V_2_50);
-            else if (voltage == 2.60f) return static_cast<uint8_t>(Ldo2Voltage::V_2_60);
-            else if (voltage == 2.70f) return static_cast<uint8_t>(Ldo2Voltage::V_2_70);
-            else if (voltage == 2.80f) return static_cast<uint8_t>(Ldo2Voltage::V_2_80);
-            else if (voltage == 2.90f) return static_cast<uint8_t>(Ldo2Voltage::V_2_90);
-            else if (voltage == 3.00f) return static_cast<uint8_t>(Ldo2Voltage::V_3_00);
-            else if (voltage == 3.10f) return static_cast<uint8_t>(Ldo2Voltage::V_3_10);
-            else if (voltage == 3.20f) return static_cast<uint8_t>(Ldo2Voltage::V_3_20);
-            else if (voltage == 3.30f) return static_cast<uint8_t>(Ldo2Voltage::V_3_30);
-            break;
-            
-        case 3: // SW1
-            if (voltage == 1.10f) return static_cast<uint8_t>(Sw1Voltage::V_1_10);
-            else if (voltage == 1.20f) return static_cast<uint8_t>(Sw1Voltage::V_1_20);
-            else if (voltage == 1.35f) return static_cast<uint8_t>(Sw1Voltage::V_1_35);
-            else if (voltage == 1.50f) return static_cast<uint8_t>(Sw1Voltage::V_1_50);
-            else if (voltage == 1.80f) return static_cast<uint8_t>(Sw1Voltage::V_1_80);
-            else if (voltage == 2.50f) return static_cast<uint8_t>(Sw1Voltage::V_2_50);
-            else if (voltage == 3.00f) return static_cast<uint8_t>(Sw1Voltage::V_3_00);
-            else if (voltage == 3.30f) return static_cast<uint8_t>(Sw1Voltage::V_3_30);
-            break;
-
-        case 4: // Sw2
-          if (voltage == 1.10f) return static_cast<uint8_t>(Sw2Voltage::V_1_10);
-            else if (voltage == 1.20f) return static_cast<uint8_t>(Sw2Voltage::V_1_20);
-            else if (voltage == 1.35f) return static_cast<uint8_t>(Sw2Voltage::V_1_35);
-            else if (voltage == 1.50f) return static_cast<uint8_t>(Sw2Voltage::V_1_50);
-            else if (voltage == 1.80f) return static_cast<uint8_t>(Sw2Voltage::V_1_80);
-            else if (voltage == 2.50f) return static_cast<uint8_t>(Sw2Voltage::V_2_50);
-            else if (voltage == 3.00f) return static_cast<uint8_t>(Sw2Voltage::V_3_00);
-            else if (voltage == 3.30f) return static_cast<uint8_t>(Sw2Voltage::V_3_30);
-            break;
-
-            
-        default:
-            return 0xFF;
-            break;
-    }
-    
-    // TODO: Better to use -1 as error code. Then the return type should be int8_t
-    return 0xFF;
-}
-
-
-
