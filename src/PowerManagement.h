@@ -19,9 +19,6 @@ class PowerManagement{
          */
         PowerManagement();
 
-        
-        ~PowerManagement();
-
         /**
          * @brief start communication with the PMIC chip and the power gauge. 
          * @returns true if the initialization was successful, false otherwise

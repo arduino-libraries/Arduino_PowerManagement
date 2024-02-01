@@ -3,7 +3,8 @@
 
 Charger::Charger(){}
 
-Charger::Charger(PF1550* pmic) : pmic(pmic) {
+Charger::Charger(PF1550* pmic){
+    this -> pmic = pmic;
 }
 
 void Charger::setChargeCurrent(ChargeCurrent current) {

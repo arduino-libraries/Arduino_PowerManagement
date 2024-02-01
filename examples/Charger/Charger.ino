@@ -53,45 +53,45 @@ void loop(){
     ChargeStatus status = charger.getChargeStatus();
 
     Serial.print("* Voltage: ");
-    Serial.println(String(battery.readVoltage()) + "mV");
+    Serial.println(String(battery.voltage()) + "mV");
 
     Serial.print("* Current: ");
-    Serial.println(String(battery.readCurrent()) + " mA");
+    Serial.println(String(battery.current()) + " mA");
 
     Serial.print("* Percentage: ");
-    Serial.println(String(battery.readPercentage()) + "%");
+    Serial.println(String(battery.percentage()) + "%");
 
     Serial.print("* Charger state :");
 
     switch (status) {
-        case PreCharge:
+        case ChargeStatus::PreCharge:
             Serial.println("precharge");
             break;
-        case FastChargeConstantCurrent:
+        case ChargeStatus::FastChargeConstantCurrent:
             Serial.println("fast-charge constant current");
             break;
-        case FastChargeConstantVoltage:
+        case ChargeStatus::FastChargeConstantVoltage:
             Serial.println("fast-charge constant voltage");
             break;
-        case EndOfCharge:
+        case ChargeStatus::EndOfCharge:
             Serial.println("end-of-charge");
             break;
-        case Done:
+        case ChargeStatus::Done:
             Serial.println("done");
             break;
-        case TimerFaultError:
+        case ChargeStatus::TimerFaultError:
             Serial.println("timer fault");
             break;
-        case ThermistorSuspendError:
+        case ChargeStatus::ThermistorSuspendError:
             Serial.println("thermistor suspend");
             break;
-        case ChargerDisabled:
+        case ChargeStatus::ChargerDisabled:
             Serial.println("off");
             break;
-        case BatteryOvervoltageError:
+        case ChargeStatus::BatteryOvervoltageError:
             Serial.println("overvoltage condition");
             break;
-        case ChargerBypassMode:
+        case ChargeStatus::ChargerBypassMode:
             Serial.println("disabled");
             break;
         default:

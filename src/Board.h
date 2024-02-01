@@ -86,6 +86,7 @@ class Board {
          */
         void enableWakeupFromRTC();
 
+        #if defined(ARDUINO_PORTENTA_C33)
         /**
          * @brief Put the device in sleep mode for a specified amount of time.
          * @param hours The number of hours to sleep.
@@ -96,6 +97,7 @@ class Board {
          * @return True if successful, false otherwise.
         */
         bool sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)(), RTClock * rtc);
+        #endif
 
         /**
          * @brief Put the device in sleep mode for a specified amount of time.
@@ -106,6 +108,15 @@ class Board {
          * @return True if successful, false otherwise.
         */
         bool sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)());
+
+
+        /** 
+         * @brief Put the device in sleep mode for a specified amount of time.
+         * @param hours The number of hours to sleep.
+         * @param minutes The number of minutes to sleep.
+         * @param seconds The number of seconds to sleep.›
+        */
+        bool sleepFor(int hours, int minutes, int seconds);
 
 
         #if defined(ARDUINO_PORTENTA_C33)
@@ -161,8 +172,7 @@ class Board {
         #if defined(ARDUINO_PORTENTA_C33)
             LowPower * pLowPower;
         #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
-            LowPowerPortentaH7 * pLowPower;
-            lowPowerStandbyType standbyType = 0;
+            lowPowerStandbyType standbyType = lowPowerStandbyType::NONE;
         #endif 
         
 };
