@@ -26,43 +26,43 @@ void printChargerStatus(){
    ChargeStatus status = charger.getChargeStatus();
 
         switch (status) {
-        case PRECHARGE:
+        case PreCharge:
             Serial.println("precharge");
             // Additional code specific to precharge
             break;
-        case FAST_CHARGE_CC:
+        case FastChargeConstantCurrent:
             Serial.println("fast-charge constant current");
             // Additional code specific to fast-charge CC
             break;
-        case FAST_CHARGE_CV:
+        case FastChargeConstantVoltage:
             Serial.println("fast-charge constant voltage");
             // Additional code specific to fast-charge CV
             break;
-        case END_OF_CHARGE:
+        case EndOfCharge:
             Serial.println("end-of-charge");
             // Additional code specific to end-of-charge
             break;
-        case DONE:
+        case Done:
             Serial.println("done");
             // Additional code specific to done
             break;
-        case TIMER_FAULT:
+        case TimerFaultError:
             Serial.println("timer fault");
             // Additional code specific to timer fault
             break;
-        case THERMISTOR_SUSPEND:
+        case ThermistorSuspendError:
             Serial.println("thermistor suspend");
             // Additional code specific to thermistor suspend
             break;
-        case OFF:
+        case ChargerDisabled:
             Serial.println("off");
             // Additional code specific to off
             break;
-        case BATTERY_OVERVOLTAGE:
+        case BatteryOvervoltageError:
             Serial.println("overvoltage condition");
             // Additional code specific to battery overvoltage condition
             break;
-        case LINEAR_ONLY:
+        case ChargerBypassMode:
             Serial.println("disabled");
             // Additional code specific to linear only
             break;
@@ -146,35 +146,35 @@ void toggleRail(std::vector<String> args){
 
   if (rail == "C33_external"){
     #if defined(ARDUINO_PORTENTA_C33)
-      board.setExternalSwitch(on);
+      board.setExternalPowerEnabled(on);
     #else
       Serial.println("Current board is not an arduino portenta c33");
     #endif
 
   } else if (rail == "C33_communication"){
     #if defined(ARDUINO_PORTENTA_C33)
-      board.setCommunicationSwitch(on);
+      board.setCommunicationPeripheralsPower(on);
     #else
       Serial.println("Current board is not an arduino portenta c33");
     #endif
 
   } else if (rail == "H7_external"){
     #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
-      board.setExternalSwitch(on);
+      board.setExternalPowerEnabled(on);
     #else
       Serial.println("Current board is not an arduino portenta h7");
     #endif
 
   } else if (rail == "nicla_external"){
     #if defined(ARDUINO_NICLA_VISION)
-     board.setExternalSwitch(on);
+     board.setExternalPowerEnabled(on);
     #else
       Serial.println("Current board is not an arduino nicla vision");
     #endif
 
   } else if (rail == "nicla_camera"){
     #if defined(ARDUINO_NICLA_VISION)
-     board.setCameraSwitch(on);
+     board.setCameraPowerEnabled(on);
     #else
       Serial.println("Current board is not an arduino nicla vision");
     #endif

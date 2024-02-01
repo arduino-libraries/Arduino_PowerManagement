@@ -4,23 +4,80 @@
 typedef VFastCharge ChargeVoltage;
 typedef IFastCharge ChargeCurrent;
 typedef IEndOfCharge EndOfChargeCurrent;
-typedef IInputCurrentLimit MaxInputCurrent;
+typedef IInputCurrentLimit InputCurrentLimit;
+
+
 
 /**
- * Enum representing different charging statuses.
+ * Enum representing different states of charging. 
+ * @see #None
+ * @see #PreCharge
+ * @see #FastChargeConstantCurrent
+ * @see #FastChargeConstantVoltage
+ * @see #EndOfCharge
+ * @see #Done
+ * @see #TimerFaultError
+ * @see #ThermistorSuspendError
+ * @see #ChargerDisabled
+ * @see #BatteryOvervoltageError
+ * @see #ChargerBypassMode
  */
-enum ChargeStatus {
-    NONE = -1,
-    PRECHARGE = 0,
-    FAST_CHARGE_CC = 1,
-    FAST_CHARGE_CV = 2,
-    END_OF_CHARGE = 3,
-    DONE = 4,
-    TIMER_FAULT = 6,
-    THERMISTOR_SUSPEND = 7,
-    OFF = 8,
-    BATTERY_OVERVOLTAGE = 9,
-    LINEAR_ONLY = 12
+
+enum class ChargeStatus {
+    /**
+     * Provided by the registers, not used. 
+     */
+    None = -1,
+
+    /**
+     * First stage of the charging process, prepares battery for the charging process.
+     */
+    PreCharge = 0,
+
+    /**
+     * Second phase of the charging process where the battery is charging in constant current mode until it reaches the voltage where the it's considered fully charged. (4.2V)
+     */
+    FastChargeConstantCurrent = 1,
+
+    /**
+     * Third phase of the charging process where the battery is kept at the fully charged voltage and current is slowly decreased to the end of charge current.
+     */
+    FastChargeConstantVoltage = 2,
+
+    /**
+     * If the battery is still connected, the charger will ensure it's kept at 4.2V by topping up the voltage to avoid self discharge.
+     */
+    EndOfCharge = 3,
+
+    /** 
+     * Battery is fully charged
+     */
+    Done = 4,
+    
+    /** 
+     * The timer that is monitoring the charge status has encountered an error.
+     */
+    TimerFaultError = 6,
+    
+    /** 
+     * Charging was suspended due to overheating
+     */
+    ThermistorSuspendError = 7,
+    
+    /** 
+     * Charger is disabled
+     */
+    ChargerDisabled = 8,
+    
+    /** 
+     *  Charging was suspended due to an overvoltage fault
+     */
+    BatteryOvervoltageError = 9,
+    
+    /** 
+     * The charger is bypassed completely and the USB voltage is powering the board
+     */
+    ChargerBypassMode = 12
 };
 
 /**
@@ -35,33 +92,33 @@ public:
 
     /**
      * @brief Constructor with PMIC instance.
-     * @param _pPMIC Pointer to the PF1550 PMIC instance.
+     * @param pmic Pointer to the PF1550 PMIC instance.
      */
-    Charger(PF1550* _pPMIC);
+    Charger(PF1550* pmic);
 
     /**
      * @brief Set the charging current.
-     * @param i Charging current enum value (ChargeCurrent).
+     * @param current Charging current enum value (ChargeCurrent).
      */
-    void setChargeCurrent(ChargeCurrent i);
+    void setChargeCurrent(ChargeCurrent current);
 
     /**
      * @brief Set the charging voltage.
-     * @param v Charging voltage enum value (ChargeVoltage).
+     * @param voltage Charging voltage enum value (ChargeVoltage).
      */
-    void setChargeVoltage(ChargeVoltage v);
+    void setChargeVoltage(ChargeVoltage voltage);
 
     /**
      * @brief Set the end-of-charge current.
-     * @param i End-of-charge current enum value (EndOfChargeCurrent).
+     * @param current End-of-charge current enum value (EndOfChargeCurrent).
      */
-    void setEndOfChargeCurrent(EndOfChargeCurrent i);
+    void setEndOfChargeCurrent(EndOfChargeCurrent current);
 
     /**
-     * @brief Set the maximum input current.
-     * @param i Maximum input current enum value (MaxInputCurrent).
+     * @brief The input current limit (ILIM) safeguards the device by preventing overcurrent, ensuring the charging current is within safe levels for the battery, and adapting to the maximum current the power source can provide, allowing you to charge and use the system at the same time. 
+     * @param current Maximum input current enum value (InputCurrentLimit).
      */
-    void setMaxInputCurrent(MaxInputCurrent i);
+    void setInputCurrentLimit(InputCurrentLimit current);
 
     /**
      * @brief Get the current charging status.
@@ -70,17 +127,18 @@ public:
     ChargeStatus getChargeStatus();
 
     /**
-     * @brief Enable the charger.
+     * @brief Enables the charging functionality with either the default settings or the last saved parameters, depending on what was set previously. 
      * @return True if successful, false otherwise.
      */
     bool enable();
 
+
     /**
-     * @brief Disable the charger.
+     * @brief Disable the charging functionality.
      * @return True if successful, false otherwise.
      */
     bool disable();
 
 private:
-    PF1550* pPMIC; /**< Pointer to the PF1550 PMIC instance. */
+    PF1550* pmic; /**< Pointer to the PF1550 PMIC instance. */
 };
