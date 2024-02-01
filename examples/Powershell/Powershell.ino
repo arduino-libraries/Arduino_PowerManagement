@@ -102,14 +102,14 @@ void setRailVoltage(std::vector<String> args){
 
   if(rail == "C33_reference"){
     #if defined(ARDUINO_PORTENTA_C33)
-      if(board.setReferenceVoltage(voltage)) Serial.println("Succesfully changed reference voltage");
+      if(board.setReferenceVoltage(voltage)) Serial.println("Successfully changed reference voltage");
       else Serial.println("Failed to set reference voltage");
     #else
       Serial.println("Current board is not an arduino portenta c33");
     #endif
   } else if (rail == "C33_analog"){
     #if defined(ARDUINO_PORTENTA_C33)
-      if(board.setAnalogVoltage(voltage)) Serial.println("Succesfully set analog voltage");
+      if(board.setAnalogVoltage(voltage)) Serial.println("Successfully set analog voltage");
       else Serial.println("Failed to set analog voltage");
     #else
       Serial.println("Current board is not an arduino portenta c33");
@@ -117,7 +117,7 @@ void setRailVoltage(std::vector<String> args){
 
   } else if (rail == "C33_external"){
     #if defined(ARDUINO_PORTENTA_C33)
-      if(board.setExternalVoltage(voltage)) Serial.println("Succesfully set external voltage");
+      if(board.setExternalVoltage(voltage)) Serial.println("Successfully set external voltage");
       else Serial.println("Failed to set external voltage");
     #else
       Serial.println("Current board is not an arduino portenta c33");
