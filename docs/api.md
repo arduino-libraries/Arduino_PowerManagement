@@ -192,6 +192,7 @@ The remaining capacity in milliampere-hours (mAh).
 | [`enableWakeupFromPin`](#class_board_1a94ac54f76a7e8fff5b7c6523af64169a) | Enables wake-up of the device from a specified pin (A0, A1, A2, A3, A4, A5, D4, D7 )  |
 | [`enableWakeupFromRTC`](#class_board_1ae158d0367a2851d1f1f560bcca784412) | Enables wake-up of the device from the RTC. |
 | [`sleepFor`](#class_board_1a966bcfa00c60eaf3b0a1aa89d1deea9d) | Put the device in sleep mode for a specified amount of time. |
+| [`sleepFor`](#class_board_1a31c46d510bbf14e372e019b8789afd3b) | Put the device in sleep mode for a specified amount of time. |
 | [`sleepUntilWakeupEvent`](#class_board_1a1d23524e0bfeb7282fa465f3834027e1) | Put the device into sleep mode until a wakeup event occurs. This sleep mode is ideal for applications requiring periodic wake-ups or brief intervals of inactivity and reduces consumption to a range between 6mA and 18mA depending on the state of the peripherals. This sleep mode resumes the operation from the last operation. A wakeup event can be an interrupt on a pin or the RTC, depending on what you set with [enableWakeupFromPin()](#class_board_1a94ac54f76a7e8fff5b7c6523af64169a) and [enableWakeupFromRTC()](#class_board_1ae158d0367a2851d1f1f560bcca784412). |
 | [`deepSleepUntilWakeupEvent`](#class_board_1aa0f7c55bf12f52374a2694aff110836b) | Put the device into deep sleep mode until a wakeup event occurs. For scenarios demanding drastic power conservation, the Deep Sleep Mode significantly reduces the board's power usage to range between 90uA and 11mA depending on the state of the peripherals. This mode restarts the board on wakeup, effectively running the setup() function again. A wakeup event can be an interrupt on a pin or the RTC, depending on what you set with [enableWakeupFromPin()](#class_board_1a94ac54f76a7e8fff5b7c6523af64169a) and [enableWakeupFromRTC()](#class_board_1ae158d0367a2851d1f1f560bcca784412). |
 | [`setAllPeripheralsPower`](#class_board_1a27dcc0b9d69a8cce256494192f2efb3a) | Turn the peripherals on Portenta C33 (ADC, RGB LED, Secure Element, Wifi and Bluetooth) off. |
@@ -332,7 +333,7 @@ True if successful, false otherwise.
 ### `sleepFor` <a id="class_board_1a31c46d510bbf14e372e019b8789afd3b" class="anchor"></a>
 
 ```cpp
-public bool sleepFor(int hours, int minutes, int seconds, void(*)() callbackFunction)
+bool sleepFor(int hours, int minutes, int seconds, void(*)() callbackFunction)
 ```
 
 Put the device in sleep mode for a specified amount of time.
@@ -582,7 +583,7 @@ constructor for the [PowerManagement](#class_power_management)
 ### `~PowerManagement` <a id="class_power_management_1a3d8e868a9d3eb39a971f1cfe901119df" class="anchor"></a>
 
 ```cpp
-public ~PowerManagement()
+~PowerManagement()
 ```
 
 destructor for the [PowerManagement](#class_power_management)
