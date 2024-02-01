@@ -329,6 +329,27 @@ Put the device in sleep mode for a specified amount of time.
 True if successful, false otherwise.
 <hr />
 
+### `sleepFor` <a id="class_board_1a31c46d510bbf14e372e019b8789afd3b" class="anchor"></a>
+
+```cpp
+public bool sleepFor(int hours, int minutes, int seconds, void(*)() callbackFunction)
+```
+
+Put the device in sleep mode for a specified amount of time.
+
+#### Parameters
+* `hours` The number of hours to sleep. 
+
+* `minutes` The number of minutes to sleep. 
+
+* `seconds` The number of seconds to sleep. 
+
+* `callbackFunction` The function to call when the device wakes up. 
+
+#### Returns
+True if successful, false otherwise.
+<hr />
+
 ### `sleepUntilWakeupEvent` <a id="class_board_1a1d23524e0bfeb7282fa465f3834027e1" class="anchor"></a>
 
 ```cpp
@@ -540,7 +561,7 @@ True if successful, false otherwise.
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
 | [`PowerManagement`](#class_power_management_1acc41d5c24cf751f6924e62c4e602f5b3) | constructor for the [PowerManagement](#class_power_management) |
-| [`~PowerManagement`](#class_power_management_1a3d8e868a9d3eb39a971f1cfe901119df) |  |
+| [`~PowerManagement`](#class_power_management_1a3d8e868a9d3eb39a971f1cfe901119df) | destructor for the [PowerManagement](#class_power_management) |
 | [`begin`](#class_power_management_1a65bcff4dceb0effedd04b20be2e6695e) | start communication with the PMIC chip and the power gauge. |
 | [`getBoard`](#class_power_management_1ad732d749ad09d03eff4523b617ec7e7f) | This class centralizes control over the power distribution within the board. It allows users to enable or disable specific power rails, and send the board into low-power modes. |
 | [`getBattery`](#class_power_management_1aec3b949e2c9904113a7c406ac7019e00) | Dedicated to battery management, this class enables real-time monitoring of battery usage and health. |
@@ -561,8 +582,10 @@ constructor for the [PowerManagement](#class_power_management)
 ### `~PowerManagement` <a id="class_power_management_1a3d8e868a9d3eb39a971f1cfe901119df" class="anchor"></a>
 
 ```cpp
-~PowerManagement()
+public ~PowerManagement()
 ```
+
+destructor for the [PowerManagement](#class_power_management)
 
 <hr />
 
