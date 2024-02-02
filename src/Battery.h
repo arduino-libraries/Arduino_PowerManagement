@@ -8,11 +8,10 @@ constexpr int fuelGaugeAddress = 0x36;
 constexpr int defaultBatteryCapacityInMiliampereHours = 200;
 constexpr int defaultEmptyVoltage = 3000;
 
+
 /**
- * @class Battery.h
  * @brief Battery class definition and member function declarations.
 */
-
 class Battery {
     public: 
         /**
