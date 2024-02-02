@@ -86,7 +86,7 @@ void status(){
 
   Serial.println("BATTERY: \n--------------------------");
   Serial.println(
-    "* Voltage: " + String(battery.readVoltageAvg()) + "mV \n" +
+    "* Voltage: " + String(battery.averageVoltage()) + "mV \n" +
     "* Current: " + String(battery.readCurrent()) + "mA \n" + 
     "* Percentage: " + String(battery.readPercentage()) + "% \n" +
     "* Remaining Capacity: " + String(battery.readRemainingCapacity()) + "mAh \n" +

@@ -81,7 +81,7 @@ class Battery {
          * @brief Reads the average temperature of the battery.
          * @return The current temperature in degrees Celsius.
         */
-        int temperatureAverage();
+        int averageTemperature();
         
         /**
          * @brief Reads the battery's state of charge (SOC). 
