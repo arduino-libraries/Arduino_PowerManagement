@@ -205,8 +205,8 @@ void Board::deepSleepUntilWakeupEvent(){
     }
 
 
-bool Board::setReferenceVoltage(float v) {
-    uint8_t voltageRegisterValue = getRailVoltage(v, CONTEXT_LDO2);
+bool Board::setReferenceVoltage(float voltage) {
+    uint8_t voltageRegisterValue = getRailVoltage(voltage, CONTEXT_LDO2);
 
     // If voltageRegisterValue is not empty, write it to the PMIC register and return the result of the comparison directly.
     if (voltageRegisterValue != emptyRegister) {
