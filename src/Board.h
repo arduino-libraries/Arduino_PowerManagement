@@ -2,7 +2,7 @@
 #define BOARD_H
 
 #include <Arduino.h>
-#include <Arduino_PMIC.h>
+#include <Arduino_PF1550.h>
 #include "wireUtils.h"
 #include "RTC.h"
 
