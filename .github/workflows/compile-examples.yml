@@ -22,10 +22,11 @@ on:
 
 env:
   UNIVERSAL_SKETCH_PATHS: |
-        - extras/tests
-        - examples/AutomaticSleep
-        - examples/SimpleDeepSleep
-        - examples/WakeFromRTC
+        - examples/Battery
+        - examples/Charger
+        - examples/DeepSleep_WakeFromPin
+        - examples/DeepSleep_WakeFromRTC
+        - examples/Powershell
   SKETCHES_REPORTS_PATH: sketches-reports
   SKETCHES_REPORTS_ARTIFACT_NAME: sketches-reports
 
