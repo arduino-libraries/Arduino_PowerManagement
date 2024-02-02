@@ -145,7 +145,7 @@ class Board {
      
 
     private:
-        PF1550 * pPMIC;
+        PF1550 * pmic;
         static uint8_t getRailVoltage(float voltage, int context);
         #if defined(ARDUINO_PORTENTA_C33)
         LowPower * lowPower;

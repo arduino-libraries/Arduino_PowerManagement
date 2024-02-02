@@ -19,9 +19,6 @@ class PowerManagement{
          */
         PowerManagement();
 
-        
-        ~PowerManagement();
-
         /**
          * @brief destructor for the PowerManagement 
          */

@@ -5,9 +5,9 @@
 Board::Board() {}
 
 Board::Board(PF1550 * pmic) {
-    this -> pPMIC = pmic;
+    this -> pmic = pmic;
     #if defined(ARDUINO_PORTENTA_C33)
-    this -> pLowPower = new LowPower();
+    this -> lowPower = new LowPower();
     #endif
 }
 
@@ -34,8 +34,8 @@ bool Board::setExternalVoltage(float v) {
         this -> setExternalPowerEnabled(false);
         uint8_t voltageRegisterValue = getRailVoltage(v, 4);
         if (voltageRegisterValue != emptyRegister){
-            this -> pPMIC ->  writePMICreg(Register::PMIC_SW2_VOLT, voltageRegisterValue);
-            if(this -> pPMIC ->  readPMICreg(Register::PMIC_SW2_VOLT) == voltageRegisterValue){
+            this -> pmic ->  writePMICreg(Register::PMIC_SW2_VOLT, voltageRegisterValue);
+            if(this -> pmic ->  readPMICreg(Register::PMIC_SW2_VOLT) == voltageRegisterValue){
                 this -> setExternalPowerEnabled(true);
                 return true;
             } else 
@@ -64,7 +64,7 @@ void Board::setCameraPowerEnabled(bool on) {
 
 void Board::enableWakeupFromPin(uint8_t pin, PinStatus direction){
     #if defined(ARDUINO_PORTENTA_C33) 
-        pLowPower->enableWakeupFromPin(pin, direction);
+        lowPower->enableWakeupFromPin(pin, direction);
     #else 
         #warning "This feature is currently only supported on the Portenta C33 board"
     #endif
@@ -72,7 +72,7 @@ void Board::enableWakeupFromPin(uint8_t pin, PinStatus direction){
 
 void Board::enableWakeupFromRTC(){
     #if defined(ARDUINO_PORTENTA_C33)
-        pLowPower->enableWakeupFromRTC();
+        lowPower->enableWakeupFromRTC();
     #else 
         #warning "This feature is currently only supported on the Portenta C33 board"
     #endif
@@ -120,7 +120,7 @@ bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callback
 
 void Board::sleepUntilWakeupEvent(){
     #if defined(ARDUINO_PORTENTA_C33)
-        pLowPower -> sleep();
+        lowPower -> sleep();
     #else
         #warning "This method is currently only supported on the Portenta C33 board"
     #endif
@@ -128,7 +128,7 @@ void Board::sleepUntilWakeupEvent(){
 
 void Board::deepSleepUntilWakeupEvent(){
     #if defined(ARDUINO_PORTENTA_C33)
-        pLowPower -> deepSleep();
+        lowPower -> deepSleep();
     #else 
         #warning "This method is currently only supported on the Portenta C33 board"
     #endif
@@ -185,13 +185,13 @@ void Board::deepSleepUntilWakeupEvent(){
 
     void Board::setAnalogDigitalConverterPower(bool on){
         if(on){
-            this->pPMIC->getControlPointer()->turnLDO1On(Ldo1Mode::Normal);
-            this->pPMIC->getControlPointer()->turnLDO1On(Ldo1Mode::Sleep);
-            this->pPMIC->getControlPointer()->turnLDO1On(Ldo1Mode::Standby);
+            this->pmic->getControlPointer()->turnLDO1On(Ldo1Mode::Normal);
+            this->pmic->getControlPointer()->turnLDO1On(Ldo1Mode::Sleep);
+            this->pmic->getControlPointer()->turnLDO1On(Ldo1Mode::Standby);
         } else {
-            this->pPMIC->getControlPointer()->turnLDO1Off(Ldo1Mode::Normal);
-            this->pPMIC->getControlPointer()->turnLDO1Off(Ldo1Mode::Sleep);
-            this->pPMIC->getControlPointer()->turnLDO1Off(Ldo1Mode::Standby);
+            this->pmic->getControlPointer()->turnLDO1Off(Ldo1Mode::Normal);
+            this->pmic->getControlPointer()->turnLDO1Off(Ldo1Mode::Sleep);
+            this->pmic->getControlPointer()->turnLDO1Off(Ldo1Mode::Standby);
         }
     }
 
@@ -208,8 +208,8 @@ bool Board::setReferenceVoltage(float v) {
 
     // If voltageRegisterValue is not empty, write it to the PMIC register and return the result of the comparison directly.
     if (voltageRegisterValue != emptyRegister) {
-        this->pPMIC->writePMICreg(Register::PMIC_LDO2_VOLT, voltageRegisterValue);
-        return (this->pPMIC->readPMICreg(Register::PMIC_LDO2_VOLT) == voltageRegisterValue);
+        this->pmic->writePMICreg(Register::PMIC_LDO2_VOLT, voltageRegisterValue);
+        return (this->pmic->readPMICreg(Register::PMIC_LDO2_VOLT) == voltageRegisterValue);
     }
 
     return false;
