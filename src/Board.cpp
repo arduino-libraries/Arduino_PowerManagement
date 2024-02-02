@@ -33,16 +33,18 @@ void Board::setExternalPowerEnabled(bool on) {
 bool Board::setExternalVoltage(float v) {
         this -> setExternalPowerEnabled(false);
         uint8_t voltageRegisterValue = getRailVoltage(v, 4);
-        if (voltageRegisterValue != emptyRegister){
-            this -> pmic ->  writePMICreg(Register::PMIC_SW2_VOLT, voltageRegisterValue);
-            if(this -> pmic ->  readPMICreg(Register::PMIC_SW2_VOLT) == voltageRegisterValue){
-                this -> setExternalPowerEnabled(true);
-                return true;
-            } else 
-                return false;
-        } else {
+        if (voltageRegisterValue == emptyRegister){
             return false;
         }
+
+        this->pmic->writePMICreg(Register::PMIC_SW2_VOLT, voltageRegisterValue);
+        bool success = this->pmic->readPMICreg(Register::PMIC_SW2_VOLT) == voltageRegisterValue;
+        
+        if (success) {
+            this->setExternalPowerEnabled(true);
+            return true;
+        }
+        return false;
 }
 
 
