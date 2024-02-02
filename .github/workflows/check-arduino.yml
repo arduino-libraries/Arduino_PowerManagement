@@ -1,4 +1,4 @@
-name: Check Arduino
+name: Run Arduino Lint
 
 # See: https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows
 on:
@@ -22,7 +22,7 @@ jobs:
         uses: arduino/arduino-lint-action@v1
         with:
           compliance: specification
-          library-manager: update
+          library-manager: submit
           # Always use this setting for official repositories. Remove for 3rd party projects.
           official: true
           project-type: library
