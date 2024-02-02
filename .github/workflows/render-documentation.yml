@@ -29,3 +29,4 @@ jobs:
       with:
         source-path: './src'
         target-path: './docs/api.md'
+        fail-on-warnings: true
