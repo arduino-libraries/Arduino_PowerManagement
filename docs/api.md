@@ -23,7 +23,7 @@
 | [`current`](#class_battery_1acc60fb79f995897dbcad56535b4ddc7f) | Reads the current flowing from the battery at the moment. |
 | [`averageCurrent`](#class_battery_1a60543d61d65d23745ffb0b11a7b52bb4) | Reads the average current of the battery. |
 | [`temperature`](#class_battery_1a9769b18902c4576c3ed7405c7e58bbea) | Reads the current temperature of the battery. |
-| [`temperatureAverage`](#class_battery_1a898ee9d9492aee01489db146e8df163d) | Reads the average temperature of the battery. |
+| [`averageTemperature`](#class_battery_1a89b2bbbda3ce367b2e855ce9b258abf0) | Reads the average temperature of the battery. |
 | [`percentage`](#class_battery_1a4d34768c6d8740fad39ce25028a01ee6) | Reads the battery's state of charge (SOC). This value is based on both the voltage and the current of the battery as well as compensation for the battery's age and temperature and discharge rate. |
 | [`remainingCapacity`](#class_battery_1a622eb39d57504e13beaac16003c04fd3) | Reads the remaining capacity of the battery. |
 
@@ -140,10 +140,10 @@ Reads the current temperature of the battery.
 The current temperature in degrees Celsius.
 <hr />
 
-### `temperatureAverage` <a id="class_battery_1a898ee9d9492aee01489db146e8df163d" class="anchor"></a>
+### `averageTemperature` <a id="class_battery_1a89b2bbbda3ce367b2e855ce9b258abf0" class="anchor"></a>
 
 ```cpp
-int temperatureAverage()
+int averageTemperature()
 ```
 
 Reads the average temperature of the battery.
