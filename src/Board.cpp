@@ -30,21 +30,21 @@ void Board::setExternalPowerEnabled(bool on) {
             this->pmic->getControlPointer()->turnSw2Off(Sw2Mode::Normal);
 }
 
-bool Board::setExternalVoltage(float v) {
-        this -> setExternalPowerEnabled(false);
-        uint8_t voltageRegisterValue = getRailVoltage(v, 4);
-        if (voltageRegisterValue == emptyRegister){
-            return false;
-        }
-
-        this->pmic->writePMICreg(Register::PMIC_SW2_VOLT, voltageRegisterValue);
-        bool success = this->pmic->readPMICreg(Register::PMIC_SW2_VOLT) == voltageRegisterValue;
-        
-        if (success) {
-            this->setExternalPowerEnabled(true);
-            return true;
-        }
+bool Board::setExternalVoltage(float voltage) {
+    this -> setExternalPowerEnabled(false);
+    uint8_t voltageRegisterValue = getRailVoltage(voltage, 4);
+    if (voltageRegisterValue == emptyRegister){
         return false;
+    }
+
+    this->pmic->writePMICreg(Register::PMIC_SW2_VOLT, voltageRegisterValue);
+    bool success = this->pmic->readPMICreg(Register::PMIC_SW2_VOLT) == voltageRegisterValue;
+    
+    if (success) {
+        this->setExternalPowerEnabled(true);
+        return true;
+    }
+    return false;
 }
 
 
