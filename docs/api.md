@@ -2,13 +2,14 @@
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`class ` [`Battery`](#class_battery) | 
+`class ` [`Battery`](#class_battery) | [Battery](#class_battery) class definition and member function declarations.
 `class ` [`Board`](#class_board) | 
 `class ` [`Charger`](#class_charger) | [Charger](#class_charger) class for controlling charging parameters and monitoring charging status.
-`class ` [`Battery::h`](#class_battery_1_1h) | [Battery](#class_battery) class definition and member function declarations.
 `class ` [`PowerManagement`](#class_power_management) | 
 
 # class `Battery` <a id="class_battery" class="anchor"></a>
+
+[Battery](#class_battery) class definition and member function declarations.
 
 ## Summary
 
@@ -543,17 +544,6 @@ Disable the charging functionality.
 #### Returns
 True if successful, false otherwise.
 <hr />
-
-# class `Battery::h` <a id="class_battery_1_1h" class="anchor"></a>
-
-[Battery](#class_battery) class definition and member function declarations.
-
-## Summary
-
- Members                        | Descriptions                                
---------------------------------|---------------------------------------------
-
-## Members
 
 # class `PowerManagement` <a id="class_power_management" class="anchor"></a>
 
