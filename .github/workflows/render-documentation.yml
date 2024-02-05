@@ -19,6 +19,8 @@ on:
       
 jobs:
   render-docs:
+    permissions:
+      contents: write
     uses: sebromero/render-docs-github-action/.github/workflows/render-docs.yml@main
     with:
       source-path: './src'
