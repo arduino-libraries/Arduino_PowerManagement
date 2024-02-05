@@ -1,4 +1,4 @@
-#include "Arduino_PowerManagement.h"
+#include "PowerManagement.h"
 
 PowerManagement::PowerManagement(){
     #if defined(ARDUINO_PORTENTA_C33)

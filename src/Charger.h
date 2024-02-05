@@ -1,4 +1,4 @@
-#include <Arduino_PMIC.h>
+#include <Arduino_PF1550.h>
 #include "wireUtils.h"
 
 typedef VFastCharge ChargeVoltage;

@@ -21,7 +21,7 @@ void setup() {
     attachInterrupt(digitalPinToInterrupt(SLEEP_PIN), sleep, RISING);
 
     board.enableWakeupFromPin(WAKE_PIN, RISING);
-    board.turnPeripheralsOn();
+    board.setAllPeripheralsPower(true);
     charger.disable();
 
     pinMode(LED_BUILTIN, OUTPUT);
