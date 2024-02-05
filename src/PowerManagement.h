@@ -49,7 +49,7 @@ class PowerManagement{
         Battery * battery;
         Board * board;
         Charger * charger;
-        PF1550 * pPMIC;
+        PF1550 * pmic;
 };
 
 

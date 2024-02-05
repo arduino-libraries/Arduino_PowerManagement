@@ -11,21 +11,21 @@ PowerManagement::PowerManagement(){
     # error "No IO class defined for this board."
     #endif
 
-    this->pPMIC = new PF1550(io);
-    this->board = new Board(this->pPMIC);
-    this->charger = new Charger(this->pPMIC);
+    this->pmic = new PF1550(io);
+    this->board = new Board(this->pmic);
+    this->charger = new Charger(this->pmic);
     this->battery = new Battery();
 }
 
  PowerManagement::~PowerManagement(){
-    delete this->pPMIC;
+    delete this->pmic;
     delete this->board;
     delete this->charger;
     delete this->battery;
 }
 
 bool PowerManagement::begin(){
-    return this->pPMIC->begin() == 0 && this->battery->begin();
+    return this->pmic->begin() == 0 && this->battery->begin();
 }
 
 Board PowerManagement::getBoard() {
