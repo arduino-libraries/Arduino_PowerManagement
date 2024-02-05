@@ -19,14 +19,8 @@ on:
       
 jobs:
   render-docs:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-    - uses: actions/checkout@v4
-    - uses: sebromero/render-docs-github-action@main
-      with:
-        source-path: './src'
-        target-path: './docs/api.md'
-        fail-on-warnings: true
+    uses: sebromero/render-docs-github-action/.github/workflows/render-docs.yml@main
+    with:
+      source-path: './src'
+      target-path: './docs/api.md'
+      fail-on-warnings: true
