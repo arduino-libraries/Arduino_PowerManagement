@@ -6,7 +6,7 @@
 #include "Board.h"
 #include "Battery.h"
 #include "Charger.h"
-#include <Arduino_PMIC.h>
+#include <Arduino_PF1550.h>
 
 
 
@@ -48,7 +48,9 @@ class PowerManagement{
         Board * board;
         Charger * charger;
         PF1550 * pPMIC;
-};
+
+            
+        };
 
 
 

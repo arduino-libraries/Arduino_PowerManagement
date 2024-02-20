@@ -44,6 +44,8 @@ void setup() {
 }
 
 void loop(){
+
+   
       Serial.println(battery.isConnected());
       Serial.print("* Voltage: ");
       Serial.println(String(battery.averageVoltage()) + "mV");

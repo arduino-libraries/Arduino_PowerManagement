@@ -4,37 +4,37 @@
 Charger::Charger(){}
 
 Charger::Charger(PF1550* pmic){
-    this -> pmic = pmic;
+
 }
 
 void Charger::setChargeCurrent(ChargeCurrent current) {
-    pmic -> getControlPointer() -> setFastChargeCurrent(current);
+    PMIC.getControlPointer() -> setFastChargeCurrent(current);
 }
 
 void Charger::setChargeVoltage(ChargeVoltage voltage) {
-    pmic -> getControlPointer() -> setFastChargeVoltage(voltage);
+    PMIC.getControlPointer() -> setFastChargeVoltage(voltage);
 }
 
 void Charger::setEndOfChargeCurrent(EndOfChargeCurrent current) {
-    pmic -> getControlPointer() -> setEndOfChargeCurrent(current);
+    PMIC.getControlPointer() -> setEndOfChargeCurrent(current);
 }
 
 void Charger::setInputCurrentLimit(InputCurrentLimit current) {
-    pmic -> getControlPointer() -> setInputCurrentLimit(current);
+    PMIC.getControlPointer() -> setInputCurrentLimit(current);
 }
 
 bool Charger::enable(){
-    pmic -> writePMICreg(Register::CHARGER_CHG_OPER, 0x02);
-    return pmic->readPMICreg(Register::CHARGER_CHG_OPER) == 0x02;
+    PMIC.writePMICreg(Register::CHARGER_CHG_OPER, 0x02);
+    return PMIC.readPMICreg(Register::CHARGER_CHG_OPER) == 0x02;
 }
 
 bool Charger::disable(){
-    pmic -> writePMICreg(Register::CHARGER_CHG_OPER, 0x01);
-    return pmic->readPMICreg(Register::CHARGER_CHG_OPER) == 0x01;
+    PMIC.writePMICreg(Register::CHARGER_CHG_OPER, 0x01);
+    return PMIC.readPMICreg(Register::CHARGER_CHG_OPER) == 0x01;
 }
 
 ChargeStatus Charger::getChargeStatus(){
-    uint16_t reg_val = this -> pmic ->  readPMICreg(Register::CHARGER_CHG_SNS);
+    uint16_t reg_val = PMIC.readPMICreg(Register::CHARGER_CHG_SNS);
     switch (extractBits(reg_val, 0, 3)) {
         case 0:
             return ChargeStatus::PreCharge;
