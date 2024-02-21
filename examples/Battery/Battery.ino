@@ -60,12 +60,6 @@ void loop(){
       Serial.print("* Temperature: ");
       Serial.println(String(battery.averageTemperature()));
 
-      Serial.print("* Time-to-full: ");
-      Serial.println(String(battery.readTimeToFull()) + "s");
-
-      Serial.print("* Time-to-empty: ");
-      Serial.println(String(battery.readTimeToEmpty()) + "s");
-
       Serial.println();
 
     delay(1000);

@@ -90,11 +90,7 @@ public:
      */
     Charger();
 
-    /**
-     * @brief Constructor with PMIC instance.
-     * @param pmic Pointer to the PF1550 PMIC instance.
-     */
-    Charger(PF1550* pmic);
+
 
     /**
      * @brief Set the charging current.
