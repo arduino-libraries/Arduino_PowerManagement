@@ -10,19 +10,10 @@ PowerManagement manager;
 Board board; 
 Charger charger;
 
-static void alarmCallback()
-{   
-    board.setAllPeripheralsPower(true);
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(5000);
-    digitalWrite(LED_BUILTIN, LOW);
-    board.setAllPeripheralsPower(false);
-    board.deepSleepUntilWakeupEvent();
-}
-
-
 void setup() {
     RTC.begin();
+
+    digitalWrite(LED_BUILTIN, digitalRead(LED_BUILTIN));
     
     manager = PowerManagement();
     manager.begin();
@@ -34,17 +25,15 @@ void setup() {
    
     if (!RTC.isRunning()) {
         RTC.setTime(initial_time);
-        board.sleepFor(0, 0, 1, &alarmCallback, &RTC);
+        board.sleepFor(0, 0, 1);
     }
 
     pinMode(LED_BUILTIN, OUTPUT);
     digitalWrite(LED_BUILTIN, LOW);
-
- 
 }
 
 void loop(){
-    board.setAllPeripheralsPower(false);
+    //board.setAllPeripheralsPower(false);
     board.deepSleepUntilWakeupEvent();
 }
 

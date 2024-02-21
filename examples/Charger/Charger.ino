@@ -34,13 +34,17 @@ Charger charger;
 
 void setup() {
   Serial.begin(115200);
-  while (!Serial);
+  //while (!Serial);
 
-  manager = PowerManagement();
-  manager.begin();
-
+     manager = PowerManagement();
+    manager.begin();
+    
   battery = manager.getBattery();
   charger = manager.getCharger();
+
+
+
+  
   charger.enable();
   #if !defined(ARDUINO_NICLA_VISION)
     charger.setChargeCurrent(ChargeCurrent::I_200_mA);

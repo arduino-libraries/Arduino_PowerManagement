@@ -78,6 +78,19 @@ void Board::enableWakeupFromPin(){
         standbyType = lowPowerStandbyType::untilBoth;
     }
 }
+
+#endif
+
+#if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
+void Board::enableWakeupFromPin(){
+    
+#endif
+    if(standbyType == lowPowerStandbyType::NONE){
+        standbyType = lowPowerStandbyType::untilPinActivity;
+    } else if (standbyType == lowPowerStandbyType::untilTimeElapsed){
+        standbyType = lowPowerStandbyType::untilBoth;
+    }
+}
 #endif
 
 void Board::enableWakeupFromRTC(){
@@ -92,6 +105,7 @@ void Board::enableWakeupFromRTC(){
     #endif
 }
 
+bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)()){
 #if defined(ARDUINO_PORTENTA_C33)
 bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)(), RTClock * rtc){
     RTCTime currentTime;
@@ -123,12 +137,12 @@ bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callback
     return true;   
 }
 
-bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)()){
     #if defined(ARDUINO_PORTENTA_C33)
-        return this -> sleepFor(hours, minutes, seconds, callbackFunction, &RTC);
     #endif
 }
+#endif
 
+        return this -> sleepFor(hours, minutes, seconds, callbackFunction, &RTC);
 bool Board::sleepFor(int hours, int minutes, int seconds){
     #if defined(ARDUINO_PORTENTA_C33)
         return this -> sleepFor(hours, minutes, seconds, NULL, &RTC);
