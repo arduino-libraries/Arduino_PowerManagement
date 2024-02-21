@@ -13,21 +13,31 @@ Board board;
 Charger charger;
 
 void setup() {
+
+  
+    
     manager = PowerManagement();
     manager.begin();
     board = manager.getBoard();
     charger = manager.getCharger();
 
-    attachInterrupt(digitalPinToInterrupt(SLEEP_PIN), sleep, RISING);
+    attachInterrupt(digitalPinToInterrupt(SLEEP_PIN), goToSleep, RISING);
 
+    #if defined(ARDUINO_PORTENTA_C33)
     board.enableWakeupFromPin(WAKE_PIN, RISING);
+    #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
+    board.enableWakeupFromPin();
+    #endif
+
+
+    
     board.setAllPeripheralsPower(true);
     charger.disable();
 
-    pinMode(LED_BUILTIN, OUTPUT);
+    pinMode(LED_BLUE, OUTPUT);
 }
 
-void sleep(){
+void goToSleep(){
   sleepFlag = true;
 }
 
@@ -36,12 +46,12 @@ void loop() {
         sleepFlag = false;
 
         //board.setAllPeripheralsPower(false);
-        board.sleepUntilWakeupEvent();
+        board.deepSleepUntilWakeupEvent();
     } else {
 
-        digitalWrite(LED_BUILTIN, HIGH);
+        digitalWrite(LED_BLUE, HIGH);
         delay(1000);
-        digitalWrite(LED_BUILTIN, LOW);
+        digitalWrite(LED_BLUE, LOW);
         delay(1000);
     }
 }

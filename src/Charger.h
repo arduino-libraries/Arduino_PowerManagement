@@ -132,7 +132,6 @@ public:
      */
     bool enable();
 
-
     /**
      * @brief Disable the charging functionality.
      * @return True if successful, false otherwise.
@@ -140,5 +139,5 @@ public:
     bool disable();
 
 private:
-    PF1550* pmic; /**< Pointer to the PF1550 PMIC instance. */
+    PF1550 * pmic; /**< Pointer to the PF1550 PMIC instance. */
 };

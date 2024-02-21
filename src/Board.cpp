@@ -2,7 +2,22 @@
 #include "RTC.h"
 
 
-Board::Board() {}
+Board::Board() {
+ #if defined(ARDUINO_PORTENTA_C33)
+        this -> pLowPower = new LowPower();
+    #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
+        
+
+        if (CM7_CPUID == HAL_GetCurrentCPUID())
+        {
+            if (lowPowerCode::success != LowPower.checkOptionBytes()) {
+                LowPower.prepareOptionBytes();
+            }
+        }
+
+
+    #endif 
+}
 
 Board::Board(PF1550 * pmic) {
     this -> pmic = pmic;
@@ -64,6 +79,7 @@ void Board::setCameraPowerEnabled(bool on) {
     #endif
 }
 
+  #if defined(ARDUINO_PORTENTA_C33) 
 void Board::enableWakeupFromPin(uint8_t pin, PinStatus direction){
     #if defined(ARDUINO_PORTENTA_C33) 
         lowPower->enableWakeupFromPin(pin, direction);
@@ -71,6 +87,19 @@ void Board::enableWakeupFromPin(uint8_t pin, PinStatus direction){
         #warning "This feature is currently only supported on the Portenta C33 board"
     #endif
 }
+
+#endif
+
+#if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
+void Board::enableWakeupFromPin(){
+    
+    if(standbyType == lowPowerStandbyType::NONE){
+        standbyType = lowPowerStandbyType::untilPinActivity;
+    } else if (standbyType == lowPowerStandbyType::untilTimeElapsed){
+        standbyType = lowPowerStandbyType::untilBoth;
+    }
+}
+#endif
 
 void Board::enableWakeupFromRTC(){
     #if defined(ARDUINO_PORTENTA_C33)
@@ -86,40 +115,55 @@ bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callback
 }
 
 bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)(), RTClock * rtc){
-    #if defined(ARDUINO_PORTENTA_C33)    
-        RTCTime currentTime;
-        if (!rtc -> getTime(currentTime)) {
-            Serial.println("Failed to get current time"); 
-            return false; 
-        }
-        delay(1);
 
 
-        // Convert current time to UNIX timestamp and add the desired interval
-        time_t currentTimestamp = currentTime.getUnixTime();
-        currentTimestamp += hours * 3600 + minutes * 60 + seconds;
+    
+            RTCTime currentTime;
+            if (!rtc -> getTime(currentTime)) {
+                Serial.println("Failed to get current time"); 
+                return false; 
+            }
+            delay(1);
 
-        // Convert back to RTCTime
-        RTCTime alarmTime(currentTimestamp);
 
-        // Configure the alarm match criteria
-        AlarmMatch match;
-        match.addMatchSecond(); // Trigger the alarm when the seconds match
-        match.addMatchMinute(); // Trigger the alarm when the minutes match
-        match.addMatchHour();   // Trigger the alarm when the hours match
+            // Convert current time to UNIX timestamp and add the desired interval
+            time_t currentTimestamp = currentTime.getUnixTime();
+            currentTimestamp += hours * 3600 + minutes * 60 + seconds;
 
-        // Set the alarm callback (assuming you have a callback function named alarmCallback)
-        if (!rtc -> setAlarmCallback(callbackFunction, alarmTime, match)) {
-            return false; // Failed to set the alarm
-        }
-        delay(1);
-        return true;
-    #else 
-        #warning "This method is currently only supported on the Portenta C33 board"
+            // Convert back to RTCTime
+            RTCTime alarmTime(currentTimestamp);
+
+            // Configure the alarm match criteria
+            AlarmMatch match;
+            match.addMatchSecond(); // Trigger the alarm when the seconds match
+            match.addMatchMinute(); // Trigger the alarm when the minutes match
+            match.addMatchHour();   // Trigger the alarm when the hours match
+
+            // Set the alarm callback (assuming you have a callback function named alarmCallback)
+            if (!rtc -> setAlarmCallback(callbackFunction, alarmTime, match)) {
+                return false; // Failed to set the alarm
+            }
+            delay(1);
+            return true;
+       
+}
+ #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
+
+#endif
+        
+bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)()){
+    #if defined(ARDUINO_PORTENTA_C33)
+        return this -> sleepFor(hours, minutes, seconds, callbackFunction, &RTC);
+    #endif
+}
+
+bool Board::sleepFor(int hours, int minutes, int seconds){
+    #if defined(ARDUINO_PORTENTA_C33)
+        return this -> sleepFor(hours, minutes, seconds, NULL, &RTC);
     #endif
 }
     
-
+#if defined(ARDUINO_PORTENTA_C33)
 void Board::sleepUntilWakeupEvent(){
     #if defined(ARDUINO_PORTENTA_C33)
         lowPower -> sleep();
@@ -127,6 +171,7 @@ void Board::sleepUntilWakeupEvent(){
         #warning "This method is currently only supported on the Portenta C33 board"
     #endif
 }
+#endif
 
 void Board::deepSleepUntilWakeupEvent(){
     #if defined(ARDUINO_PORTENTA_C33)
@@ -137,6 +182,11 @@ void Board::deepSleepUntilWakeupEvent(){
 }
 
     void Board::setAllPeripheralsPower(bool on){
+        this -> setCommunicationPeripheralsPower(on);
+        this -> setExternalPowerEnabled(on);
+        this -> setAnalogDigitalConverterPower(on);
+
+        /*
         if(on){
             this->pmic->getControlPointer()->clrBit(Register::PMIC_VSNVS_CTRL, (uint8_t)5);
             this->pmic->getControlPointer()->turnLDO1On(Ldo1Mode::Normal);
@@ -183,6 +233,7 @@ void Board::deepSleepUntilWakeupEvent(){
                 Wire3.end();
             #endif
         }
+    */
     }
 
     void Board::setAnalogDigitalConverterPower(bool on){

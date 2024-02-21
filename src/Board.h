@@ -4,17 +4,19 @@
 #include <Arduino.h>
 #include <Arduino_PF1550.h>
 #include "wireUtils.h"
-#include "RTC.h"
 
-#if defined(ARDUINO_PORTENTA_C33)
-#include "Arduino_Portenta_C33_LowPower.h"
-#endif
+
+#if defined(ARDUINO_PORTENTA_C33) 
+    #include "Arduino_Portenta_C33_LowPower.h"
+    #include "RTC.h"
+#elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
+    #include "Arduino_LowPowerPortentaH7.h"
+#endif 
 
 #define CONTEXT_LDO2 2
 #define CONTEXT_SW 3 
 
 constexpr int emptyRegister = 0xFF;
-
 
 class Board {
     public:
@@ -64,18 +66,27 @@ class Board {
         */
         void setCameraPowerEnabled(bool enabled); 
 
+
+        #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
+        void enableWakeupFromPin();
+        #endif 
+        
+        #if defined(ARDUINO_PORTENTA_C33)
         /**
-         * Enables wake-up of the device from a specified pin (A0, A1, A2, A3, A4, A5, D4, D7 )
+         * Enables wake-up of the device from a specified pin (A0, A1, A2, A3, A4, A5, D4, D7 ) on Arduino Portenta C33.
          * @param pin The pin number used for waking up the device.
          * @param direction The direction of the interrupt that will wake up the device. (RISING, FALLING)
          */
         void enableWakeupFromPin(uint8_t pin, PinStatus direction);
+        #endif
 
+        
         /**
          * Enables wake-up of the device from the RTC.
          */
         void enableWakeupFromRTC();
 
+        #if defined(ARDUINO_PORTENTA_C33)
         /**
          * @brief Put the device in sleep mode for a specified amount of time.
          * @param hours The number of hours to sleep.
@@ -86,6 +97,20 @@ class Board {
          * @return True if successful, false otherwise.
         */
         bool sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)(), RTClock * rtc);
+        #endif
+
+        /**
+         * @brief Put the device in sleep mode for a specified amount of time.
+         * @param hours The number of hours to sleep.
+         * @param minutes The number of minutes to sleep.
+         * @param seconds The number of seconds to sleep.
+         * @param callbackFunction The function to call when the device wakes up.
+         * @return True if successful, false otherwise.
+        */
+        bool sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)());
+
+        // TODO: Explain wake up events and add references
+        // TODO: Explain difference between sleep and deep sleep
 
         /**
          * @brief Put the device in sleep mode for a specified amount of time.
@@ -107,6 +132,7 @@ class Board {
          * A wakeup event can be an interrupt on a pin or the RTC, depending on what you set with enableWakeupFromPin() and enableWakeupFromRTC().
          */
         void sleepUntilWakeupEvent();
+        #endif
 
         /**
          * Put the device into deep sleep mode until a wakeup event occurs.
@@ -147,6 +173,7 @@ class Board {
     private:
         PF1550 * pmic;
         static uint8_t getRailVoltage(float voltage, int context);
+
         #if defined(ARDUINO_PORTENTA_C33)
         LowPower * lowPower;
         #endif
