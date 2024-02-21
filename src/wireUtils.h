@@ -81,7 +81,6 @@ static inline bool readBitFromRegister(TwoWire *wire, uint8_t address, uint8_t r
 
 
 static inline void replaceRegisterBits(TwoWire *wire, uint8_t address, uint8_t reg, uint16_t data, uint16_t bits, uint8_t offset) {
-    uint16_t value;
     uint16_t temp = readRegister16(wire, address, reg);
 
     // Left-shift the bits to the correct position in the register

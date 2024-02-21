@@ -9,15 +9,17 @@
 #include <Arduino_PF1550.h>
 
 
-
-
-
 class PowerManagement{
     public: 
         /**
          * @brief constructor for the PowerManagement 
          */
         PowerManagement();
+
+        /**
+         * @brief destructor for the PowerManagement 
+         */
+        ~PowerManagement();
 
         /**
          * @brief start communication with the PMIC chip and the power gauge. 
@@ -47,10 +49,8 @@ class PowerManagement{
         Battery * battery;
         Board * board;
         Charger * charger;
-        PF1550 * pPMIC;
-
-            
-        };
+        PF1550 * pmic;
+};
 
 
 

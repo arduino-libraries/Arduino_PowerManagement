@@ -69,7 +69,7 @@ int Battery::temperature(){
   }
 }
 
-int Battery::temperatureAverage(){
+int Battery::averageTemperature(){
   if(isConnected()){
     return readRegister16(this->wire, fuelGaugeAddress, AVG_TA_REG) >> 8;
   } else {

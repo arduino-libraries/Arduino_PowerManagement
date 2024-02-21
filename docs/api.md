@@ -2,13 +2,15 @@
 
  Members                        | Descriptions                                
 --------------------------------|---------------------------------------------
-`class ` [`Battery`](#class_battery) | 
+`class ` [`Battery`](#class_battery) | [Battery](#class_battery) class definition and member function declarations.
 `class ` [`Board`](#class_board) | 
 `class ` [`Charger`](#class_charger) | [Charger](#class_charger) class for controlling charging parameters and monitoring charging status.
 `class ` [`Battery::h`](#class_battery_1_1h) | [Battery](#class_battery) class definition and member function declarations.
 `class ` [`PowerManagement`](#class_power_management) | 
 
 # class `Battery` <a id="class_battery" class="anchor"></a>
+
+[Battery](#class_battery) class definition and member function declarations.
 
 ## Summary
 
@@ -140,7 +142,7 @@ Reads the current temperature of the battery.
 The current temperature in degrees Celsius.
 <hr />
 
-### `temperatureAverage` <a id="class_battery_1a898ee9d9492aee01489db146e8df163d" class="anchor"></a>
+### `averageTemperature` <a id="class_battery_1a89b2bbbda3ce367b2e855ce9b258abf0" class="anchor"></a>
 
 ```cpp
 int temperatureAverage()

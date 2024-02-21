@@ -109,19 +109,11 @@ class Board {
         */
         bool sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)());
 
+        // TODO: Explain wake up events and add references
+        // TODO: Explain difference between sleep and deep sleep
 
-        /** 
-         * @brief Put the device in sleep mode for a specified amount of time.
-         * @param hours The number of hours to sleep.
-         * @param minutes The number of minutes to sleep.
-         * @param seconds The number of seconds to sleep.›
-        */
-        bool sleepFor(int hours, int minutes, int seconds);
-
-
-        #if defined(ARDUINO_PORTENTA_C33)
         /**
-         * Put the device into sleep mode until a wakeup event occurs
+         * Put the device into sleep mode until a wakeup event occurs. 
          * This sleep mode is ideal for applications requiring periodic wake-ups or brief intervals of inactivity and reduces consumption to a range between 6mA and 18mA depending on the state of the peripherals. 
          * This sleep mode resumes the operation from the last operation.
          * A wakeup event can be an interrupt on a pin or the RTC, depending on what you set with enableWakeupFromPin() and enableWakeupFromRTC().
@@ -166,13 +158,11 @@ class Board {
      
 
     private:
-        PF1550 * pPMIC;
+        PF1550 * pmic;
         static uint8_t getRailVoltage(float voltage, int context);
 
         #if defined(ARDUINO_PORTENTA_C33)
-            LowPower * pLowPower;
-        #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
-            lowPowerStandbyType standbyType = lowPowerStandbyType::NONE;
-        #endif 
+        LowPower * lowPower;
+        #endif
         
 };

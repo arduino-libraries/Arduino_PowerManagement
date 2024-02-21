@@ -26,43 +26,43 @@ void printChargerStatus(){
    ChargeStatus status = charger.getChargeStatus();
 
         switch (status) {
-        case PreCharge:
+        case ChargeStatus::PreCharge:
             Serial.println("precharge");
             // Additional code specific to precharge
             break;
-        case FastChargeConstantCurrent:
+        case ChargeStatus::FastChargeConstantCurrent:
             Serial.println("fast-charge constant current");
             // Additional code specific to fast-charge CC
             break;
-        case FastChargeConstantVoltage:
+        case ChargeStatus::FastChargeConstantVoltage:
             Serial.println("fast-charge constant voltage");
             // Additional code specific to fast-charge CV
             break;
-        case EndOfCharge:
+        case ChargeStatus::EndOfCharge:
             Serial.println("end-of-charge");
             // Additional code specific to end-of-charge
             break;
-        case Done:
+        case ChargeStatus::Done:
             Serial.println("done");
             // Additional code specific to done
             break;
-        case TimerFaultError:
+        case ChargeStatus::TimerFaultError:
             Serial.println("timer fault");
             // Additional code specific to timer fault
             break;
-        case ThermistorSuspendError:
+        case ChargeStatus::ThermistorSuspendError:
             Serial.println("thermistor suspend");
             // Additional code specific to thermistor suspend
             break;
-        case ChargerDisabled:
+        case ChargeStatus::ChargerDisabled:
             Serial.println("off");
             // Additional code specific to off
             break;
-        case BatteryOvervoltageError:
+        case ChargeStatus::BatteryOvervoltageError:
             Serial.println("overvoltage condition");
             // Additional code specific to battery overvoltage condition
             break;
-        case ChargerBypassMode:
+        case ChargeStatus::ChargerBypassMode:
             Serial.println("disabled");
             // Additional code specific to linear only
             break;
@@ -86,11 +86,11 @@ void status(){
 
   Serial.println("BATTERY: \n--------------------------");
   Serial.println(
-    "* Voltage: " + String(battery.readVoltageAvg()) + "mV \n" +
-    "* Current: " + String(battery.readCurrent()) + "mA \n" + 
-    "* Percentage: " + String(battery.readPercentage()) + "% \n" +
-    "* Remaining Capacity: " + String(battery.readRemainingCapacity()) + "mAh \n" +
-    "* Temperature: " + String(battery.readTempAvg()) + "\n" +  
+    "* Voltage: " + String(battery.averageVoltage()) + "mV \n" +
+    "* Current: " + String(battery.current()) + "mA \n" + 
+    "* Percentage: " + String(battery.percentage()) + "% \n" +
+    "* Remaining Capacity: " + String(battery.remainingCapacity()) + "mAh \n" +
+    "* Temperature: " + String(battery.averageTemperature()) + "\n" +  
     "* Time-to-full: " + String(battery.readTimeToFull()) + "s \n" + 
     "* Time-to-empty: " + String(battery.readTimeToEmpty()) + "s \n");
 }
@@ -102,14 +102,14 @@ void setRailVoltage(std::vector<String> args){
 
   if(rail == "C33_reference"){
     #if defined(ARDUINO_PORTENTA_C33)
-      if(board.setReferenceVoltage(voltage)) Serial.println("Succesfully changed reference voltage");
+      if(board.setReferenceVoltage(voltage)) Serial.println("Successfully changed reference voltage");
       else Serial.println("Failed to set reference voltage");
     #else
       Serial.println("Current board is not an arduino portenta c33");
     #endif
   } else if (rail == "C33_analog"){
     #if defined(ARDUINO_PORTENTA_C33)
-      if(board.setAnalogVoltage(voltage)) Serial.println("Succesfully set analog voltage");
+      if(board.setAnalogVoltage(voltage)) Serial.println("Successfully set analog voltage");
       else Serial.println("Failed to set analog voltage");
     #else
       Serial.println("Current board is not an arduino portenta c33");
@@ -117,7 +117,7 @@ void setRailVoltage(std::vector<String> args){
 
   } else if (rail == "C33_external"){
     #if defined(ARDUINO_PORTENTA_C33)
-      if(board.setExternalVoltage(voltage)) Serial.println("Succesfully set external voltage");
+      if(board.setExternalVoltage(voltage)) Serial.println("Successfully set external voltage");
       else Serial.println("Failed to set external voltage");
     #else
       Serial.println("Current board is not an arduino portenta c33");

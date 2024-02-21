@@ -44,14 +44,12 @@ void setup() {
 }
 
 void loop(){
-
-   
       Serial.println(battery.isConnected());
       Serial.print("* Voltage: ");
       Serial.println(String(battery.averageVoltage()) + "mV");
 
       Serial.print("* Current: ");
-      Serial.println(String(battery.averageCurrent()) + "mA");
+      Serial.println(String(battery.current()) + "mA");
 
       Serial.print("* Percentage: ");
       Serial.println(String(battery.percentage()) + "%");
@@ -60,7 +58,13 @@ void loop(){
       Serial.println(String(battery.remainingCapacity()) + "mAh");
 
       Serial.print("* Temperature: ");
-      Serial.println(String(battery.temperatureAverage()));
+      Serial.println(String(battery.averageTemperature()));
+
+      Serial.print("* Time-to-full: ");
+      Serial.println(String(battery.readTimeToFull()) + "s");
+
+      Serial.print("* Time-to-empty: ");
+      Serial.println(String(battery.readTimeToEmpty()) + "s");
 
       Serial.println();
 

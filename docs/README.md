@@ -109,7 +109,7 @@ charger.setEndOfChargeCurrent(EndOfChargeCurrent::I_5_mA);
 The PF1550 power management IC has three LDO regulators, and three DCDC converters, each of these have a configurable voltage range and can be turned on and off. 
 The implementation of these regulators and the power rails rails differs from board to board, for example on the Nicla Vision, some of the rails are dedicated to the voltages required by the camera, while on the Portenta H7 some of these rails are dedicated to the rich USB-C functionality.
 
-Changing some voltages on some rails might break the boards functionality or even damage the board, so not all of these are available trough this library. 
+Changing some voltages on some rails might break the boards functionality or even damage the board, so not all of these are available through this library. 
 
 However there is one power rail they all have in common, and that is the external power rail. The external power rail is labeled as 3V3 on all of these boards and can be used to power external peripherals. 
 
@@ -182,7 +182,7 @@ board.setCameraSwitch(false);
 The wakeup source can be one of the deep-sleep enabled wakeup pins, and an RTC Alarm. You can select multiple pins or the RTC alarm to wake up the board. 
 
 #### Wakeup Pins
-This feature can be used when you want to wake up the board from external stimuli, such as sensors or user input. Some sensors have an interupt pin that you can connect to one of the wakeup pins (eg: most motion sensors), while some output voltage on a pin, (eg: Passive Infrared Sensors or user buttons).
+This feature can be used when you want to wake up the board from external stimuli, such as sensors or user input. Some sensors have an interrupt pin that you can connect to one of the wakeup pins (eg: most motion sensors), while some output voltage on a pin, (eg: Passive Infrared Sensors or user buttons).
 To select a wakeup pin just call `board.setWakeupPin(<pin_number>, <direction>)`. The direction can be either **RISING** if you want to wake up when voltage is applied to a pin, or **FALLING** if you want to wake when no voltage is applied anymore. 
 Here is a list of the usable interrupts: 
 

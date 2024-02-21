@@ -8,11 +8,10 @@ constexpr int fuelGaugeAddress = 0x36;
 constexpr int defaultBatteryCapacityInMiliampereHours = 200;
 constexpr int defaultEmptyVoltage = 3000;
 
+
 /**
- * @class Battery.h
  * @brief Battery class definition and member function declarations.
 */
-
 class Battery {
     public: 
         /**
@@ -81,7 +80,7 @@ class Battery {
          * @brief Reads the average temperature of the battery.
          * @return The current temperature in degrees Celsius.
         */
-        int temperatureAverage();
+        int averageTemperature();
         
         /**
          * @brief Reads the battery's state of charge (SOC). 
