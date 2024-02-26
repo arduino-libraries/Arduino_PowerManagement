@@ -22,16 +22,16 @@ void Charger::setInputCurrentLimit(InputCurrentLimit current) {
 
 bool Charger::enable(){
     PMIC.writePMICreg(Register::CHARGER_CHG_OPER, 0x02);
-    return pmic->readPMICreg(Register::CHARGER_CHG_OPER) == 0x02;
+    return PMIC.readPMICreg(Register::CHARGER_CHG_OPER) == 0x02;
 }
 
 bool Charger::disable(){
     PMIC.writePMICreg(Register::CHARGER_CHG_OPER, 0x01);
-    return pmic->readPMICreg(Register::CHARGER_CHG_OPER) == 0x01;
+    return PMIC.readPMICreg(Register::CHARGER_CHG_OPER) == 0x01;
 }
 
 ChargeStatus Charger::getChargeStatus(){
-    uint16_t reg_val = this -> PMIC.readPMICreg(Register::CHARGER_CHG_SNS);
+    uint16_t reg_val = PMIC.readPMICreg(Register::CHARGER_CHG_SNS);
     switch (extractBits(reg_val, 0, 3)) {
         case 0:
             return ChargeStatus::PreCharge;

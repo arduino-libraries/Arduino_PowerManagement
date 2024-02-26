@@ -4,12 +4,13 @@
 Board::Board() {
  #if defined(ARDUINO_PORTENTA_C33)
         this -> pLowPower = new LowPower();
-    #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
+    #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_NICLA_VISION)
         if (CM7_CPUID == HAL_GetCurrentCPUID())
         {
-            if (lowPowerCode::success != LowPower.checkOptionBytes()) {
+            if (LowPowerReturnCode::success != LowPower.checkOptionBytes()){
                 LowPower.prepareOptionBytes();
             }
+            bootM4();
         }
     #endif 
 }
@@ -81,17 +82,6 @@ void Board::enableWakeupFromPin(){
 
 #endif
 
-#if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
-void Board::enableWakeupFromPin(){
-    
-#endif
-    if(standbyType == lowPowerStandbyType::NONE){
-        standbyType = lowPowerStandbyType::untilPinActivity;
-    } else if (standbyType == lowPowerStandbyType::untilTimeElapsed){
-        standbyType = lowPowerStandbyType::untilBoth;
-    }
-}
-#endif
 
 void Board::enableWakeupFromRTC(){
     #if defined(ARDUINO_PORTENTA_C33)
@@ -105,7 +95,7 @@ void Board::enableWakeupFromRTC(){
     #endif
 }
 
-bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)()){
+
 #if defined(ARDUINO_PORTENTA_C33)
 bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)(), RTClock * rtc){
     RTCTime currentTime;
@@ -137,19 +127,20 @@ bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callback
     return true;   
 }
 
-    #if defined(ARDUINO_PORTENTA_C33)
-    #endif
+bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)()){
+    return this -> sleepFor(hours, minutes, seconds, callbackFunction, &RTC);
 }
 #endif
 
-        return this -> sleepFor(hours, minutes, seconds, callbackFunction, &RTC);
+    
 bool Board::sleepFor(int hours, int minutes, int seconds){
     #if defined(ARDUINO_PORTENTA_C33)
         return this -> sleepFor(hours, minutes, seconds, NULL, &RTC);
+    #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
+        this -> rtcWakeupDelay = RTCWakeupDelay(hours, minutes, seconds);
     #endif
 }
 
-#endif
     
 #if defined(ARDUINO_PORTENTA_C33)
 void Board::sleepUntilWakeupEvent(){
@@ -161,8 +152,13 @@ void Board::deepSleepUntilWakeupEvent(){
     #if defined(ARDUINO_PORTENTA_C33)
         pLowPower -> deepSleep();
     #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
-        LowPower.allowDeepSleep();
-        LowPower.standbyM7(standbyType, RTCWakeupDelay(0, 0, 0));
+        if(standbyType == lowPowerStandbyType::untilBoth)
+            LowPower.standbyM7(LowPowerStandbyType::untilPinActivity | LowPowerStandbyType::untilTimeElapsed, rtcWakeupDelay);
+        else if (standbyType == lowPowerStandbyType::untilPinActivity)
+            LowPower.standbyM7(LowPowerStandbyType::untilPinActivity);
+        else if (standbyType == lowPowerStandbyType::untilTimeElapsed)
+           LowPower.standbyM7(LowPowerStandbyType::untilTimeElapsed, rtcWakeupDelay);
+
     #endif
 }
 
@@ -173,8 +169,19 @@ void Board::deepSleepUntilWakeupEvent(){
             this -> setAnalogDigitalConverterPower(on);
             Wire3.end();
         #else if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
-            
-        #else if defined(ARDUINO_NICLA_VISION)
+            PMIC.getControlPointer() -> turnLDO2Off(Ldo2Mode::Normal);
+            PMIC.getControlPointer() -> turnLDO2Off(Ldo2Mode::Sleep);
+            PMIC.getControlPointer() -> turnLDO2Off(Ldo2Mode::Standby);
+            PMIC.getControlPointer() -> turnLDO1Off(Ldo1Mode::Normal);
+            PMIC.getControlPointer() -> turnLDO1Off(Ldo1Mode::Sleep);
+            PMIC.getControlPointer() -> turnLDO1Off(Ldo1Mode::Standby);
+            PMIC.getControlPointer() -> turnLDO3Off(Ldo3Mode::Normal);
+            PMIC.getControlPointer() -> turnLDO3Off(Ldo3Mode::Sleep);
+            PMIC.getControlPointer() -> turnLDO3Off(Ldo3Mode::Standby);
+            PMIC.getControlPointer() -> turnSw1Off(Sw1Mode::Normal);
+            PMIC.getControlPointer() -> turnSw1Off(Sw1Mode::Sleep);
+            PMIC.getControlPointer() -> turnSw1Off(Sw1Mode::Standby);
+            Wire1.end();
         #endif
 
         /*

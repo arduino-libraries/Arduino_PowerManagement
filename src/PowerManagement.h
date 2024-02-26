@@ -16,10 +16,7 @@ class PowerManagement{
          */
         PowerManagement();
 
-        /**
-         * @brief destructor for the PowerManagement 
-         */
-        ~PowerManagement();
+
 
         /**
          * @brief start communication with the PMIC chip and the power gauge. 
@@ -49,7 +46,7 @@ class PowerManagement{
         Battery * battery;
         Board * board;
         Charger * charger;
-        PF1550 * pmic;
+
 };
 
 

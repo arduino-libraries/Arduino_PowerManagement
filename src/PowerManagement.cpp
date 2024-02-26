@@ -8,15 +8,9 @@ PowerManagement::PowerManagement(){
     this->battery = new Battery();
 }
 
- PowerManagement::~PowerManagement(){
-    delete this->pmic;
-    delete this->board;
-    delete this->charger;
-    delete this->battery;
-}
 
 bool PowerManagement::begin(){
-    return this->pmic->begin() == 0 && this->battery->begin();
+    return PMIC.begin() == 0 && this->battery->begin();
 }
 
 Board PowerManagement::getBoard() {

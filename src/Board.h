@@ -16,6 +16,13 @@
 #define CONTEXT_LDO2 2
 #define CONTEXT_SW 3 
 
+enum class lowPowerStandbyType {
+    NONE = 0,
+    untilPinActivity = 1,
+    untilTimeElapsed = 2,
+    untilBoth = 3
+};
+
 constexpr int emptyRegister = 0xFF;
 
 class Board {
@@ -25,11 +32,6 @@ class Board {
         */
         Board();
 
-        /**
-         * @brief Constructor for the Board class with a PF1550 PMIC instance.
-         * @param pmic Pointer to the PF1550 PMIC instance.
-        */
-        Board(PF1550 * pmic);
 
         /**
          * @brief Check if the board is powered through USB.
@@ -172,7 +174,8 @@ class Board {
         #if defined(ARDUINO_PORTENTA_C33)
             LowPower * pLowPower;
         #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
-            LowPowerStandbyType standbyType = nullptr;
+            lowPowerStandbyType standbyType = lowPowerStandbyType::NONE;
+            RTCWakeupDelay rtcWakeupDelay = RTCWakeupDelay(0, 0, 0);
         #endif 
         
 };
