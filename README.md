@@ -2,9 +2,9 @@
 
 [![Check Arduino](https://github.com/cristidragomir97/Arduino_PowerManagement/actions/workflows/check-arduino.yml/badge.svg)](https://github.com/cristidragomir97/Arduino_PowerManagement/actions/workflows/check-arduino.yml) [![Compile Examples](https://github.com/cristidragomir97/Arduino_PowerManagement/actions/workflows/compile-examples.yml/badge.svg)](https://github.com/cristidragomir97/Arduino_PowerManagement/actions/workflows/compile-examples.yml) [![Spell Check](https://github.com/cristidragomir97/Arduino_PowerManagement/actions/workflows/spell-check.yml/badge.svg)](https://github.com/cristidragomir97/Arduino_PowerManagement/actions/workflows/spell-check.yml) [![Sync Labels](https://github.com/cristidragomir97/Arduino_PowerManagement/actions/workflows/sync-labels.yml/badge.svg)](https://github.com/cristidragomir97/Arduino_PowerManagement/actions/workflows/sync-labels.yml)
 
-The Arduino Pro Power Management Library serves as a comprehensive and sophisticated toolkit.
+The Arduino Pro Power Management Library serves as a comprehensive and sophisticated power management toolkit tailored for Arduino Pro boards, encompassing the Portenta H7, Portenta C33, and Nicla Vision. 
 
-This library streamlines the interaction with complex hardware components such as the [PF1550 Power Management Integrated Circuit](https://www.nxp.com/docs/en/data-sheet/PF1550.pdf) (PMIC) and the [MAX17162 LiPo Fuel Gauge](https://www.analog.com/media/en/technical-documentation/data-sheets/MAX1716-MAX1855.pdf) and presents a user-friendly, functionality-oriented interface.
+This library streamlines the interaction with complex hardware components such as the [PF1550 Power Management Integrated Circuit](https://www.nxp.com/docs/en/data-sheet/PF1550.pdf) (PMIC) and the [MAX17262 LiPo Fuel Gauge](https://www.analog.com/media/en/technical-documentation/data-sheets/MAX17262.pdf) and presents a user-friendly, functionality-oriented interface.
 
 ## ✅ Supported Boards
 
