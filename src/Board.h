@@ -71,6 +71,9 @@ class Board {
 
         #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
         void enableWakeupFromPin();
+
+
+        void enableSleepWhenIdle();
         #endif 
         
         #if defined(ARDUINO_PORTENTA_C33)

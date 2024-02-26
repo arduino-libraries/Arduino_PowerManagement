@@ -80,6 +80,9 @@ void Board::enableWakeupFromPin(){
     }
 }
 
+void Board::enableSleepWhenIdle(){
+    LowPower.allowDeepSleep();
+}
 #endif
 
 
@@ -169,6 +172,20 @@ void Board::deepSleepUntilWakeupEvent(){
             this -> setAnalogDigitalConverterPower(on);
             Wire3.end();
         #else if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
+        if(on){
+            PMIC.getControlPointer() -> turnLDO2On(Ldo2Mode::Normal);
+            PMIC.getControlPointer() -> turnLDO2On(Ldo2Mode::Sleep);
+            PMIC.getControlPointer() -> turnLDO2On(Ldo2Mode::Standby);
+            PMIC.getControlPointer() -> turnLDO1On(Ldo1Mode::Normal);
+            PMIC.getControlPointer() -> turnLDO1On(Ldo1Mode::Sleep);
+            PMIC.getControlPointer() -> turnLDO1On(Ldo1Mode::Standby);
+            PMIC.getControlPointer() -> turnLDO3On(Ldo3Mode::Normal);
+            PMIC.getControlPointer() -> turnLDO3On(Ldo3Mode::Sleep);
+            PMIC.getControlPointer() -> turnLDO3On(Ldo3Mode::Standby);
+            PMIC.getControlPointer() -> turnSw1On(Sw1Mode::Normal);
+            PMIC.getControlPointer() -> turnSw1On(Sw1Mode::Sleep);
+            PMIC.getControlPointer() -> turnSw1On(Sw1Mode::Standby);
+        } else {
             PMIC.getControlPointer() -> turnLDO2Off(Ldo2Mode::Normal);
             PMIC.getControlPointer() -> turnLDO2Off(Ldo2Mode::Sleep);
             PMIC.getControlPointer() -> turnLDO2Off(Ldo2Mode::Standby);
@@ -182,6 +199,8 @@ void Board::deepSleepUntilWakeupEvent(){
             PMIC.getControlPointer() -> turnSw1Off(Sw1Mode::Sleep);
             PMIC.getControlPointer() -> turnSw1Off(Sw1Mode::Standby);
             Wire1.end();
+        }
+           
         #endif
 
         /*
