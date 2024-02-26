@@ -27,7 +27,8 @@ In addition to power rail management and battery handling, the library provides 
 
 -  **Sleep**
 This mode offers a significant reduction in power consumption while maintaining a state of minimal activity. 
-It's ideal for applications requiring periodic wake-ups or brief intervals of inactivity. This sleep mode resumes the operation from the last operation. 
+It's ideal for applications requiring periodic wake-ups or brief intervals of inactivity. This sleep mode resumes the operation from the last operation.
+You can manually enable this sleep mode on the Portenta C33, on the H7 and Nicla Vision however, this is automatically handled by mbed. 
 
 - **Deep Sleep**
 For scenarios demanding drastic power conservation, the Deep Sleep Mode drastically reduces the board's power usage. It's suitable for long-duration, battery-dependent applications where occasional wake-ups are sufficient. This mode restarts the board on wakeup, effectively running the `setup()` function again. 
@@ -36,8 +37,9 @@ For scenarios demanding drastic power conservation, the Deep Sleep Mode drastica
 ## Examples 
 - [Battery](./examples/Battery/Battery.ino) - Demonstrates battery metrics monitoring.
 - [Charger](./examples/Charger/Charger.ino) - Illustrates charger status monitoring and control.
-- [DeepSleep_WakeFromPin](./examples/DeepSleep_WakeFromPin/DeepSleep_WakeFromPin.ino) - Demonstrates how to wake up the board from deep sleep using a wakeup pin (Available only on Portenta C33)
-- [DeepSleep_WakeFromRTC](./examples/DeepSleep_WakeFromRTC/DeepSleep_WakeFromRTC.ino) - Demonstrates how to use the RTC to wake the board from deep sleep. (Available only on Portenta C33)
+- [DeepSleep_WakeFromPin](./examples/DeepSleep_WakeFromPin/DeepSleep_WakeFromPin.ino) - Demonstrates how to wake up the board from deep sleep using a wakeup pin.
+- [DeepSleep_WakeFromRTC_C33](./examples/DeepSleep_WakeFromRTC/DeepSleep_WakeFromRTC_C33.ino) - Demonstrates how to use the RTC to wake the Portenta C33 from deep sleep.
+- [DeepSleep_WakeFromRTC_H7](./examples/DeepSleep_WakeFromRTC/DeepSleep_WakeFromRTC_H7.ino) - Demonstrates how to use the RTC to wake the Portenta H7 from deep sleep.
 - [Powershell](./examples/Powershell/Powershell.ino) - Provides an interactive shell on the serial port that allows you to interact with any aspect of this library. 
 
 ## 👀 Instructions
