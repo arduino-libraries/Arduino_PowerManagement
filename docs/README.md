@@ -167,7 +167,7 @@ board.setCameraSwitch(false);
 ##  Low Power 
 
 ### Sleep Modes
-The Renesas and ST chips that are supported by this library have a slighly different way of handling sleep, and very different ways of calling those modes. For example ST calls the deepest sleep mode *Standby* while Renesas calls the most light sleep mode *Standby*. To reduce the confusion, and to have a universal API for both architectures we have selected two sleep modes and simply called them: **Sleep** and **Deep Sleep**: 
+The Renesas and ST chips that are supported by this library have a slightly different way of handling sleep, and very different ways of calling those modes. For example ST calls the deepest sleep mode *Standby* while Renesas calls the most light sleep mode *Standby*. To reduce the confusion, and to have a universal API for both architectures we have selected two sleep modes and simply called them: **Sleep** and **Deep Sleep**: 
 
 #### Sleep 
 * **Function**: Reduces the microcontroller's power usage to about half of its normal consumption.
