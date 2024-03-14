@@ -1,3 +1,4 @@
+// TODO Document the registers
 
 #define BATTERY_STATUS_BIT 3 
 

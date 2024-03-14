@@ -47,11 +47,11 @@ void setup() {
 void loop() {
    auto batteryIsConnected = battery.isConnected();
    Serial.println("* Battery is connected: " + (batteryIsConnected ? String("Yes") : String("No")));
-   Serial.println("* Voltage: " + String(battery.averageVoltage()) + "mV");
+   Serial.println("* Voltage: " + String(battery.voltage()) + "mV");
    Serial.println("* Current: " + String(battery.current()) + "mA");
    Serial.println("* Percentage: " + String(battery.percentage()) + "%");
    Serial.println("* Remaining Capacity: " + String(battery.remainingCapacity()) + "mAh");
-   Serial.println("* Temperature: " + String(battery.averageTemperature()));
+   Serial.println("* Temperature: " + String(battery.temperature()));
    Serial.println();
 
    delay(1000);
