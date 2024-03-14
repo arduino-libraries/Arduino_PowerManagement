@@ -4,15 +4,17 @@
 #include "Arduino.h"
 #include "Wire.h"
 
-
-#define toLowByte(w)              ((uint8_t) ((w) & 0xff))
-#define toHighByte(w)             ((uint8_t) ((w) >> 8))
-#define toUint16(highB, lowB)     ((uint16_t)((uint8_t)highB << 8) + (uint8_t)lowB)
-#define BV(bit)                   (1 <<(bit))
-//#define setBit(byte, bit)         (byte |= BV(bit))
-#define clearBit(byte, bit)       (byte &= ~BV(bit))
-#define toggleBit(byte, bit)      (byte ^= BV(bit))
-
+/**
+ * @brief Extracts a range of bits from an integer value.
+ *
+ * This function extracts a range of bits from the given integer value, starting from the startBit
+ * and ending at the endBit (inclusive).
+ *
+ * @param value The integer value from which to extract the bits.
+ * @param startBit The starting bit position.
+ * @param endBit The ending bit position.
+ * @return The extracted bits as an integer value.
+ */
 static inline int extractBits(int value, int startBit, int endBit) {
     if (startBit < 0 || startBit > 31 || endBit < 0 || endBit > 31 || startBit > endBit) {
         // Handle invalid bit range
@@ -23,65 +25,82 @@ static inline int extractBits(int value, int startBit, int endBit) {
     return (value >> startBit) & mask;
 }
 
-static inline uint8_t writeRegister16(TwoWire *wire, uint8_t address, uint8_t reg, uint16_t data)
+/**
+ * Writes a 16-bit data value to a register using the specified I2C wire object.
+ *
+ * @param wire The I2C wire object to use for communication.
+ * @param address The I2C address of the device.
+ * @param reg The register address to write to.
+ * @param data The 16-bit data value to write.
+ * @return The status of the write operation:
+ * 0: success.
+ * 1: data too long to fit in transmit buffer.
+ * 2: received NACK on transmit of address.
+ * 3: received NACK on transmit of data.
+ * 4: other error.
+ * 5: timeout
+ */
+static inline uint8_t writeRegister16Bits(TwoWire *wire, uint8_t address, uint8_t reg, uint16_t data)
 {
-  uint8_t msb, lsb;
-  msb = (data & 0xFF00) >> 8;
-  lsb = (data & 0x00FF);
-  wire -> beginTransmission(address);
-  wire -> write(reg);
-  wire -> write(msb);
-  wire -> write(lsb);
-  return (wire -> endTransmission());
+    uint8_t msb, lsb;
+    msb = (data & 0xFF00) >> 8;
+    lsb = (data & 0x00FF);
+    wire->beginTransmission(address);
+    wire->write(reg);
+    wire->write(msb);
+    wire->write(lsb);
+    return (wire->endTransmission());
 }
 
-static inline uint16_t readRegister16(TwoWire *ptr, uint8_t address, uint8_t reg)
+/**
+ * @brief Reads a 16-bit register from a specified address using the given I2C wire object.
+ * 
+ * @param wire The I2C wire object to use for communication.
+ * @param address The address of the device to read from.
+ * @param reg The register to read.
+ * @return The value read from the register as a 16-bit integer.
+ */
+static inline uint16_t readRegister16Bits(TwoWire *wire, uint8_t address, uint8_t reg)
 {
-
-   uint16_t temp;
-    ptr->beginTransmission(address);
-    ptr->write(reg);
-    ptr->endTransmission();
-    ptr->requestFrom(address, 2);
-    temp = (uint16_t)ptr->read();
-    temp |= (uint16_t)ptr->read() << 8;
-    ptr->endTransmission();
-    return temp;
+    wire->beginTransmission(address);
+    wire->write(reg);
+    wire->endTransmission();
+    wire->requestFrom(address, 2);
+    uint16_t registerValue = (uint16_t)wire->read();
+    registerValue |= (uint16_t)wire->read() << 8;
+    wire->endTransmission();
+    return registerValue;
 
 }
 
-static inline uint16_t extractAndReverseBits(uint16_t value, int startBit, int endBit) {
-    if (startBit < 0 || startBit > 15 || endBit < 0 || endBit > 15 || startBit > endBit) {
-        // Handle invalid bit range
-        return 0; // You might want to return an appropriate error value here
-    }
-
-    uint16_t result = 0;
-    for (int i = endBit; i >= startBit; i--) {
-        uint16_t bit = (value >> i) & 1;
-        result = (result << 1) | bit;
-    }
-
-    return result;
-}
-
-static inline bool getBitFromOffset(uint16_t value, uint8_t offset) {
-        if (offset < 16) {
-            uint16_t bitmask = (1 << offset);
-            return (value & bitmask) != 0;
-        } else {
-            return false;
-        }
-}
-
-static inline bool readBitFromRegister(TwoWire *wire, uint8_t address, uint8_t reg, uint8_t offset) {
-    uint16_t regValue = readRegister16(wire, address, reg);
-    return getBitFromOffset(regValue, offset);
+/**
+ * Checks if a specific bit is set in a register value.
+ *
+ * @param wire The I2C object used for communication.
+ * @param address The address of the device.
+ * @param reg The register to check.
+ * @param offset The bit offset within the register value.
+ * @return True if the bit is set, false otherwise.
+ */
+static inline bool bitIsSetInRegister(TwoWire *wire, uint8_t address, uint8_t reg, uint8_t offset) {
+    uint16_t regValue = readRegister16Bits(wire, address, reg);
+    return bitRead(regValue, offset) == 1;
 }
 
 
+// TODO: What is this function doing?
+/**
+ * Replaces specific bits in a register value of a device connected to the I2C bus.
+ *
+ * @param wire The I2C object representing the I2C bus.
+ * @param address The address of the device on the I2C bus.
+ * @param reg The register to modify.
+ * @param data The new data to write to the register.
+ * @param bits The bits to replace in the register.
+ * @param offset The offset of the bits to replace.
+ */
 static inline void replaceRegisterBits(TwoWire *wire, uint8_t address, uint8_t reg, uint16_t data, uint16_t bits, uint8_t offset) {
-    uint16_t temp = readRegister16(wire, address, reg);
+    uint16_t registerValue = readRegister16Bits(wire, address, reg);
 
     // Left-shift the bits to the correct position in the register
     uint16_t shiftedBits = bits << offset;
@@ -90,7 +109,7 @@ static inline void replaceRegisterBits(TwoWire *wire, uint8_t address, uint8_t r
     uint16_t bitMask = ~(shiftedBits);
 
     // Preserve the bits in the register that don't need to be modified
-    uint16_t preservedBits = temp & bitMask;
+    uint16_t preservedBits = registerValue & bitMask;
 
     // Left-shift the new data to be written to the correct bit positions
     uint16_t shiftedData = data << offset;
@@ -98,7 +117,7 @@ static inline void replaceRegisterBits(TwoWire *wire, uint8_t address, uint8_t r
     // Combine the preserved bits with the new data to obtain the updated value
     uint16_t updatedValue = preservedBits | shiftedData;
 
-    writeRegister16(wire, address, reg, updatedValue);
+    writeRegister16Bits(wire, address, reg, updatedValue);
 }
 
 #endif
