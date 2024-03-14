@@ -2,18 +2,21 @@
 /*
   Battery Information Display Demo
 
-  This sketch demonstrates how to read battery information using the PowerManagement library. It prints the battery's voltage, current, percentage, remaining capacity, temperature, time-to-full, and time-to-empty in a loop. The sketch is designed to work with the PowerManagement library and is intended for educational purposes.
+  This sketch demonstrates how to read battery information using the PowerManagement library. 
+  It prints the battery's voltage, current, percentage, remaining capacity, temperature, 
+  time-to-full, and time-to-empty in a loop. 
+  The sketch is designed to work with the PowerManagement library and is intended for educational purposes.
 
   Requirements:
   - Arduino Portenta C33, Arduino Portenta H7, Arduino Nicla Vision
-  - Arduino IDE
+  - Arduino IDE / Arduino CLI
   - PowerManagement library (installable from the Arduino Library Manager)
 
   Usage:
   1. Install the required library:
      - Open the Arduino IDE.
      - Go to "Sketch" -> "Include Library" -> "Manage Libraries..."
-     - Search for "PowerManagement" and install it.
+     - Search for "Arduino_PowerManagement" and install it.
 
   2. Upload the Sketch:
      - Open the provided sketch in the Arduino IDE.
@@ -24,14 +27,12 @@
      - Open the Serial Monitor in the Arduino IDE.
      - Set the baud rate to 115200.
      - You will see the sketch continuously printing battery information.
-
 */
 
 #include "PowerManagement.h"
 
 PowerManagement manager;
 Battery battery; 
-
 
 void setup() {
   Serial.begin(115200);
@@ -40,27 +41,18 @@ void setup() {
   manager = PowerManagement();
   manager.begin();
   battery = manager.getBattery();
-
+  battery.begin();
 }
 
-void loop(){
-      Serial.println(battery.isConnected());
-      Serial.print("* Voltage: ");
-      Serial.println(String(battery.averageVoltage()) + "mV");
+void loop() {
+   auto batteryIsConnected = battery.isConnected();
+   Serial.println("* Battery is connected: " + (batteryIsConnected ? String("Yes") : String("No")));
+   Serial.println("* Voltage: " + String(battery.averageVoltage()) + "mV");
+   Serial.println("* Current: " + String(battery.current()) + "mA");
+   Serial.println("* Percentage: " + String(battery.percentage()) + "%");
+   Serial.println("* Remaining Capacity: " + String(battery.remainingCapacity()) + "mAh");
+   Serial.println("* Temperature: " + String(battery.averageTemperature()));
+   Serial.println();
 
-      Serial.print("* Current: ");
-      Serial.println(String(battery.current()) + "mA");
-
-      Serial.print("* Percentage: ");
-      Serial.println(String(battery.percentage()) + "%");
-
-      Serial.print("* Remaining Capacity: ");
-      Serial.println(String(battery.remainingCapacity()) + "mAh");
-
-      Serial.print("* Temperature: ");
-      Serial.println(String(battery.averageTemperature()));
-
-      Serial.println();
-
-    delay(1000);
+   delay(1000);
 }
