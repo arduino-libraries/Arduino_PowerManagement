@@ -28,9 +28,9 @@ bool Board::isBatteryPowered() {
 
 void Board::setExternalPowerEnabled(bool on) {
         if(on)
-            PMIC.getControlPointer()->turnSw2On(Sw2Mode::Normal);
+            PMIC.getControl()->turnSw2On(Sw2Mode::Normal);
         else
-            PMIC.getControlPointer()->turnSw2Off(Sw2Mode::Normal);
+            PMIC.getControl()->turnSw2Off(Sw2Mode::Normal);
 }
 
 bool Board::setExternalVoltage(float v) {
@@ -51,13 +51,13 @@ bool Board::setExternalVoltage(float v) {
 void Board::setCameraPowerEnabled(bool on) {
     #if defined(ARDUINO_NICLA_VISION)
         if(on){
-            PMIC.getControlPointer()->turnLDO1On(Ldo1Mode::Normal);
-            PMIC.getControlPointer()->turnLDO2On(Ldo2Mode::Normal);
-            PMIC.getControlPointer()->turnLDO3On(Ldo3Mode::Normal);
+            PMIC.getControl()->turnLDO1On(Ldo1Mode::Normal);
+            PMIC.getControl()->turnLDO2On(Ldo2Mode::Normal);
+            PMIC.getControl()->turnLDO3On(Ldo3Mode::Normal);
         } else {
-            PMIC.getControlPointer()->turnLDO1Off(Ldo1Mode::Normal);
-            PMIC.getControlPointer()->turnLDO2Off(Ldo2Mode::Normal);
-            PMIC.getControlPointer()->turnLDO3Off(Ldo3Mode::Normal);
+            PMIC.getControl()->turnLDO1Off(Ldo1Mode::Normal);
+            PMIC.getControl()->turnLDO2Off(Ldo2Mode::Normal);
+            PMIC.getControl()->turnLDO3Off(Ldo3Mode::Normal);
         }
     #else 
         #warning "This feature is currently only supported on the Nicla Vision Board"
@@ -173,31 +173,31 @@ void Board::deepSleepUntilWakeupEvent(){
             Wire3.end();
         #else if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
         if(on){
-            PMIC.getControlPointer() -> turnLDO2On(Ldo2Mode::Normal);
-            PMIC.getControlPointer() -> turnLDO2On(Ldo2Mode::Sleep);
-            PMIC.getControlPointer() -> turnLDO2On(Ldo2Mode::Standby);
-            PMIC.getControlPointer() -> turnLDO1On(Ldo1Mode::Normal);
-            PMIC.getControlPointer() -> turnLDO1On(Ldo1Mode::Sleep);
-            PMIC.getControlPointer() -> turnLDO1On(Ldo1Mode::Standby);
-            PMIC.getControlPointer() -> turnLDO3On(Ldo3Mode::Normal);
-            PMIC.getControlPointer() -> turnLDO3On(Ldo3Mode::Sleep);
-            PMIC.getControlPointer() -> turnLDO3On(Ldo3Mode::Standby);
-            PMIC.getControlPointer() -> turnSw1On(Sw1Mode::Normal);
-            PMIC.getControlPointer() -> turnSw1On(Sw1Mode::Sleep);
-            PMIC.getControlPointer() -> turnSw1On(Sw1Mode::Standby);
+            PMIC.getControl() -> turnLDO2On(Ldo2Mode::Normal);
+            PMIC.getControl() -> turnLDO2On(Ldo2Mode::Sleep);
+            PMIC.getControl() -> turnLDO2On(Ldo2Mode::Standby);
+            PMIC.getControl() -> turnLDO1On(Ldo1Mode::Normal);
+            PMIC.getControl() -> turnLDO1On(Ldo1Mode::Sleep);
+            PMIC.getControl() -> turnLDO1On(Ldo1Mode::Standby);
+            PMIC.getControl() -> turnLDO3On(Ldo3Mode::Normal);
+            PMIC.getControl() -> turnLDO3On(Ldo3Mode::Sleep);
+            PMIC.getControl() -> turnLDO3On(Ldo3Mode::Standby);
+            PMIC.getControl() -> turnSw1On(Sw1Mode::Normal);
+            PMIC.getControl() -> turnSw1On(Sw1Mode::Sleep);
+            PMIC.getControl() -> turnSw1On(Sw1Mode::Standby);
         } else {
-            PMIC.getControlPointer() -> turnLDO2Off(Ldo2Mode::Normal);
-            PMIC.getControlPointer() -> turnLDO2Off(Ldo2Mode::Sleep);
-            PMIC.getControlPointer() -> turnLDO2Off(Ldo2Mode::Standby);
-            PMIC.getControlPointer() -> turnLDO1Off(Ldo1Mode::Normal);
-            PMIC.getControlPointer() -> turnLDO1Off(Ldo1Mode::Sleep);
-            PMIC.getControlPointer() -> turnLDO1Off(Ldo1Mode::Standby);
-            PMIC.getControlPointer() -> turnLDO3Off(Ldo3Mode::Normal);
-            PMIC.getControlPointer() -> turnLDO3Off(Ldo3Mode::Sleep);
-            PMIC.getControlPointer() -> turnLDO3Off(Ldo3Mode::Standby);
-            PMIC.getControlPointer() -> turnSw1Off(Sw1Mode::Normal);
-            PMIC.getControlPointer() -> turnSw1Off(Sw1Mode::Sleep);
-            PMIC.getControlPointer() -> turnSw1Off(Sw1Mode::Standby);
+            PMIC.getControl() -> turnLDO2Off(Ldo2Mode::Normal);
+            PMIC.getControl() -> turnLDO2Off(Ldo2Mode::Sleep);
+            PMIC.getControl() -> turnLDO2Off(Ldo2Mode::Standby);
+            PMIC.getControl() -> turnLDO1Off(Ldo1Mode::Normal);
+            PMIC.getControl() -> turnLDO1Off(Ldo1Mode::Sleep);
+            PMIC.getControl() -> turnLDO1Off(Ldo1Mode::Standby);
+            PMIC.getControl() -> turnLDO3Off(Ldo3Mode::Normal);
+            PMIC.getControl() -> turnLDO3Off(Ldo3Mode::Sleep);
+            PMIC.getControl() -> turnLDO3Off(Ldo3Mode::Standby);
+            PMIC.getControl() -> turnSw1Off(Sw1Mode::Normal);
+            PMIC.getControl() -> turnSw1Off(Sw1Mode::Sleep);
+            PMIC.getControl() -> turnSw1Off(Sw1Mode::Standby);
             Wire1.end();
         }
            
@@ -207,46 +207,46 @@ void Board::deepSleepUntilWakeupEvent(){
         if(on){
 
 
-            PMIC.getControlPointer()->clrBit(Register::PMIC_VSNVS_CTRL, (uint8_t)5);
-            PMIC.getControlPointer()->turnLDO1On(Ldo1Mode::Normal);
-            PMIC.getControlPointer()->turnLDO1On(Ldo1Mode::Sleep);
-            PMIC.getControlPointer()->turnLDO1On(Ldo1Mode::Standby);
+            PMIC.getControl()->clrBit(Register::PMIC_VSNVS_CTRL, (uint8_t)5);
+            PMIC.getControl()->turnLDO1On(Ldo1Mode::Normal);
+            PMIC.getControl()->turnLDO1On(Ldo1Mode::Sleep);
+            PMIC.getControl()->turnLDO1On(Ldo1Mode::Standby);
 
-            PMIC.getControlPointer()->turnLDO2On(Ldo2Mode::Normal);
-            PMIC.getControlPointer()->turnLDO2On(Ldo2Mode::Sleep);
-            PMIC.getControlPointer()->turnLDO2On(Ldo2Mode::Standby);
+            PMIC.getControl()->turnLDO2On(Ldo2Mode::Normal);
+            PMIC.getControl()->turnLDO2On(Ldo2Mode::Sleep);
+            PMIC.getControl()->turnLDO2On(Ldo2Mode::Standby);
 
-            PMIC.getControlPointer()->turnLDO3On(Ldo3Mode::Normal);
-            PMIC.getControlPointer()->turnLDO3On(Ldo3Mode::Sleep);
-            PMIC.getControlPointer()->turnLDO3On(Ldo3Mode::Standby);
+            PMIC.getControl()->turnLDO3On(Ldo3Mode::Normal);
+            PMIC.getControl()->turnLDO3On(Ldo3Mode::Sleep);
+            PMIC.getControl()->turnLDO3On(Ldo3Mode::Standby);
 
-            PMIC.getControlPointer()->turnSw2On(Sw2Mode::Normal);
-            PMIC.getControlPointer()->turnSw2On(Sw2Mode::Sleep);
-            PMIC.getControlPointer()->turnSw2On(Sw2Mode::Standby);
+            PMIC.getControl()->turnSw2On(Sw2Mode::Normal);
+            PMIC.getControl()->turnSw2On(Sw2Mode::Sleep);
+            PMIC.getControl()->turnSw2On(Sw2Mode::Standby);
 
-            PMIC.getControlPointer()->turnSw1On(Sw1Mode::Normal);
-            PMIC.getControlPointer()->turnSw1On(Sw1Mode::Sleep);
-            PMIC.getControlPointer()->turnSw1On(Sw1Mode::Standby);
+            PMIC.getControl()->turnSw1On(Sw1Mode::Normal);
+            PMIC.getControl()->turnSw1On(Sw1Mode::Sleep);
+            PMIC.getControl()->turnSw1On(Sw1Mode::Standby);
         } else {
-            PMIC.getControlPointer()->turnLDO1Off(Ldo1Mode::Normal);
-            PMIC.getControlPointer()->turnLDO1Off(Ldo1Mode::Sleep);
-            PMIC.getControlPointer()->turnLDO1Off(Ldo1Mode::Standby);
+            PMIC.getControl()->turnLDO1Off(Ldo1Mode::Normal);
+            PMIC.getControl()->turnLDO1Off(Ldo1Mode::Sleep);
+            PMIC.getControl()->turnLDO1Off(Ldo1Mode::Standby);
 
-            PMIC.getControlPointer()->turnLDO2Off(Ldo2Mode::Normal);
-            PMIC.getControlPointer()->turnLDO2Off(Ldo2Mode::Sleep);
-            PMIC.getControlPointer()->turnLDO2Off(Ldo2Mode::Standby);
+            PMIC.getControl()->turnLDO2Off(Ldo2Mode::Normal);
+            PMIC.getControl()->turnLDO2Off(Ldo2Mode::Sleep);
+            PMIC.getControl()->turnLDO2Off(Ldo2Mode::Standby);
 
-            PMIC.getControlPointer()->turnLDO3Off(Ldo3Mode::Normal);
-            PMIC.getControlPointer()->turnLDO3Off(Ldo3Mode::Sleep);
-            PMIC.getControlPointer()->turnLDO3Off(Ldo3Mode::Standby);
+            PMIC.getControl()->turnLDO3Off(Ldo3Mode::Normal);
+            PMIC.getControl()->turnLDO3Off(Ldo3Mode::Sleep);
+            PMIC.getControl()->turnLDO3Off(Ldo3Mode::Standby);
 
-            PMIC.getControlPointer()->turnSw2Off(Sw2Mode::Normal);
-            PMIC.getControlPointer()->turnSw2Off(Sw2Mode::Sleep);
-            PMIC.getControlPointer()->turnSw2Off(Sw2Mode::Standby);
+            PMIC.getControl()->turnSw2Off(Sw2Mode::Normal);
+            PMIC.getControl()->turnSw2Off(Sw2Mode::Sleep);
+            PMIC.getControl()->turnSw2Off(Sw2Mode::Standby);
 
-            PMIC.getControlPointer()->turnSw1Off(Sw1Mode::Normal);
-            PMIC.getControlPointer()->turnSw1Off(Sw1Mode::Sleep);
-            PMIC.getControlPointer()->turnSw1Off(Sw1Mode::Standby);
+            PMIC.getControl()->turnSw1Off(Sw1Mode::Normal);
+            PMIC.getControl()->turnSw1Off(Sw1Mode::Sleep);
+            PMIC.getControl()->turnSw1Off(Sw1Mode::Standby);
 
             #if defined(ARDUINO_PORTENTA_C33)
                 Wire3.end();
@@ -257,21 +257,21 @@ void Board::deepSleepUntilWakeupEvent(){
 
     void Board::setAnalogDigitalConverterPower(bool on){
         if(on){
-            PMIC.getControlPointer()->turnLDO1On(Ldo1Mode::Normal);
-            PMIC.getControlPointer()->turnLDO1On(Ldo1Mode::Sleep);
-            PMIC.getControlPointer()->turnLDO1On(Ldo1Mode::Standby);
+            PMIC.getControl()->turnLDO1On(Ldo1Mode::Normal);
+            PMIC.getControl()->turnLDO1On(Ldo1Mode::Sleep);
+            PMIC.getControl()->turnLDO1On(Ldo1Mode::Standby);
         } else {
-            PMIC.getControlPointer()->turnLDO1Off(Ldo1Mode::Normal);
-            PMIC.getControlPointer()->turnLDO1Off(Ldo1Mode::Sleep);
-            PMIC.getControlPointer()->turnLDO1Off(Ldo1Mode::Standby);
+            PMIC.getControl()->turnLDO1Off(Ldo1Mode::Normal);
+            PMIC.getControl()->turnLDO1Off(Ldo1Mode::Sleep);
+            PMIC.getControl()->turnLDO1Off(Ldo1Mode::Standby);
         }
     }
 
     void Board::setCommunicationPeripheralsPower(bool on){
         if(on)
-            PMIC.getControlPointer()->turnSw1On(Sw1Mode::Normal);
+            PMIC.getControl()->turnSw1On(Sw1Mode::Normal);
         else
-            PMIC.getControlPointer()->turnSw1Off(Sw1Mode::Normal);
+            PMIC.getControl()->turnSw1Off(Sw1Mode::Normal);
     }
 
 
