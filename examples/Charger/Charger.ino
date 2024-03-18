@@ -33,19 +33,19 @@ Battery battery;
 Charger charger;
 
 void setup() {
-  Serial.begin(115200);
-  //while (!Serial);
+    Serial.begin(115200);
+    // Wait for Serial to be ready with a timeout of 5 seconds
+    for (auto start = millis(); !Serial && millis() - start < 5000;);
 
-     manager = PowerManagement();
+    manager = PowerManagement();
     manager.begin();
-    
-  battery = manager.getBattery();
-  charger = manager.getCharger();
 
+    battery = manager.getBattery();
+    charger = manager.getCharger();
 
+    charger.enable();
 
-  
-  charger.enable();
+    // TODO What's different on Nicla Vision?
   #if !defined(ARDUINO_NICLA_VISION)
     charger.setChargeCurrent(ChargeCurrent::I_200_mA);
     charger.setChargeVoltage(ChargeVoltage::V_3_80);
@@ -53,8 +53,48 @@ void setup() {
   #endif
 }
 
+void getChargerState(){
+    ChargingState status = charger.getState();
+
+    switch (status) {
+        case ChargingState::PreCharge:
+            return "precharge";
+            break;
+        case ChargingState::FastChargeConstantCurrent:
+            return "fast-charge constant current";
+            break;
+        case ChargingState::FastChargeConstantVoltage:
+            return "fast-charge constant voltage";
+            break;
+        case ChargingState::EndOfCharge:
+            return "end-of-charge";
+            break;
+        case ChargingState::Done:
+            return "done";
+            break;
+        case ChargingState::TimerFaultError:
+            return "timer fault";
+            break;
+        case ChargingState::ThermistorSuspendError:
+            return "thermistor suspend";
+            break;
+        case ChargingState::ChargerDisabled:
+            return "off";
+            break;
+        case ChargingState::BatteryOvervoltageError:
+            return "overvoltage condition";
+            break;
+        case ChargingState::ChargerBypassed:
+            return "disabled";
+            break;
+        default:
+            return "unknown";
+            break;
+    }
+}
+
 void loop(){
-    ChargeStatus status = charger.getChargeStatus();
+    ChargingState status = charger.getState();
 
     Serial.print("* Voltage: ");
     Serial.println(String(battery.voltage()) + "mV");
@@ -65,43 +105,8 @@ void loop(){
     Serial.print("* Percentage: ");
     Serial.println(String(battery.percentage()) + "%");
 
-    Serial.print("* Charger state :");
-
-    switch (status) {
-        case ChargeStatus::PreCharge:
-            Serial.println("precharge");
-            break;
-        case ChargeStatus::FastChargeConstantCurrent:
-            Serial.println("fast-charge constant current");
-            break;
-        case ChargeStatus::FastChargeConstantVoltage:
-            Serial.println("fast-charge constant voltage");
-            break;
-        case ChargeStatus::EndOfCharge:
-            Serial.println("end-of-charge");
-            break;
-        case ChargeStatus::Done:
-            Serial.println("done");
-            break;
-        case ChargeStatus::TimerFaultError:
-            Serial.println("timer fault");
-            break;
-        case ChargeStatus::ThermistorSuspendError:
-            Serial.println("thermistor suspend");
-            break;
-        case ChargeStatus::ChargerDisabled:
-            Serial.println("off");
-            break;
-        case ChargeStatus::BatteryOvervoltageError:
-            Serial.println("overvoltage condition");
-            break;
-        case ChargeStatus::ChargerBypassMode:
-            Serial.println("disabled");
-            break;
-        default:
-            Serial.println("unknown");
-            break;
-    }
+    Serial.print("* Charger state : ");
+    Serial.println(getChargerState());
 
     Serial.println();
     delay(1000);
