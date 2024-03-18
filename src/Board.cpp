@@ -1,5 +1,46 @@
 #include "Board.h"
+#include <map>
 
+std::map<float, Ldo2Voltage> ldo2VoltageMap = {
+    {1.80f, Ldo2Voltage::V_1_80},
+    {1.90f, Ldo2Voltage::V_1_90},
+    {2.00f, Ldo2Voltage::V_2_00},
+    {2.10f, Ldo2Voltage::V_2_10},
+    {2.20f, Ldo2Voltage::V_2_20},
+    {2.30f, Ldo2Voltage::V_2_30},
+    {2.40f, Ldo2Voltage::V_2_40},
+    {2.50f, Ldo2Voltage::V_2_50},
+    {2.60f, Ldo2Voltage::V_2_60},
+    {2.70f, Ldo2Voltage::V_2_70},
+    {2.80f, Ldo2Voltage::V_2_80},
+    {2.90f, Ldo2Voltage::V_2_90},
+    {3.00f, Ldo2Voltage::V_3_00},
+    {3.10f, Ldo2Voltage::V_3_10},
+    {3.20f, Ldo2Voltage::V_3_20},
+    {3.30f, Ldo2Voltage::V_3_30}
+};
+
+std::map<float, Sw1Voltage> sw1VoltageMap = {
+    {1.10f, Sw1Voltage::V_1_10},
+    {1.20f, Sw1Voltage::V_1_20},
+    {1.35f, Sw1Voltage::V_1_35},
+    {1.50f, Sw1Voltage::V_1_50},
+    {1.80f, Sw1Voltage::V_1_80},
+    {2.50f, Sw1Voltage::V_2_50},
+    {3.00f, Sw1Voltage::V_3_00},
+    {3.30f, Sw1Voltage::V_3_30}
+};
+
+std::map<float, Sw2Voltage> sw2VoltageMap = {
+    {1.10f, Sw2Voltage::V_1_10},
+    {1.20f, Sw2Voltage::V_1_20},
+    {1.35f, Sw2Voltage::V_1_35},
+    {1.50f, Sw2Voltage::V_1_50},
+    {1.80f, Sw2Voltage::V_1_80},
+    {2.50f, Sw2Voltage::V_2_50},
+    {3.00f, Sw2Voltage::V_3_00},
+    {3.30f, Sw2Voltage::V_3_30}
+};
 
 Board::Board() {
  #if defined(ARDUINO_PORTENTA_C33)
@@ -290,44 +331,21 @@ bool Board::setReferenceVoltage(float voltage) {
  uint8_t Board::getRailVoltage(float voltage, int context) {
     switch (context) {
         case CONTEXT_LDO2:
-            if (voltage == 1.80f) return static_cast<uint8_t>(Ldo2Voltage::V_1_80);
-            else if (voltage == 1.90f) return static_cast<uint8_t>(Ldo2Voltage::V_1_90);
-            else if (voltage == 2.00f) return static_cast<uint8_t>(Ldo2Voltage::V_2_00);
-            else if (voltage == 2.10f) return static_cast<uint8_t>(Ldo2Voltage::V_2_10);
-            else if (voltage == 2.20f) return static_cast<uint8_t>(Ldo2Voltage::V_2_20);
-            else if (voltage == 2.30f) return static_cast<uint8_t>(Ldo2Voltage::V_2_30);
-            else if (voltage == 2.40f) return static_cast<uint8_t>(Ldo2Voltage::V_2_40);
-            else if (voltage == 2.50f) return static_cast<uint8_t>(Ldo2Voltage::V_2_50);
-            else if (voltage == 2.60f) return static_cast<uint8_t>(Ldo2Voltage::V_2_60);
-            else if (voltage == 2.70f) return static_cast<uint8_t>(Ldo2Voltage::V_2_70);
-            else if (voltage == 2.80f) return static_cast<uint8_t>(Ldo2Voltage::V_2_80);
-            else if (voltage == 2.90f) return static_cast<uint8_t>(Ldo2Voltage::V_2_90);
-            else if (voltage == 3.00f) return static_cast<uint8_t>(Ldo2Voltage::V_3_00);
-            else if (voltage == 3.10f) return static_cast<uint8_t>(Ldo2Voltage::V_3_10);
-            else if (voltage == 3.20f) return static_cast<uint8_t>(Ldo2Voltage::V_3_20);
-            else if (voltage == 3.30f) return static_cast<uint8_t>(Ldo2Voltage::V_3_30);
+            if (ldo2VoltageMap.find(voltage) != ldo2VoltageMap.end()) {
+                return static_cast<uint8_t>(ldo2VoltageMap[voltage]);
+            }
             break;
             
         case CONTEXT_SW1:
-            if (voltage == 1.10f) return static_cast<uint8_t>(Sw1Voltage::V_1_10);
-            else if (voltage == 1.20f) return static_cast<uint8_t>(Sw1Voltage::V_1_20);
-            else if (voltage == 1.35f) return static_cast<uint8_t>(Sw1Voltage::V_1_35);
-            else if (voltage == 1.50f) return static_cast<uint8_t>(Sw1Voltage::V_1_50);
-            else if (voltage == 1.80f) return static_cast<uint8_t>(Sw1Voltage::V_1_80);
-            else if (voltage == 2.50f) return static_cast<uint8_t>(Sw1Voltage::V_2_50);
-            else if (voltage == 3.00f) return static_cast<uint8_t>(Sw1Voltage::V_3_00);
-            else if (voltage == 3.30f) return static_cast<uint8_t>(Sw1Voltage::V_3_30);
+            if (sw1VoltageMap.find(voltage) != sw1VoltageMap.end()) {
+                return static_cast<uint8_t>(sw1VoltageMap[voltage]);
+            }
             break;
 
         case CONTEXT_SW2:
-          if (voltage == 1.10f) return static_cast<uint8_t>(Sw2Voltage::V_1_10);
-            else if (voltage == 1.20f) return static_cast<uint8_t>(Sw2Voltage::V_1_20);
-            else if (voltage == 1.35f) return static_cast<uint8_t>(Sw2Voltage::V_1_35);
-            else if (voltage == 1.50f) return static_cast<uint8_t>(Sw2Voltage::V_1_50);
-            else if (voltage == 1.80f) return static_cast<uint8_t>(Sw2Voltage::V_1_80);
-            else if (voltage == 2.50f) return static_cast<uint8_t>(Sw2Voltage::V_2_50);
-            else if (voltage == 3.00f) return static_cast<uint8_t>(Sw2Voltage::V_3_00);
-            else if (voltage == 3.30f) return static_cast<uint8_t>(Sw2Voltage::V_3_30);
+            if (sw2VoltageMap.find(voltage) != sw2VoltageMap.end()) {
+                return static_cast<uint8_t>(sw2VoltageMap[voltage]);
+            }
             break;
 
         default:
