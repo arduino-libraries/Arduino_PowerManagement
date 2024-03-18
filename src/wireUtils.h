@@ -79,45 +79,52 @@ static inline uint16_t readRegister16Bits(TwoWire *wire, uint8_t address, uint8_
  * @param wire The I2C object used for communication.
  * @param address The address of the device.
  * @param reg The register to check.
- * @param offset The bit offset within the register value.
+ * @param index The bit index within the register value.
  * @return True if the bit is set, false otherwise.
  */
-static inline bool bitIsSetInRegister(TwoWire *wire, uint8_t address, uint8_t reg, uint8_t offset) {
+static inline bool bitIsSetInRegister(TwoWire *wire, uint8_t address, uint8_t reg, uint8_t index) {
     uint16_t regValue = readRegister16Bits(wire, address, reg);
-    return bitRead(regValue, offset) == 1;
+    return bitRead(regValue, index) == 1;
 }
 
 
-// TODO: What is this function doing?
 /**
  * Replaces specific bits in a register value of a device connected to the I2C bus.
  *
  * @param wire The I2C object representing the I2C bus.
  * @param address The address of the device on the I2C bus.
  * @param reg The register to modify.
- * @param data The new data to write to the register.
- * @param bits The bits to replace in the register.
- * @param offset The offset of the bits to replace.
+ * @param data The new data (bits) to write to the register.
+ * @param indexFrom The index of the first bit to replace starting from LSB (0)
+ * @param indexTo The index of the last bit to replace starting from LSB (0)
  */
-static inline void replaceRegisterBits(TwoWire *wire, uint8_t address, uint8_t reg, uint16_t data, uint16_t bits, uint8_t offset) {
+static inline void replaceRegisterBits(TwoWire *wire, uint8_t address, uint8_t reg, uint16_t data, uint16_t indexFrom, uint8_t indexTo) {
     uint16_t registerValue = readRegister16Bits(wire, address, reg);
 
-    // Left-shift the bits to the correct position in the register
-    uint16_t shiftedBits = bits << offset;
+    // Create a mask to clear the bits to be replaced
+    uint16_t mask = 0;
+    for (int i = indexFrom; i <= indexTo; i++) {
+        mask |= (1 << i);
+    }
+    registerValue &= ~mask; // Clear the bits to be replaced
+    registerValue |= (data << indexFrom); // Set the new bits
+    writeRegister16Bits(wire, address, reg, registerValue);
+}
 
-    // Create a bit mask with all bits set to 1 except for the bits to be modified
-    uint16_t bitMask = ~(shiftedBits);
 
-    // Preserve the bits in the register that don't need to be modified
-    uint16_t preservedBits = registerValue & bitMask;
-
-    // Left-shift the new data to be written to the correct bit positions
-    uint16_t shiftedData = data << offset;
-
-    // Combine the preserved bits with the new data to obtain the updated value
-    uint16_t updatedValue = preservedBits | shiftedData;
-
-    writeRegister16Bits(wire, address, reg, updatedValue);
+/**
+ * @brief Replaces a specific bit in a register of a given I2C device.
+ *
+ * This function replaces a specific bit in a register of a given I2C device.
+ *
+ * @param wire The TwoWire object representing the I2C bus.
+ * @param address The address of the I2C device.
+ * @param reg The register to modify.
+ * @param data The new data (1 bit) to write to the register.
+ * @param index The index of the bit to replace.
+ */
+static inline void replaceRegisterBit(TwoWire *wire, uint8_t address, uint8_t reg, uint16_t data, uint16_t index) {
+    replaceRegisterBits(wire, address, reg, data, index, index);
 }
 
 #endif

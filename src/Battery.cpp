@@ -8,7 +8,7 @@ Battery::Battery(int capacityInMilliAmpereHours, int emptyVoltageInMilliVolts) {
 }
 
 bool Battery::begin() {
-  if (readBitFromRegister(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, POR_BIT)) {
+  if (bitIsSetInRegister(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, POR_BIT)) {
 
     uint16_t tempHibernateConfigRegister = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG);
 
@@ -26,13 +26,13 @@ bool Battery::begin() {
     writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, MODEL_CFG_REG, 0x8000); // Write ModelCFG
 
     writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG, tempHibernateConfigRegister); // Restore Original HibCFG value
-    replaceRegisterBits(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, 0, 0x01, POR_BIT);
+    replaceRegisterBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, 0, POR_BIT); // Clear POR bit
   }
 }
 
 bool Battery::isConnected(){
   uint16_t statusRegister = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG);
-  return getBitFromOffset(statusRegister, BATTERY_STATUS_BIT) == 0;
+  return bitRead(statusRegister, BATTERY_STATUS_BIT) == 0;
 }
 
 int Battery::voltage(){
