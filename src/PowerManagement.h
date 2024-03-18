@@ -43,9 +43,9 @@ class PowerManagement{
         Charger getCharger();
 
     private:
-        Battery * battery;
-        Board * board;
-        Charger * charger;
+        Battery * battery = nullptr;
+        Board * board = nullptr;
+        Charger * charger = nullptr;
 
 };
 
