@@ -27,7 +27,7 @@ class Battery {
         /**
          * @brief Constructs a new instance of the Battery class with the specified capacity and empty voltage.
          * @param capacityInMilliAmpereHours The capacity of the battery in milliampere-hours (mAh).
-         * @param emptyVoltageInMilliVolts The voltage at which the battery is considered empty in millivolts (mV).
+         * @param emptyVoltageInMilliVolts The voltage in millivolts (mV) at which the battery is considered empty.
         */
         Battery(int capacityInMilliAmpereHours, int emptyVoltageInMilliVolts); 
 

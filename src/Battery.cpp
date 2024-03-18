@@ -22,8 +22,7 @@ bool Battery::begin() {
     writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, DESIGN_CAP_REG, (uint16_t)(batteryCapacityInMiliampereHours / CAP_MULTIPLIER));
     writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, I_CHG_TERM_REG, (uint16_t)(101 / CURRENT_MULTIPLIER));
 
-    // TODO: Where does this value come from?
-    writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, MODEL_CFG_REG, 0x8000); // Write ModelCFG
+    writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, MODEL_CFG_REG, 0x8000); // Set bit 15 of ModelCFG
 
     writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG, tempHibernateConfigRegister); // Restore Original HibCFG value
     replaceRegisterBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, 0, POR_BIT); // Clear POR bit
