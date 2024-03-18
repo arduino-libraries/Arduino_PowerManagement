@@ -1,4 +1,3 @@
-
 #ifndef POWER_MANAGEMENT_H
 #define POWER_MANAGEMENT_H 
 
@@ -8,15 +7,12 @@
 #include "Charger.h"
 #include <Arduino_PF1550.h>
 
-
 class PowerManagement{
     public: 
         /**
          * @brief constructor for the PowerManagement 
          */
         PowerManagement();
-
-
 
         /**
          * @brief start communication with the PMIC chip and the power gauge. 
@@ -46,10 +42,6 @@ class PowerManagement{
         Battery * battery = nullptr;
         Board * board = nullptr;
         Charger * charger = nullptr;
-
 };
-
-
-
 
 #endif

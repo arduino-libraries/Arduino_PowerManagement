@@ -6,8 +6,6 @@ typedef IFastCharge ChargeCurrent;
 typedef IEndOfCharge EndOfChargeCurrent;
 typedef IInputCurrentLimit InputCurrentLimit;
 
-
-
 /**
  * Enum representing different states of charging. 
  * @see #None
@@ -20,12 +18,12 @@ typedef IInputCurrentLimit InputCurrentLimit;
  * @see #ThermistorSuspendError
  * @see #ChargerDisabled
  * @see #BatteryOvervoltageError
- * @see #ChargerBypassMode
+ * @see #ChargerBypassed
  */
 
-enum class ChargeStatus {
+enum class ChargingState {
     /**
-     * Provided by the registers, not used. 
+     * Provided by the registers, not used in this API.
      */
     None = -1,
 
@@ -77,51 +75,56 @@ enum class ChargeStatus {
     /** 
      * The charger is bypassed completely and the USB voltage is powering the board
      */
-    ChargerBypassMode = 12
+    ChargerBypassed = 12
 };
 
 /**
- * @brief Charger class for controlling charging parameters and monitoring charging status.
+ * @brief Class for controlling charging parameters and monitoring charging status.
  */
 class Charger {
 public:
     /**
-     * @brief Default constructor.
+     * @brief Constructs a new Charger object.
      */
     Charger();
 
-
-
+    // TODO What's the default value?
     /**
      * @brief Set the charging current.
      * @param current Charging current enum value (ChargeCurrent).
      */
     void setChargeCurrent(ChargeCurrent current);
 
+    // TODO What's the default value?
     /**
      * @brief Set the charging voltage.
      * @param voltage Charging voltage enum value (ChargeVoltage).
      */
     void setChargeVoltage(ChargeVoltage voltage);
 
+    // TODO What's the default value?
     /**
      * @brief Set the end-of-charge current.
      * @param current End-of-charge current enum value (EndOfChargeCurrent).
      */
     void setEndOfChargeCurrent(EndOfChargeCurrent current);
 
+    // TODO What's the default value?
     /**
-     * @brief The input current limit (ILIM) safeguards the device by preventing overcurrent, ensuring the charging current is within safe levels for the battery, and adapting to the maximum current the power source can provide, allowing you to charge and use the system at the same time. 
+     * @brief The input current limit (ILIM) safeguards the device by preventing overcurrent, 
+     * ensuring the charging current is within safe levels for the battery, and adapting to the maximum 
+     * current the power source can provide, allowing you to charge and use the system at the same time. 
      * @param current Maximum input current enum value (InputCurrentLimit).
      */
     void setInputCurrentLimit(InputCurrentLimit current);
 
     /**
      * @brief Get the current charging status.
-     * @return Charging status enum value (ChargeStatus).
+     * @return Charging status enum value (ChargingState).
      */
-    ChargeStatus getChargeStatus();
+    ChargingState getState();
 
+    // TODO Is charging enabled or disabled by default?
     /**
      * @brief Enables the charging functionality with either the default settings or the last saved parameters, depending on what was set previously. 
      * @return True if successful, false otherwise.
