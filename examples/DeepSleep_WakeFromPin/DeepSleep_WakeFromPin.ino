@@ -34,7 +34,7 @@ void setup() {
     board.setAllPeripheralsPower(true);
     charger.disable();
 
-    pinMode(LED_BLUE, OUTPUT);
+    pinMode(LEDB, OUTPUT);
 }
 
 void goToSleep(){
@@ -49,9 +49,9 @@ void loop() {
         board.deepSleepUntilWakeupEvent();
     } else {
 
-        digitalWrite(LED_BLUE, HIGH);
+        digitalWrite(LEDB, HIGH);
         delay(1000);
-        digitalWrite(LED_BLUE, LOW);
+        digitalWrite(LEDB, LOW);
         delay(1000);
     }
 }

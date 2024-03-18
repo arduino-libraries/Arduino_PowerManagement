@@ -23,46 +23,46 @@ std::vector<String> splitString(String input) {
 
 
 void printChargerStatus(){
-   ChargeStatus status = charger.getChargeStatus();
+   ChargingState status = charger.getState();
 
         switch (status) {
-        case ChargeStatus::PreCharge:
+        case ChargingState::PreCharge:
             Serial.println("precharge");
             // Additional code specific to precharge
             break;
-        case ChargeStatus::FastChargeConstantCurrent:
+        case ChargingState::FastChargeConstantCurrent:
             Serial.println("fast-charge constant current");
             // Additional code specific to fast-charge CC
             break;
-        case ChargeStatus::FastChargeConstantVoltage:
+        case ChargingState::FastChargeConstantVoltage:
             Serial.println("fast-charge constant voltage");
             // Additional code specific to fast-charge CV
             break;
-        case ChargeStatus::EndOfCharge:
+        case ChargingState::EndOfCharge:
             Serial.println("end-of-charge");
             // Additional code specific to end-of-charge
             break;
-        case ChargeStatus::Done:
+        case ChargingState::Done:
             Serial.println("done");
             // Additional code specific to done
             break;
-        case ChargeStatus::TimerFaultError:
+        case ChargingState::TimerFaultError:
             Serial.println("timer fault");
             // Additional code specific to timer fault
             break;
-        case ChargeStatus::ThermistorSuspendError:
+        case ChargingState::ThermistorSuspendError:
             Serial.println("thermistor suspend");
             // Additional code specific to thermistor suspend
             break;
-        case ChargeStatus::ChargerDisabled:
+        case ChargingState::ChargerDisabled:
             Serial.println("off");
             // Additional code specific to off
             break;
-        case ChargeStatus::BatteryOvervoltageError:
+        case ChargingState::BatteryOvervoltageError:
             Serial.println("overvoltage condition");
             // Additional code specific to battery overvoltage condition
             break;
-        case ChargeStatus::ChargerBypassMode:
+        case ChargingState::ChargerBypassed:
             Serial.println("disabled");
             // Additional code specific to linear only
             break;
@@ -86,13 +86,15 @@ void status(){
 
   Serial.println("BATTERY: \n--------------------------");
   Serial.println(
-    "* Voltage: " + String(battery.averageVoltage()) + "mV \n" +
+    "* Voltage: " + String(battery.voltage()) + "mV \n" +
     "* Current: " + String(battery.current()) + "mA \n" + 
     "* Percentage: " + String(battery.percentage()) + "% \n" +
     "* Remaining Capacity: " + String(battery.remainingCapacity()) + "mAh \n" +
-    "* Temperature: " + String(battery.averageTemperature()) + "\n" +  
-    "* Time-to-full: " + String(battery.readTimeToFull()) + "s \n" + 
-    "* Time-to-empty: " + String(battery.readTimeToEmpty()) + "s \n");
+    "* Temperature: " + String(battery.temperature()) + "\n" +  
+    // TODO: What happend to these functions?
+    // "* Time-to-full: " + String(battery.timeToFull()) + "s \n" + 
+    // "* Time-to-empty: " + String(battery.timeToEmpty()) + "s \n");
+    "\n");
 }
 
 
@@ -109,8 +111,9 @@ void setRailVoltage(std::vector<String> args){
     #endif
   } else if (rail == "C33_analog"){
     #if defined(ARDUINO_PORTENTA_C33)
-      if(board.setAnalogVoltage(voltage)) Serial.println("Successfully set analog voltage");
-      else Serial.println("Failed to set analog voltage");
+      // TODO: This function is not implemented?
+      // if(board.setAnalogVoltage(voltage)) Serial.println("Successfully set analog voltage");
+      // else Serial.println("Failed to set analog voltage");
     #else
       Serial.println("Current board is not an arduino portenta c33");
     #endif
