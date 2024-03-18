@@ -5,19 +5,19 @@ Charger::Charger(){}
 
 
 void Charger::setChargeCurrent(ChargeCurrent current) {
-    PMIC.getControlPointer() -> setFastChargeCurrent(current);
+    PMIC.getControl() -> setFastChargeCurrent(current);
 }
 
 void Charger::setChargeVoltage(ChargeVoltage voltage) {
-    PMIC.getControlPointer() -> setFastChargeVoltage(voltage);
+    PMIC.getControl() -> setFastChargeVoltage(voltage);
 }
 
 void Charger::setEndOfChargeCurrent(EndOfChargeCurrent current) {
-    PMIC.getControlPointer() -> setEndOfChargeCurrent(current);
+    PMIC.getControl() -> setEndOfChargeCurrent(current);
 }
 
 void Charger::setInputCurrentLimit(InputCurrentLimit current) {
-    PMIC.getControlPointer() -> setInputCurrentLimit(current);
+    PMIC.getControl() -> setInputCurrentLimit(current);
 }
 
 bool Charger::enable(){
