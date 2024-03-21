@@ -34,20 +34,22 @@ bool Battery::isConnected(){
   return bitRead(statusRegister, BATTERY_STATUS_BIT) == 0;
 }
 
-int Battery::voltage(){
+float Battery::voltage(){
   if(!isConnected()){
     return -1;
   }
   
-  return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, VCELL_REG) * VOLTAGE_MULTIPLIER;
+  auto voltageInMV = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, VCELL_REG) * VOLTAGE_MULTIPLIER;
+  return voltageInMV / 1000.0f;
 }
 
-unsigned int Battery::averageVoltage(){
+float Battery::averageVoltage(){
   if(!isConnected()){
     return -1;
   }
   
-  return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, AVG_VCELL_REG) * VOLTAGE_MULTIPLIER;
+  auto voltageInVolts = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, AVG_VCELL_REG) * VOLTAGE_MULTIPLIER;
+  return voltageInVolts / 1000.0f;
 }
 
 int Battery::temperature(){
@@ -66,20 +68,22 @@ int Battery::averageTemperature(){
   return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, AVG_TA_REG) >> 8;
 }
 
-int Battery::current(){
+float Battery::current(){
   if(!isConnected()){
     return -1;
   }
   
-  return (int16_t)readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, CURRENT_REG) * CURRENT_MULTIPLIER;
+  auto currentInAmperes = (int16_t)readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, CURRENT_REG) * CURRENT_MULTIPLIER;
+  return currentInAmperes / 1000.0f;
 }
 
-int Battery::averageCurrent(){
+float Battery::averageCurrent(){
   if(!isConnected()){
     return -1;
   }
 
-  return (int16_t)readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, AVG_CURRENT_REG) * CURRENT_MULTIPLIER;
+  auto currentInAmperes = (int16_t)readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, AVG_CURRENT_REG) * CURRENT_MULTIPLIER;
+  return currentInAmperes / 1000.0f;
 }
 
 int Battery::percentage(){

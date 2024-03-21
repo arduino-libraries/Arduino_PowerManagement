@@ -217,9 +217,9 @@ void setup() {
 
 
   #if !defined(ARDUINO_NICLA_VISION)
-    charger.setChargeCurrent(ChargeCurrent::I_200_mA);
-    charger.setChargeVoltage(ChargeVoltage::V_4_20);
-    charger.setEndOfChargeCurrent(EndOfChargeCurrent::I_5_mA);
+    charger.setChargeCurrent(0.2);
+    charger.setChargeVoltage(4.2);
+    charger.setEndOfChargeCurrent(0.005);
   #endif
 }
 

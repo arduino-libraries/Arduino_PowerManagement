@@ -45,10 +45,10 @@ class Battery {
         // TODO Shall this be in volts to be consistent?
         /**
          * @brief Reads the current voltage of the battery.
-         * Voltage is usually between 3000mV and 4200mV.
-         * @return The current voltage in millivolts (mV).
+         * Voltage is usually between 3.0V and 4.2V.
+         * @return The current voltage in volts (V).
         */
-        int voltage();
+        float voltage();
 
         // TODO Shall this be in ampere to be consistent?
         /**
@@ -56,9 +56,9 @@ class Battery {
          * Negative values indicate that the battery is charging, 
          * positive values indicate that the battery is discharging.
          * When no battery is connected, the value is 0.
-         * @return The current flowing from the battery in milliamperes (mA).
+         * @return The current flowing from the battery in amperes (A).
         */
-        int current();
+        float current();
 
         /**
          * @brief Reads the current temperature of the battery.
@@ -92,16 +92,16 @@ class Battery {
         // TODO Shall this be in ampere to be consistent?
         /**
          * @brief Reads the average current of the battery.
-         * @return The average current in millivolts (mV). 
+         * @return The average current in amperes (A).
         */
-        int averageCurrent();
+        float averageCurrent();
 
         // TODO Shall this be in volts to be consistent?
         /**
          * @brief Reads the average voltage of the battery.
-         * @return The average voltage in millivolts (mV). 
+         * @return The average voltage in volts (V). 
         */
-        unsigned int averageVoltage();
+        float averageVoltage();
 
         int batteryCapacityInMiliampereHours = DEFAULT_BATTERY_CAPACITY;
         int batteryEmptyVoltage = DEFAULT_BATTERY_EMPTY_VOLTAGE;
