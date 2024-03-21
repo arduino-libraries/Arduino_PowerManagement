@@ -91,32 +91,43 @@ public:
     // TODO What's the default value?
     /**
      * @brief Set the charging current.
-     * @param current Charging current enum value (ChargeCurrent).
+     * @param current Charging current in amperes (A).
+     * Supported values: 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0
+     * @return True if successful, false if an invalid value was provided or if the PMIC communication failed.
      */
-    void setChargeCurrent(ChargeCurrent current);
+    bool setChargeCurrent(float current);
 
     // TODO What's the default value?
     /**
      * @brief Set the charging voltage.
-     * @param voltage Charging voltage enum value (ChargeVoltage).
+     * @param voltage Charging voltage in volts (V).
+     * Supported values: 3.50, 3.52, 3.54, 3.56, 3.58, 3.60, 3.62, 3.64, 3.66, 3.68, 3.70, 3.72, 3.74, 3.76, 
+     * 3.78, 3.80, 3.82, 3.84, 3.86, 3.88, 3.90, 3.92, 3.94, 3.96, 3.98, 4.00, 4.02, 4.04, 4.06, 4.08, 4.10, 
+     * 4.12, 4.14, 4.16, 4.18, 4.20, 4.22, 4.24, 4.26, 4.28, 4.30, 4.32, 4.34, 4.36, 4.38, 4.40, 4.42, 4.44
+     * @return True if successful, false if an invalid value was provided or if the PMIC communication failed.
      */
-    void setChargeVoltage(ChargeVoltage voltage);
+    bool setChargeVoltage(float voltage);
 
     // TODO What's the default value?
     /**
      * @brief Set the end-of-charge current.
-     * @param current End-of-charge current enum value (EndOfChargeCurrent).
+     * @param current End-of-charge current in amperes (A).
+     * Supported values: 0.005, 0.01, 0.02, 0.03, 0.05
+     * @return True if successful, false if an invalid value was provided or if the PMIC communication failed.
      */
-    void setEndOfChargeCurrent(EndOfChargeCurrent current);
+    bool setEndOfChargeCurrent(float current);
 
     // TODO What's the default value?
     /**
      * @brief The input current limit (ILIM) safeguards the device by preventing overcurrent, 
      * ensuring the charging current is within safe levels for the battery, and adapting to the maximum 
      * current the power source can provide, allowing you to charge and use the system at the same time. 
-     * @param current Maximum input current enum value (InputCurrentLimit).
+     * @param current Maximum input current in amperes (A).
+     * Supported values: 0.01, 0.015, 0.02, 0.025, 0.03, 0.035, 0.04, 0.045, 0.05, 0.1, 0.15, 0.2, 0.3, 
+     * 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.5
+     * @return True if successful, false if an invalid value was provided or if the PMIC communication failed.
      */
-    void setInputCurrentLimit(InputCurrentLimit current);
+    bool setInputCurrentLimit(float current);
 
     /**
      * @brief Get the current charging status.
