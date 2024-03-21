@@ -189,7 +189,7 @@ class Board {
         /**
          * @brief Set the reference voltage on Portenta C33. This value is used by the ADC to convert analog values to digital values.
          * This can be particularly useful to increase the accuracy of the ADC when working with low voltages
-         * @param voltage Reference voltage value. It can be anything between 1.80V and 3.30V in steps of 0.10V. 
+         * @param voltage Reference voltage value in volts. It can be anything between 1.80V and 3.30V in steps of 0.10V. 
          * Any value outside this range or with different steps will not be accepted by the library.
          * @return True if the voltage was set successfully, false otherwise.
         */

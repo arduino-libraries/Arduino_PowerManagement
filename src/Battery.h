@@ -42,6 +42,7 @@ class Battery {
         */
         boolean isConnected();
 
+        // TODO Shall this be in volts to be consistent?
         /**
          * @brief Reads the current voltage of the battery.
          * Voltage is usually between 3000mV and 4200mV.
@@ -49,6 +50,7 @@ class Battery {
         */
         int voltage();
 
+        // TODO Shall this be in ampere to be consistent?
         /**
          * @brief Reads the current flowing from the battery at the moment.
          * Negative values indicate that the battery is charging, 
@@ -87,12 +89,14 @@ class Battery {
         */
         int averageTemperature();
 
+        // TODO Shall this be in ampere to be consistent?
         /**
          * @brief Reads the average current of the battery.
          * @return The average current in millivolts (mV). 
         */
         int averageCurrent();
 
+        // TODO Shall this be in volts to be consistent?
         /**
          * @brief Reads the average voltage of the battery.
          * @return The average voltage in millivolts (mV). 

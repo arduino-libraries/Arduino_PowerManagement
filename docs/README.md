@@ -257,7 +257,7 @@ This feature is particularly useful when you want to set the board to wake up at
 
 To simplify things, we have added a convenience function in `Board` called `sleepFor`. This method takes a number of hours, minutes and seconds as a parameters. For more information, check out the [DeepSleep_WakeFromRTC_H7](https://github.com/arduino-libraries/Arduino_PowerManagement/blob/main/examples/DeepSleep_WakeFromRTC_H7/DeepSleep_WakeFromRTC_H7.ino) example.
 
-```c
+```cpp
 PowerManagement manager;
 Board board; 
 
