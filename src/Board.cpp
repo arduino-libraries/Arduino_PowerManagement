@@ -246,58 +246,6 @@ void Board::setAllPeripheralsPower(bool on){
     }
         
     #endif
-
-    // TODO: What's going on here?
-    /*
-    if(on){
-
-
-        PMIC.getControl()->clrBit(Register::PMIC_VSNVS_CTRL, (uint8_t)5);
-        PMIC.getControl()->turnLDO1On(Ldo1Mode::Normal);
-        PMIC.getControl()->turnLDO1On(Ldo1Mode::Sleep);
-        PMIC.getControl()->turnLDO1On(Ldo1Mode::Standby);
-
-        PMIC.getControl()->turnLDO2On(Ldo2Mode::Normal);
-        PMIC.getControl()->turnLDO2On(Ldo2Mode::Sleep);
-        PMIC.getControl()->turnLDO2On(Ldo2Mode::Standby);
-
-        PMIC.getControl()->turnLDO3On(Ldo3Mode::Normal);
-        PMIC.getControl()->turnLDO3On(Ldo3Mode::Sleep);
-        PMIC.getControl()->turnLDO3On(Ldo3Mode::Standby);
-
-        PMIC.getControl()->turnSw2On(Sw2Mode::Normal);
-        PMIC.getControl()->turnSw2On(Sw2Mode::Sleep);
-        PMIC.getControl()->turnSw2On(Sw2Mode::Standby);
-
-        PMIC.getControl()->turnSw1On(Sw1Mode::Normal);
-        PMIC.getControl()->turnSw1On(Sw1Mode::Sleep);
-        PMIC.getControl()->turnSw1On(Sw1Mode::Standby);
-    } else {
-        PMIC.getControl()->turnLDO1Off(Ldo1Mode::Normal);
-        PMIC.getControl()->turnLDO1Off(Ldo1Mode::Sleep);
-        PMIC.getControl()->turnLDO1Off(Ldo1Mode::Standby);
-
-        PMIC.getControl()->turnLDO2Off(Ldo2Mode::Normal);
-        PMIC.getControl()->turnLDO2Off(Ldo2Mode::Sleep);
-        PMIC.getControl()->turnLDO2Off(Ldo2Mode::Standby);
-
-        PMIC.getControl()->turnLDO3Off(Ldo3Mode::Normal);
-        PMIC.getControl()->turnLDO3Off(Ldo3Mode::Sleep);
-        PMIC.getControl()->turnLDO3Off(Ldo3Mode::Standby);
-
-        PMIC.getControl()->turnSw2Off(Sw2Mode::Normal);
-        PMIC.getControl()->turnSw2Off(Sw2Mode::Sleep);
-        PMIC.getControl()->turnSw2Off(Sw2Mode::Standby);
-
-        PMIC.getControl()->turnSw1Off(Sw1Mode::Normal);
-        PMIC.getControl()->turnSw1Off(Sw1Mode::Sleep);
-        PMIC.getControl()->turnSw1Off(Sw1Mode::Standby);
-
-        #if defined(ARDUINO_PORTENTA_C33)
-            Wire3.end();
-        #endif
-    }
-*/
 }
 
 void Board::setAnalogDigitalConverterPower(bool on){
