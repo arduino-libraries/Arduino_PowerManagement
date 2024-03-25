@@ -91,9 +91,6 @@ void status(){
     "* Percentage: " + String(battery.percentage()) + "% \n" +
     "* Remaining Capacity: " + String(battery.remainingCapacity()) + "mAh \n" +
     "* Temperature: " + String(battery.temperature()) + "\n" +  
-    // TODO: What happend to these functions?
-    // "* Time-to-full: " + String(battery.timeToFull()) + "s \n" + 
-    // "* Time-to-empty: " + String(battery.timeToEmpty()) + "s \n");
     "\n");
 }
 
@@ -109,15 +106,6 @@ void setRailVoltage(std::vector<String> args){
     #else
       Serial.println("Current board is not an arduino portenta c33");
     #endif
-  } else if (rail == "C33_analog"){
-    #if defined(ARDUINO_PORTENTA_C33)
-      // TODO: This function is not implemented?
-      // if(board.setAnalogVoltage(voltage)) Serial.println("Successfully set analog voltage");
-      // else Serial.println("Failed to set analog voltage");
-    #else
-      Serial.println("Current board is not an arduino portenta c33");
-    #endif
-
   } else if (rail == "C33_external"){
     #if defined(ARDUINO_PORTENTA_C33)
       if(board.setExternalVoltage(voltage)) Serial.println("Successfully set external voltage");
