@@ -99,5 +99,9 @@ int Battery::percentage(){
     return -1;
   }
   
+  if(batteryCapacityInMiliampereHours == 0){
+    return -1;
+  }
+  
   return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, REP_CAP_REG) * CAP_MULTIPLIER;
 }

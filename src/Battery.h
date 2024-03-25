@@ -7,7 +7,6 @@
 #include "wireUtils.h"
 
 constexpr int FUEL_GAUGE_ADDRESS = 0x36; // I2C address of the fuel gauge
-constexpr int DEFAULT_BATTERY_CAPACITY = 200; // mAh
 constexpr int DEFAULT_BATTERY_EMPTY_VOLTAGE = 3000; // mV
 
 /**
@@ -42,7 +41,6 @@ class Battery {
         */
         boolean isConnected();
 
-        // TODO Shall this be in volts to be consistent?
         /**
          * @brief Reads the current voltage of the battery.
          * Voltage is usually between 3.0V and 4.2V.
@@ -50,7 +48,6 @@ class Battery {
         */
         float voltage();
 
-        // TODO Shall this be in ampere to be consistent?
         /**
          * @brief Reads the current flowing from the battery at the moment.
          * Negative values indicate that the battery is charging, 
@@ -89,21 +86,19 @@ class Battery {
         */
         int averageTemperature();
 
-        // TODO Shall this be in ampere to be consistent?
         /**
          * @brief Reads the average current of the battery.
          * @return The average current in amperes (A).
         */
         float averageCurrent();
 
-        // TODO Shall this be in volts to be consistent?
         /**
          * @brief Reads the average voltage of the battery.
          * @return The average voltage in volts (V). 
         */
         float averageVoltage();
 
-        int batteryCapacityInMiliampereHours = DEFAULT_BATTERY_CAPACITY;
+        int batteryCapacityInMiliampereHours = 0;
         int batteryEmptyVoltage = DEFAULT_BATTERY_EMPTY_VOLTAGE;
 
         #if defined(ARDUINO_PORTENTA_C33)
