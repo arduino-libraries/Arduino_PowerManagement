@@ -102,10 +102,9 @@ class Board {
         void enableWakeupFromRTC();
 
         #if defined(ARDUINO_PORTENTA_C33)
-        // TODO Document what happens when the device wakes up. Does it continue from where it left off?
         // TODO Do I needs to call enableWakeupFromRTC() before calling this function?
         /**
-         * @brief Put the device in sleep mode for a specified amount of time.
+         * @brief Put the device in sleep mode for a specified amount of time. Restarts after waking up.
          * This function allows to use a custom RTC instance to put the device in sleep mode.
          * @param hours The number of hours to sleep.
          * @param minutes The number of minutes to sleep.
@@ -128,9 +127,8 @@ class Board {
         bool sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)());
         #endif
 
-        // TODO Document what happens when the device wakes up. Does it continue from where it left off?
         /** 
-         * @brief Put the device in sleep mode for a specified amount of time.
+         * @brief Put the device in sleep mode for a specified amount of time. It restarts after waking up.
          * This function uses the default RTC instance to put the device in sleep mode and 
          * does not call a function when the device wakes up.
          * @param hours The number of hours to sleep.
@@ -165,23 +163,21 @@ class Board {
          */
         void deepSleepUntilWakeupEvent();
 
-        // TODO If this is just for Portenta C33, we should probably ifdef it.
+        #if defined(ARDUINO_PORTENTA_C33)
         /**
          * @brief Toggle the peripherals' power on Portenta C33 (ADC, RGB LED, Secure Element, Wifi and Bluetooth).
          * @param on True to turn on the power, false to turn it off.
         */
         void setAllPeripheralsPower(bool on);
 
-        // TODO If this is just for Portenta C33, we should probably ifdef it.
         /**
          * @brief Toggles the communication peripherials' power on Portenta C33 (Wifi, Bluetooth and Secure Element)
          * @param on True to turn on the power, false to turn it off.
         */
         void setCommunicationPeripheralsPower(bool on);
         
-        // TODO If this is just for Portenta C33, we should probably ifdef it.
         /**
-         * @brief Toggels the power of the analog digital converter on Portenta C33.
+         * @brief Toggles the power of the analog digital converter on Portenta C33.
          * @param on True to turn on the power, false to turn it off.
         */
         void setAnalogDigitalConverterPower(bool on);
@@ -207,3 +203,5 @@ class Board {
             RTCWakeupDelay rtcWakeupDelay = RTCWakeupDelay(0, 0, 0);
         #endif         
 };
+
+#endif
