@@ -115,9 +115,10 @@ void Board::enableWakeupFromPin(uint8_t pin, PinStatus direction){
 
 #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
 void Board::enableWakeupFromPin(){
-    // TODO: What does this code do?
+    // If no wake up method is selected yet, set it to wake up from pin activity
     if(standbyType == LowPowerStandbyType::None){
         standbyType = LowPowerStandbyType::UntilPinActivity;
+    // If there is already a wake up method selected, set it to wake up from both pin activity and time elapsed
     } else if (standbyType == LowPowerStandbyType::UntilTimeElapsed){
         standbyType = LowPowerStandbyType::UntilBothAreTrue;
     }
@@ -133,7 +134,7 @@ void Board::enableWakeupFromRTC(){
     #if defined(ARDUINO_PORTENTA_C33)
         lowPower->enableWakeupFromRTC();
     #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
-        // TODO What does this code do?
+       // If no wake up method is selected yet, set it to wake up from RTC
         if(standbyType == LowPowerStandbyType::None){
             standbyType = LowPowerStandbyType::UntilTimeElapsed;
         } else if (standbyType == LowPowerStandbyType::UntilPinActivity){
@@ -178,7 +179,7 @@ bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callback
 
 bool Board::sleepFor(int hours, int minutes, int seconds){
     #if defined(ARDUINO_PORTENTA_C33)
-    // TODO: Shall we use the same RTCWakeupDelay ?
+        // TODO: Let's add an overload to accept RTCWakeupDelay as a parameter
         return this -> sleepFor(hours, minutes, seconds, NULL, &RTC);
     #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
         this -> rtcWakeupDelay = RTCWakeupDelay(hours, minutes, seconds);
@@ -209,7 +210,9 @@ void Board::setAllPeripheralsPower(bool on){
         this -> setCommunicationPeripheralsPower(on);
         this -> setExternalPowerEnabled(on);
         this -> setAnalogDigitalConverterPower(on);
-        Wire3.end(); // TODO Why is this necessary?
+        // I2C needs to be shut down because the PMIC would still try
+        // to communicate with the MCU.
+        Wire3.end();
     #else if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
     if(on){
         PMIC.getControl() -> turnLDO2On(Ldo2Mode::Normal);
@@ -237,7 +240,9 @@ void Board::setAllPeripheralsPower(bool on){
         PMIC.getControl() -> turnSw1Off(Sw1Mode::Normal);
         PMIC.getControl() -> turnSw1Off(Sw1Mode::Sleep);
         PMIC.getControl() -> turnSw1Off(Sw1Mode::Standby);
-        Wire1.end(); // TODO Why is this necessary?
+        // I2C needs to be shut down because the PMIC would still try
+        // to communicate with the MCU.
+        Wire1.end();
     }
         
     #endif
