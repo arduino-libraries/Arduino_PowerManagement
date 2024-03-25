@@ -1,4 +1,4 @@
-// TODO Document the registers
+// SEE: https://www.analog.com/media/en/technical-documentation/data-sheets/MAX17262.pdf
 
 #define BATTERY_STATUS_BIT 3 
 
