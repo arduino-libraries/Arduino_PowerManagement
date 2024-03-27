@@ -196,18 +196,17 @@ float Charger::getInputCurrentLimit() {
     return -1;
 }
 
-bool Charger::enable(){
-    PMIC.writePMICreg(Register::CHARGER_CHG_OPER, 0x02);
-    return PMIC.readPMICreg(Register::CHARGER_CHG_OPER) == 0x02;
-}
-
 bool Charger::isEnabled(){
     return PMIC.readPMICreg(Register::CHARGER_CHG_OPER) == 0x02;
 }
-
-bool Charger::disable(){
-    PMIC.writePMICreg(Register::CHARGER_CHG_OPER, 0x01);
-    return PMIC.readPMICreg(Register::CHARGER_CHG_OPER) == 0x01;
+bool Charger::setEnabled(bool enabled){
+    if(enabled){
+        PMIC.writePMICreg(Register::CHARGER_CHG_OPER, 0x02);
+        return PMIC.readPMICreg(Register::CHARGER_CHG_OPER) == 0x02;
+    } else {
+        PMIC.writePMICreg(Register::CHARGER_CHG_OPER, 0x01);
+        return PMIC.readPMICreg(Register::CHARGER_CHG_OPER) == 0x01;
+    }
 }
 
 ChargingState Charger::getState(){
