@@ -45,23 +45,26 @@ void setup() {
 
     charger.enable();
 
-    // TODO What's different on Nicla Vision?
-  #if !defined(ARDUINO_NICLA_VISION)
-    if(!charger.setChargeCurrent(0.2)){
-        Serial.println("Failed to set charge current");
-        Serial.println("Please double check the supported values in the documentation");
-    }
+    // The following charger settings are not supported on Nicla Vision
+    #if !defined(ARDUINO_NICLA_VISION)
+        if (!charger.setChargeCurrent(0.2))
+        {
+            Serial.println("Failed to set charge current");
+            Serial.println("Please double check the supported values in the documentation");
+        }
 
-    if(!charger.setChargeVoltage(3.8)){
-        Serial.println("Failed to set charge voltage");
-        Serial.println("Please double check the supported values in the documentation");
-    }
-    
-    if(!charger.setEndOfChargeCurrent(0.005)){
-        Serial.println("Failed to set end of charge current");
-        Serial.println("Please double check the supported values in the documentation");
-    }
-  #endif
+        if (!charger.setChargeVoltage(3.8))
+        {
+            Serial.println("Failed to set charge voltage");
+            Serial.println("Please double check the supported values in the documentation");
+        }
+
+        if (!charger.setEndOfChargeCurrent(0.005))
+        {
+            Serial.println("Failed to set end of charge current");
+            Serial.println("Please double check the supported values in the documentation");
+        }
+    #endif
 }
 
 String getChargerState(){
