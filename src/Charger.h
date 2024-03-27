@@ -88,18 +88,24 @@ public:
      */
     Charger();
 
-    // TODO What's the default value?
     /**
-     * @brief Set the charging current.
+     * @brief Set the charging current. 
+     * The default charging current is set to 0.1A.
      * @param current Charging current in amperes (A).
      * Supported values: 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0
      * @return True if successful, false if an invalid value was provided or if the PMIC communication failed.
      */
     bool setChargeCurrent(float current);
 
-    // TODO What's the default value?
     /**
-     * @brief Set the charging voltage.
+     * @brief Get the charge current in amperes (A).
+     * @return The charge current in float.
+     */
+    float getChargeCurrent();
+
+    /**
+     * @brief Set the charging voltage in volts (V).
+     * The current charging voltage is set to 4.2V by default.
      * @param voltage Charging voltage in volts (V).
      * Supported values: 3.50, 3.52, 3.54, 3.56, 3.58, 3.60, 3.62, 3.64, 3.66, 3.68, 3.70, 3.72, 3.74, 3.76, 
      * 3.78, 3.80, 3.82, 3.84, 3.86, 3.88, 3.90, 3.92, 3.94, 3.96, 3.98, 4.00, 4.02, 4.04, 4.06, 4.08, 4.10, 
@@ -108,20 +114,36 @@ public:
      */
     bool setChargeVoltage(float voltage);
 
-    // TODO What's the default value?
+    /**
+     * @brief Get the charge voltage in volts (V).
+     * @return The charge voltage as a float value.
+     */
+    float getChargeVoltage();
+
     /**
      * @brief Set the end-of-charge current.
+     * The default end-of-charge current is set to 0.05A.
      * @param current End-of-charge current in amperes (A).
      * Supported values: 0.005, 0.01, 0.02, 0.03, 0.05
      * @return True if successful, false if an invalid value was provided or if the PMIC communication failed.
      */
     bool setEndOfChargeCurrent(float current);
 
-    // TODO What's the default value?
+    /**
+     * @brief Get the end of charge current.
+     * 
+     * This function returns the current value at which the charging process is considered complete.
+     * Charging is terminated when the supplied current drops below the pre-programmed end of charge level. 
+     * 
+     * @return The end of charge current.
+     */
+    float getEndOfChargeCurrent();
+
     /**
      * @brief The input current limit (ILIM) safeguards the device by preventing overcurrent, 
      * ensuring the charging current is within safe levels for the battery, and adapting to the maximum 
      * current the power source can provide, allowing you to charge and use the system at the same time. 
+     * The default input current limit is set to 1.5A.
      * @param current Maximum input current in amperes (A).
      * Supported values: 0.01, 0.015, 0.02, 0.025, 0.03, 0.035, 0.04, 0.045, 0.05, 0.1, 0.15, 0.2, 0.3, 
      * 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.5
@@ -130,12 +152,21 @@ public:
     bool setInputCurrentLimit(float current);
 
     /**
+     * @brief Get the input current limit. It is a safeguard to prevent overcurrent when charging
+     * respectively to the maximum current the power source can provide.
+     * 
+     * This function returns the current limit of the input power source.
+     * 
+     * @return The input current limit in amps.
+     */
+    float getInputCurrentLimit();
+
+    /**
      * @brief Get the current charging status.
      * @return Charging status enum value (ChargingState).
      */
     ChargingState getState();
 
-    // TODO Is charging enabled or disabled by default?
     /**
      * @brief Enables the charging functionality with either the default settings or the last saved parameters, depending on what was set previously. 
      * @return True if successful, false otherwise.
@@ -143,11 +174,16 @@ public:
     bool enable();
 
     /**
+     * @brief Checks if the charger is enabled.
+     * By default, the charger is enabled.
+     * @return true if the charger is enabled, false otherwise.
+     */
+    bool isEnabled();
+
+    /**
      * @brief Disable the charging functionality.
      * @return True if successful, false otherwise.
      */
     bool disable();
 
-private:
-    PF1550 * pmic; /**< Pointer to the PF1550 PMIC instance. */
 };

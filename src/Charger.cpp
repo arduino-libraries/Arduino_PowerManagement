@@ -119,6 +119,32 @@ bool Charger::setChargeCurrent(float current) {
     return false;
 }
 
+float Charger::getChargeCurrent() {
+    auto currentValue = PMIC.readPMICreg(Register::CHARGER_CHG_CURR_CFG);
+    currentValue = (currentValue & REG_CHG_CURR_CFG_CHG_CC_mask);
+    ChargeCurrent current = static_cast<ChargeCurrent>(currentValue);
+    for (auto const& [key, val] : chargeCurrentMap) {
+        if (val == current) {
+            return key;
+        }
+    }
+    return -1;
+}
+
+float Charger::getChargeVoltage() {
+    uint8_t currentValue = PMIC.readPMICreg(Register::CHARGER_BATT_REG);
+    currentValue = (currentValue & REG_BATT_REG_CHCCV_mask);
+    ChargeVoltage voltageValue = static_cast<ChargeVoltage>(currentValue);
+
+    // Lookup the value in the map
+    for (auto const& [key, val] : chargeVoltageMap) {
+        if (val == voltageValue) {
+            return key;
+        }
+    }
+    return -1;
+}
+
 bool Charger::setChargeVoltage(float voltage) {
     if(chargeVoltageMap.find(voltage) != chargeVoltageMap.end()) {
         ChargeVoltage convertedVoltage = chargeVoltageMap[voltage];
@@ -137,6 +163,18 @@ bool Charger::setEndOfChargeCurrent(float current) {
     return false;
 }
 
+float Charger::getEndOfChargeCurrent() {
+    uint8_t currentValue = PMIC.readPMICreg(Register::CHARGER_CHG_EOC_CNFG);
+    currentValue = (currentValue & REG_CHG_EOC_CNFG_IEOC_mask);
+    EndOfChargeCurrent current = static_cast<EndOfChargeCurrent>(currentValue);
+    for (auto const& [key, val] : endOfChargeCurrentMap) {
+        if (val == current) {
+            return key;
+        }
+    }
+    return -1;
+}
+
 bool Charger::setInputCurrentLimit(float current) {
     if(inputCurrentLimitMap.find(current) != inputCurrentLimitMap.end()) {
         InputCurrentLimit convertedCurrent = inputCurrentLimitMap[current];
@@ -146,8 +184,24 @@ bool Charger::setInputCurrentLimit(float current) {
     return false;
 }
 
+float Charger::getInputCurrentLimit() {
+    uint8_t currentValue = PMIC.readPMICreg(Register::CHARGER_VBUS_INLIM_CNFG);
+    currentValue = (currentValue & REG_VBUS_INLIM_CNFG_VBUS_LIN_INLIM_mask);
+    InputCurrentLimit current = static_cast<InputCurrentLimit>(currentValue);
+    for (auto const& [key, val] : inputCurrentLimitMap) {
+        if (val == current) {
+            return key;
+        }
+    }
+    return -1;
+}
+
 bool Charger::enable(){
     PMIC.writePMICreg(Register::CHARGER_CHG_OPER, 0x02);
+    return PMIC.readPMICreg(Register::CHARGER_CHG_OPER) == 0x02;
+}
+
+bool Charger::isEnabled(){
     return PMIC.readPMICreg(Register::CHARGER_CHG_OPER) == 0x02;
 }
 
@@ -157,7 +211,7 @@ bool Charger::disable(){
 }
 
 ChargingState Charger::getState(){
-    uint16_t reg_val = PMIC.readPMICreg(Register::CHARGER_CHG_SNS);
+    uint8_t reg_val = PMIC.readPMICreg(Register::CHARGER_CHG_SNS);
     switch (extractBits(reg_val, 0, 3)) {
         case 0:
             return ChargingState::PreCharge;
