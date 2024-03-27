@@ -168,12 +168,6 @@ public:
     ChargingState getState();
 
     /**
-     * @brief Enables the charging functionality with either the default settings or the last saved parameters, depending on what was set previously. 
-     * @return True if successful, false otherwise.
-     */
-    bool enable();
-
-    /**
      * @brief Checks if the charger is enabled.
      * By default, the charger is enabled.
      * @return true if the charger is enabled, false otherwise.
@@ -181,9 +175,10 @@ public:
     bool isEnabled();
 
     /**
-     * @brief Disable the charging functionality.
-     * @return True if successful, false otherwise.
+     * @brief Sets the enabled state of the charger.
+     * When enabling it uses the default settings or the last saved parameters, depending on what was set previously. 
+     * @param enabled The desired enabled state of the charger.
+     * @return true if the enabled state was successfully set, false otherwise.
      */
-    bool disable();
-
+    bool setEnabled(bool enabled);
 };
