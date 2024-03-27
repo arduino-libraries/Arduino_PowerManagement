@@ -3,7 +3,7 @@
 PowerManagement::PowerManagement(){}
 
 bool PowerManagement::begin(){
-    return PMIC.begin() == 0 && this->getBattery().begin();
+    return PMIC.begin() == 0;
 }
 
 Board PowerManagement::getBoard() {
@@ -16,6 +16,7 @@ Board PowerManagement::getBoard() {
 Battery PowerManagement::getBattery() {
     if (this->battery == nullptr) {
         this->battery = new Battery();
+        this->battery->begin();
     }
     return *battery; 
 }
