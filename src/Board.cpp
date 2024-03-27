@@ -179,12 +179,17 @@ bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callback
 
 bool Board::sleepFor(int hours, int minutes, int seconds){
     #if defined(ARDUINO_PORTENTA_C33)
-        // TODO: Let's add an overload to accept RTCWakeupDelay as a parameter
         return this -> sleepFor(hours, minutes, seconds, NULL, &RTC);
     #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
         this -> rtcWakeupDelay = RTCWakeupDelay(hours, minutes, seconds);
     #endif
 }
+
+#if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
+bool Board::sleepFor(RTCWakeupDelay delay){
+    this -> rtcWakeupDelay = delay;
+}
+#endif
     
 #if defined(ARDUINO_PORTENTA_C33)
 void Board::sleepUntilWakeupEvent(){

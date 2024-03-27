@@ -136,6 +136,17 @@ class Board {
          * @param seconds The number of seconds to sleep.›
         */
         bool sleepFor(int hours, int minutes, int seconds);
+
+        #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)        
+        
+        /**
+         * Sleeps the board for a specified delay.
+         * 
+         * @param delay The delay as an RTCWakeupDelay object.
+         * @return True if the board successfully sleeps, false otherwise.
+         */
+        bool sleepFor(RTCWakeupDelay delay);
+        #endif
    
 
         #if defined(ARDUINO_PORTENTA_C33)
