@@ -71,11 +71,11 @@ class Board {
         void setCameraPowerEnabled(bool enabled); 
 
 
-        #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
-        // TODO document which pin on which board.
+        #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
 
         /**
-         * Enables wakeup from pin.
+         * Enables wakeup from pin GPIO0 on Portenta H7.
+         * The pin is only accessible via high-density connectors.
          */
         void enableWakeupFromPin();
 
@@ -204,7 +204,6 @@ class Board {
         #endif
 
     private:
-        PF1550 * pmic;
         static uint8_t getRailVoltage(float voltage, int context);
 
         #if defined(ARDUINO_PORTENTA_C33)
