@@ -199,6 +199,7 @@ float Charger::getInputCurrentLimit() {
 bool Charger::isEnabled(){
     return PMIC.readPMICreg(Register::CHARGER_CHG_OPER) == 0x02;
 }
+
 bool Charger::setEnabled(bool enabled){
     if(enabled){
         PMIC.writePMICreg(Register::CHARGER_CHG_OPER, 0x02);
