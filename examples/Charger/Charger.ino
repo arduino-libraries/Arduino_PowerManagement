@@ -42,8 +42,22 @@ void setup() {
 
     battery = manager.getBattery();
     charger = manager.getCharger();
-
     charger.enable();
+
+    Serial.print("Charging is enabled: ");
+    Serial.println(charger.isEnabled() ? "true" : "false");
+
+    Serial.print("Charge current: ");
+    Serial.println(charger.getChargeCurrent());
+
+    Serial.print("Charge voltage: ");
+    Serial.println(charger.getChargeVoltage());
+
+    Serial.print("End of charge current: ");
+    Serial.println(charger.getEndOfChargeCurrent());
+
+    Serial.print("Input current limit: ");
+    Serial.println(charger.getInputCurrentLimit());
 
     // The following charger settings are not supported on Nicla Vision
     #if !defined(ARDUINO_NICLA_VISION)
