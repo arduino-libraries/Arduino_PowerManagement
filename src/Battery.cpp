@@ -7,7 +7,8 @@ Battery::Battery(int capacityInMilliAmpereHours, int emptyVoltageInMilliVolts) {
   batteryEmptyVoltage = emptyVoltageInMilliVolts;
 }
 
-bool Battery::begin() {
+void Battery::begin() {
+  // TODO what are we checking here?
   if (bitIsSetInRegister(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, POR_BIT)) {
 
     uint16_t tempHibernateConfigRegister = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG);
