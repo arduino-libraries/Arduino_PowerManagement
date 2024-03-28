@@ -3,8 +3,8 @@
 
 #include "Arduino.h"
 #include "Wire.h"
-#include "BatteryRegisters.h"
-#include "wireUtils.h"
+#include "BatteryConstants.h"
+#include "WireUtils.h"
 
 constexpr int FUEL_GAUGE_ADDRESS = 0x36; // I2C address of the fuel gauge
 constexpr int DEFAULT_BATTERY_EMPTY_VOLTAGE = 3000; // mV
@@ -17,9 +17,6 @@ class Battery {
         /**
          * @brief Initializes the battery object with default values for capacity and empty voltage. 
          * The default values are 200mAh and 3000mV respectively.
-         * @see #Battery(int, int)
-         * @see #DEFAULT_BATTERY_CAPACITY
-         * @see #DEFAULT_BATTERY_EMPTY_VOLTAGE
         */
         Battery();
 
@@ -52,7 +49,7 @@ class Battery {
          * @brief Reads the current flowing from the battery at the moment.
          * Negative values indicate that the battery is charging, 
          * positive values indicate that the battery is discharging.
-         * When no battery is connected, the value is 0.
+         * When no battery is connected, the value is -1.
          * @return The current flowing from the battery in amperes (A).
         */
         float current();

@@ -26,6 +26,15 @@ enum class LowPowerStandbyType {
 
 constexpr int EMPTY_REGISTER = 0xFF;
 
+/**
+ * @brief Represents a board with power management capabilities.
+ * 
+ * The Board class provides methods to check the power source, enable/disable power rails, 
+ * set voltage levels, enable/disable wakeup from pins or RTC, 
+ * put the device into sleep mode for a specified duration, and control peripherals' power.
+ * 
+ * Supported boards: Arduino Portenta H7, Arduino Portenta C33, Arduino Nicla Vision.
+ */
 class Board {
     public:
         /**
@@ -110,7 +119,7 @@ class Board {
          * @param minutes The number of minutes to sleep.
          * @param seconds The number of seconds to sleep.
          * @param callbackFunction The function to call when the device wakes up.
-         * @param RTC The RTC instance to use for the sleep function.
+         * @param rtc The RTC instance to use for the sleep function.
          * @return True if successful, false otherwise.
         */
         bool sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)(), RTClock * rtc);
@@ -133,7 +142,8 @@ class Board {
          * does not call a function when the device wakes up.
          * @param hours The number of hours to sleep.
          * @param minutes The number of minutes to sleep.
-         * @param seconds The number of seconds to sleep.›
+         * @param seconds The number of seconds to sleep.
+         * @return True if successful, false otherwise.
         */
         bool sleepFor(int hours, int minutes, int seconds);
 

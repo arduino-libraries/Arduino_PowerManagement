@@ -7,6 +7,10 @@
 #include "Charger.h"
 #include <Arduino_PF1550.h>
 
+/**
+ * @brief The PowerManagement class is responsible for centralizing control over power distribution within the board.
+ * It provides functions to start communication with the PMIC chip and power gauge, and access objects for board, battery, and charger management.
+ */
 class PowerManagement{
     public: 
         /**
