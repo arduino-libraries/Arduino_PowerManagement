@@ -29,7 +29,6 @@ void setup() {
     board.enableWakeupFromPin();
     #endif
 
-
     
     board.setAllPeripheralsPower(true);
     charger.disable();

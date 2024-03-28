@@ -3,8 +3,7 @@
   Battery Information Display Demo
 
   This sketch demonstrates how to read battery information using the PowerManagement library. 
-  It prints the battery's voltage, current, percentage, remaining capacity, temperature, 
-  time-to-full, and time-to-empty in a loop. 
+  It prints the battery's voltage, current, percentage, remaining capacity and temperature in a loop. 
   The sketch is designed to work with the PowerManagement library and is intended for educational purposes.
 
   Requirements:
@@ -41,18 +40,15 @@ void setup() {
   manager = PowerManagement();
   manager.begin();
   battery = manager.getBattery();
-  battery.begin();
 }
 
 void loop() {
-   auto batteryIsConnected = battery.isConnected();
-   Serial.println("* Battery is connected: " + (batteryIsConnected ? String("Yes") : String("No")));
+   Serial.println("* Battery is connected: " + ( battery.isConnected() ? String("Yes") : String("No")));
    Serial.println("* Voltage: " + String(battery.voltage()) + "mV");
    Serial.println("* Current: " + String(battery.current()) + "mA");
    Serial.println("* Percentage: " + String(battery.percentage()) + "%");
    Serial.println("* Remaining Capacity: " + String(battery.remainingCapacity()) + "mAh");
    Serial.println("* Temperature: " + String(battery.temperature()));
    Serial.println();
-
    delay(1000);
 }
