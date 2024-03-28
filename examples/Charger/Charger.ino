@@ -42,7 +42,6 @@ void setup() {
 
     battery = manager.getBattery();
     charger = manager.getCharger();
-    charger.enable();
 
     Serial.print("Charging is enabled: ");
     Serial.println(charger.isEnabled() ? "true" : "false");
@@ -133,7 +132,7 @@ void loop(){
     Serial.print("* Percentage: ");
     Serial.println(String(battery.percentage()) + "%");
 
-    Serial.print("* Charger state : ");
+    Serial.print("* Charger state: ");
     Serial.println(getChargerState());
 
     Serial.println();
