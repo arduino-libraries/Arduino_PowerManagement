@@ -34,21 +34,33 @@ PowerManagement manager;
 Battery battery; 
 
 void setup() {
-  Serial.begin(115200);
-  while (!Serial);
+   Serial.begin(115200);
+   while (!Serial);
 
-  manager = PowerManagement();
-  manager.begin();
-  battery = manager.getBattery();
+   // Battery capacity in mAh. Change this value to match your battery's capacity.
+   auto batteryCapacity = 200;
+
+   manager = PowerManagement();
+   manager.begin();
+   
+   battery = Battery(batteryCapacity);
+   bool batteryInitialized = battery.begin();
+   
+   if (!batteryInitialized) {
+      Serial.println("Battery initialization failed.");
+      while (true);
+   }
+
 }
 
 void loop() {
    Serial.println("* Battery is connected: " + ( battery.isConnected() ? String("Yes") : String("No")));
-   Serial.println("* Voltage: " + String(battery.voltage()) + "mV");
-   Serial.println("* Current: " + String(battery.current()) + "mA");
+   Serial.println("* Voltage: " + String(battery.voltage()) + "V");
+   // Print current with a precision of 4 decimal places
+   Serial.println("* Current: " + String(battery.current(), 4) + "A");
    Serial.println("* Percentage: " + String(battery.percentage()) + "%");
    Serial.println("* Remaining Capacity: " + String(battery.remainingCapacity()) + "mAh");
-   Serial.println("* Temperature: " + String(battery.temperature()));
+   Serial.println("* Temperature: " + String(battery.temperature()) + "°C");
    Serial.println();
    delay(1000);
 }
