@@ -84,6 +84,9 @@
 #define POWER_REG 0xB1
 #define AVG_POWER_REG 0xB3
 
+// POR (Power-On Reset): This bit is set to 1 when the device detects that 
+// a software or hardware POR event has occurred. This bit must be cleared 
+// by system software to detect the next POR event. POR is set to 1 at power-up.
 #define POR_BIT 1
 #define DNR_BIT 0
 #define EN_HIBERNATION_BIT 15
