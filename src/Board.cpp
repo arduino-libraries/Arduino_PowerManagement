@@ -182,12 +182,14 @@ bool Board::sleepFor(int hours, int minutes, int seconds){
         return this -> sleepFor(hours, minutes, seconds, NULL, &RTC);
     #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
         this -> rtcWakeupDelay = RTCWakeupDelay(hours, minutes, seconds);
+        return true;
     #endif
 }
 
 #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
 bool Board::sleepFor(RTCWakeupDelay delay){
     this -> rtcWakeupDelay = delay;
+    return true;
 }
 #endif
     
