@@ -19,6 +19,11 @@ class PowerManagement{
         PowerManagement();
 
         /**
+         * @brief destructor for the PowerManagement
+         */
+        ~PowerManagement();
+
+        /**
          * @brief start communication with the PMIC chip and the power gauge. 
          * @returns true if the initialization was successful, false otherwise
          */
@@ -31,7 +36,7 @@ class PowerManagement{
         Board getBoard();
 
         /**
-         * @brief Dedicated to battery management, this class enables real-time monitoring of battery usage and health. 
+         * @brief Focused on battery health and usage, this class provides a detailed insight into the battery's health and usage.
          * @returns the Battery object. 
          */
         Battery getBattery();
