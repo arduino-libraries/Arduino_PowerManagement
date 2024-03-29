@@ -18,7 +18,7 @@
 static inline int extractBits(int value, int startBit, int endBit) {
     if (startBit < 0 || startBit > 31 || endBit < 0 || endBit > 31 || startBit > endBit) {
         // Handle invalid bit range
-        return 0; // You might want to return an appropriate error value here
+        return -1;
     }
 
     int mask = (1 << (endBit - startBit + 1)) - 1;
