@@ -1,32 +1,61 @@
 #include "Battery.h"
 
-Battery::Battery() {}
+Battery::Battery() {
+  Battery(0, DEFAULT_BATTERY_EMPTY_VOLTAGE);
+}
 
 Battery::Battery(int capacityInMilliAmpereHours, int emptyVoltageInMilliVolts) {
   batteryCapacityInMiliampereHours = capacityInMilliAmpereHours;
   batteryEmptyVoltage = emptyVoltageInMilliVolts;
 }
 
-void Battery::begin() {
-  // TODO what are we checking here?
-  if (bitIsSetInRegister(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, POR_BIT)) {
+bool Battery::begin() {
 
-    uint16_t tempHibernateConfigRegister = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG);
+  // If powe-on-reset (POR) event has occurred, reconfigure the battery gauge, otherwise, skip the configuration
+  if (!bitIsSetInRegister(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, POR_BIT)) {
+    return true;
+  }
 
-    // release from hibernation
-    writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, SOFT_WAKEUP_REG, 0x90); // Exit Hibernate Mode step 1
-    writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG, 0x0);      // Exit Hibernate Mode step 2
-    writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, SOFT_WAKEUP_REG, 0x0);  // Exit Hibernate Mode step 3
+  uint16_t tempHibernateConfigRegister = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG);
 
-    // set battery configuration
-    writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, V_EMPTY_REG, (uint16_t)(batteryEmptyVoltage / VOLTAGE_MULTIPLIER));
-    writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, DESIGN_CAP_REG, (uint16_t)(batteryCapacityInMiliampereHours / CAP_MULTIPLIER));
-    writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, I_CHG_TERM_REG, (uint16_t)(101 / CURRENT_MULTIPLIER));
+  // Release from hibernation
+  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, SOFT_WAKEUP_REG, 0x90); // Exit Hibernate Mode step 1
+  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG, 0x0);      // Exit Hibernate Mode step 2
+  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, SOFT_WAKEUP_REG, 0x0);  // Exit Hibernate Mode step 3
 
-    writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, MODEL_CFG_REG, 0x8000); // Set bit 15 of ModelCFG
+  // Set the empty voltage
+  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, V_EMPTY_REG, (uint16_t)(batteryEmptyVoltage / VOLTAGE_MULTIPLIER));
 
-    writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG, tempHibernateConfigRegister); // Restore Original HibCFG value
-    replaceRegisterBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, 0, POR_BIT); // Clear POR bit
+  // Set the battery capacity
+  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, DESIGN_CAP_REG, (uint16_t)(batteryCapacityInMiliampereHours / CAP_MULTIPLIER));
+
+  // Set the charge termination current
+  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, I_CHG_TERM_REG, (uint16_t)(101 / CURRENT_MULTIPLIER));
+
+  if(!refreshBatteryGaugeModel()){
+    return false;
+  }
+
+  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG, tempHibernateConfigRegister); // Restore Original HibCFG value
+  replaceRegisterBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, 0, POR_BIT); // Clear POR bit after reset
+  return true;
+}
+
+bool Battery::refreshBatteryGaugeModel(){
+  replaceRegisterBit(this->wire, FUEL_GAUGE_ADDRESS, MODEL_CFG_REG, 1, MODEL_CFG_REFRESH_BIT);
+
+  unsigned long startTime = millis();
+  while (true) {
+    // Read back the model configuration register to ensure the refresh bit is cleared
+    bool isRefreshBitSet = bitIsSetInRegister(this->wire, FUEL_GAUGE_ADDRESS, MODEL_CFG_REG, MODEL_CFG_REFRESH_BIT);
+    if (!isRefreshBitSet) {
+      return true; // Exit the loop if the refresh bit is cleared
+    }
+    
+    if (millis() - startTime > 2000) {
+      return false; // Exit the loop if the refresh bit is not cleared after 2 seconds
+    }
+    delay(1);
   }
 }
 
@@ -49,8 +78,8 @@ float Battery::averageVoltage(){
     return -1;
   }
   
-  auto voltageInVolts = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, AVG_VCELL_REG) * VOLTAGE_MULTIPLIER;
-  return voltageInVolts / 1000.0f;
+  auto voltageInMV = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, AVG_VCELL_REG) * VOLTAGE_MULTIPLIER;
+  return voltageInMV / 1000.0f;
 }
 
 int Battery::temperature(){
@@ -74,8 +103,8 @@ float Battery::current(){
     return -1;
   }
   
-  auto currentInAmperes = (int16_t)readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, CURRENT_REG) * CURRENT_MULTIPLIER;
-  return currentInAmperes / 1000.0f;
+  auto currentInMilliAmperes = (int16_t)readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, CURRENT_REG) * CURRENT_MULTIPLIER;
+  return currentInMilliAmperes / 1000.0f;
 }
 
 float Battery::averageCurrent(){
