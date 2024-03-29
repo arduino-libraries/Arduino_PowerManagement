@@ -7,7 +7,7 @@
 #include "WireUtils.h"
 
 constexpr int FUEL_GAUGE_ADDRESS = 0x36; // I2C address of the fuel gauge
-constexpr int DEFAULT_BATTERY_EMPTY_VOLTAGE = 3000; // mV
+constexpr int DEFAULT_BATTERY_EMPTY_VOLTAGE = 3300; // mV
 
 /**
  * @brief This class provides a detailed insight into the battery's health and usage.
@@ -15,8 +15,7 @@ constexpr int DEFAULT_BATTERY_EMPTY_VOLTAGE = 3000; // mV
 class Battery {
     public: 
         /**
-         * @brief Initializes the battery object with default values for capacity and empty voltage. 
-         * The default values are 200mAh and 3000mV respectively.
+         * @brief Initializes the battery object with default values for capacity (0mAh) and empty voltage (3.3V). 
         */
         Battery();
 
@@ -25,12 +24,13 @@ class Battery {
          * @param capacityInMilliAmpereHours The capacity of the battery in milliampere-hours (mAh).
          * @param emptyVoltageInMilliVolts The voltage in millivolts (mV) at which the battery is considered empty.
         */
-        Battery(int capacityInMilliAmpereHours, int emptyVoltageInMilliVolts); 
+        Battery(int capacityInMilliAmpereHours, int emptyVoltageInMilliVolts = DEFAULT_BATTERY_EMPTY_VOLTAGE); 
 
         /**
          * @brief Initializes the battery communication and configuration.
+         * @return True if the initialization was successful, false otherwise.
         */
-        void begin();
+        bool begin();
 
         /**
          * @brief Checks if a battery is connected to the system. 
@@ -56,6 +56,7 @@ class Battery {
 
         /**
          * @brief Reads the current temperature of the battery.
+         * Note: This only works if the battery is equipped with a thermistor.
          * @return The current temperature in degrees Celsius.
         */
         int temperature();
@@ -95,8 +96,18 @@ class Battery {
         */
         float averageVoltage();
 
-        int batteryCapacityInMiliampereHours = 0;
-        int batteryEmptyVoltage = DEFAULT_BATTERY_EMPTY_VOLTAGE;
+        /** 
+         * @brief Refreshes the battery gauge model. This is required when
+         * changing the battery's characteristics and is used by the EZ algorithm (battery characterization).
+         * EZ stands for "Easy" and highlights how the algorithm makes it easy to
+         * use the battery gauge without needing to provide precise battery characteristics.
+         * 
+         * @return true if the battery gauge model was successfully refreshed, false otherwise.
+         */
+        bool refreshBatteryGaugeModel();
+
+        int batteryCapacityInMiliampereHours;
+        int batteryEmptyVoltage;
 
         #if defined(ARDUINO_PORTENTA_C33)
             TwoWire *wire = &Wire3;
