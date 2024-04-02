@@ -89,6 +89,13 @@ public:
     Charger();
 
     /**
+     * @brief Initializes the charger by initiating the PMIC.
+     * 
+     * @return true if the charger initialization is successful, false otherwise.
+     */
+    bool begin();
+
+    /**
      * @brief Set the charging current. 
      * The default charging current is set to 0.1A.
      * @param current Charging current in amperes (A).
