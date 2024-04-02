@@ -1,18 +1,21 @@
 #include "Battery.h"
+#include "PF1550.h"
 
 Battery::Battery() {
-  Battery(0, DEFAULT_BATTERY_EMPTY_VOLTAGE);
+  Battery(BatteryCharacteristics());
 }
 
-Battery::Battery(int capacityInMilliAmpereHours, int emptyVoltageInMilliVolts) {
-  batteryCapacityInMiliampereHours = capacityInMilliAmpereHours;
-  batteryEmptyVoltage = emptyVoltageInMilliVolts;
+Battery::Battery(BatteryCharacteristics batteryCharacteristics) : characteristics(batteryCharacteristics) {
 }
+
 
 bool Battery::begin() {
+  if(PMIC.begin() != 0){
+    return false;
+  }
 
-  // If powe-on-reset (POR) event has occurred, reconfigure the battery gauge, otherwise, skip the configuration
-  if (!bitIsSetInRegister(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, POR_BIT)) {
+  // If power-on-reset (POR) event has occurred, reconfigure the battery gauge, otherwise, skip the configuration
+  if (getBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, POR_BIT) != 1) {
     return true;
   }
 
@@ -24,13 +27,14 @@ bool Battery::begin() {
   writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, SOFT_WAKEUP_REG, 0x0);  // Exit Hibernate Mode step 3
 
   // Set the empty voltage
-  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, V_EMPTY_REG, (uint16_t)(batteryEmptyVoltage / VOLTAGE_MULTIPLIER));
+  uint16_t emptyVoltageValue = (uint16_t)((characteristics.emptyVoltage * 1000) / VOLTAGE_MULTIPLIER);
+  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, V_EMPTY_REG, emptyVoltageValue);
 
   // Set the battery capacity
-  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, DESIGN_CAP_REG, (uint16_t)(batteryCapacityInMiliampereHours / CAP_MULTIPLIER));
+  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, DESIGN_CAP_REG, (uint16_t)(characteristics.capacity / CAP_MULTIPLIER));
 
   // Set the charge termination current
-  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, I_CHG_TERM_REG, (uint16_t)(101 / CURRENT_MULTIPLIER));
+  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, I_CHG_TERM_REG, (uint16_t)(5 / CURRENT_MULTIPLIER));
 
   if(!refreshBatteryGaugeModel()){
     return false;
@@ -42,12 +46,27 @@ bool Battery::begin() {
 }
 
 bool Battery::refreshBatteryGaugeModel(){
+  // uint16_t currentRegisterValue = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, MODEL_CFG_REG);
+
+  // if(characteristics.chargeVoltage > 4.275f) {
+  //   // Set bit 10 to 1
+  //   currentRegisterValue |= 1 << 10;
+  // } else {
+  //   // Set bit 10 to 0
+  //   currentRegisterValue &= ~(1 << 10);
+  // }
+
+  // // Set bit MODEL_CFG_REFRESH_BIT to 1
+  // currentRegisterValue |= 1 << MODEL_CFG_REFRESH_BIT;
+
+  // writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, MODEL_CFG_REG, currentRegisterValue);
   replaceRegisterBit(this->wire, FUEL_GAUGE_ADDRESS, MODEL_CFG_REG, 1, MODEL_CFG_REFRESH_BIT);
 
   unsigned long startTime = millis();
+
   while (true) {
     // Read back the model configuration register to ensure the refresh bit is cleared
-    bool isRefreshBitSet = bitIsSetInRegister(this->wire, FUEL_GAUGE_ADDRESS, MODEL_CFG_REG, MODEL_CFG_REFRESH_BIT);
+    bool isRefreshBitSet = getBit(this->wire, FUEL_GAUGE_ADDRESS, MODEL_CFG_REG, MODEL_CFG_REFRESH_BIT) == 1;
     if (!isRefreshBitSet) {
       return true; // Exit the loop if the refresh bit is cleared
     }
@@ -98,22 +117,20 @@ int Battery::averageTemperature(){
   return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, AVG_TA_REG) >> 8;
 }
 
-float Battery::current(){
+int Battery::current(){
   if(!isConnected()){
     return -1;
   }
   
-  auto currentInMilliAmperes = (int16_t)readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, CURRENT_REG) * CURRENT_MULTIPLIER;
-  return currentInMilliAmperes / 1000.0f;
+  return (int16_t)readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, CURRENT_REG) * CURRENT_MULTIPLIER;
 }
 
-float Battery::averageCurrent(){
+int Battery::averageCurrent(){
   if(!isConnected()){
     return -1;
   }
 
-  auto currentInAmperes = (int16_t)readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, AVG_CURRENT_REG) * CURRENT_MULTIPLIER;
-  return currentInAmperes / 1000.0f;
+  return (int16_t)readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, AVG_CURRENT_REG) * CURRENT_MULTIPLIER;
 }
 
 int Battery::percentage(){
@@ -129,7 +146,7 @@ int Battery::percentage(){
     return -1;
   }
   
-  if(batteryCapacityInMiliampereHours == 0){
+  if(characteristics.capacity == 0){
     return -1;
   }
   

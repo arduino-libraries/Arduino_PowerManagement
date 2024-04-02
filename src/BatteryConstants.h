@@ -5,9 +5,9 @@
 // corrections
 #define VOLTAGE_MULTIPLIER (1.25 / 16)
 #define CURRENT_MULTIPLIER (156.25 / 1000)
-#define CAP_MULTIPLIER 0.5
+#define CAP_MULTIPLIER 0.5 // Resolution: 0.5mAh per LSB for MAX17262R
 #define PERCENTAGE_MULTIPLIER (1 / 256)
-#define TIME_MULTIPLIER 5625s
+#define TIME_MULTIPLIER 5625
 #define TEMP_MULTIPLIER (1 / 256)
 
 // voltages

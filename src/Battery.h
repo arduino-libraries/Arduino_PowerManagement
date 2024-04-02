@@ -7,7 +7,23 @@
 #include "WireUtils.h"
 
 constexpr int FUEL_GAUGE_ADDRESS = 0x36; // I2C address of the fuel gauge
-constexpr int DEFAULT_BATTERY_EMPTY_VOLTAGE = 3300; // mV
+constexpr float DEFAULT_BATTERY_EMPTY_VOLTAGE = 3.3f; // V
+constexpr float DEFAULT_CHARGE_VOLTAGE = 4.2f; // V
+constexpr int DEFAULT_END_OF_CHARGE_CURRENT = 50; // mA
+
+struct BatteryCharacteristics {
+    /// @brief The battery's capacity in milliampere-hours (mAh).
+    int capacity = 0;
+    
+    /// @brief The voltage in volts (V) at which the battery is considered empty.
+    float emptyVoltage = DEFAULT_BATTERY_EMPTY_VOLTAGE;
+
+    /// @brief The voltage in volts (V) at which the battery is being charged.
+    float chargeVoltage = DEFAULT_CHARGE_VOLTAGE;
+
+    /// @brief The current in milli amperes (mA) that is used to keep the battery charged at the end of the charging process.
+    int endOfChargeCurrent = DEFAULT_END_OF_CHARGE_CURRENT;
+};
 
 /**
  * @brief This class provides a detailed insight into the battery's health and usage.
@@ -19,12 +35,7 @@ class Battery {
         */
         Battery();
 
-        /**
-         * @brief Constructs a new instance of the Battery class with the specified capacity and empty voltage.
-         * @param capacityInMilliAmpereHours The capacity of the battery in milliampere-hours (mAh).
-         * @param emptyVoltageInMilliVolts The voltage in millivolts (mV) at which the battery is considered empty.
-        */
-        Battery(int capacityInMilliAmpereHours, int emptyVoltageInMilliVolts = DEFAULT_BATTERY_EMPTY_VOLTAGE); 
+        Battery(BatteryCharacteristics batteryCharacteristics);
 
         /**
          * @brief Initializes the battery communication and configuration.
@@ -50,9 +61,9 @@ class Battery {
          * Negative values indicate that the battery is charging, 
          * positive values indicate that the battery is discharging.
          * When no battery is connected, the value is -1.
-         * @return The current flowing from the battery in amperes (A).
+         * @return The current flowing from the battery in milli amperes (mA).
         */
-        float current();
+        int current();
 
         /**
          * @brief Reads the current temperature of the battery.
@@ -86,9 +97,9 @@ class Battery {
 
         /**
          * @brief Reads the average current of the battery.
-         * @return The average current in amperes (A).
+         * @return The average current in milli amperes (mA).
         */
-        float averageCurrent();
+        int averageCurrent();
 
         /**
          * @brief Reads the average voltage of the battery.
@@ -106,8 +117,7 @@ class Battery {
          */
         bool refreshBatteryGaugeModel();
 
-        int batteryCapacityInMiliampereHours;
-        int batteryEmptyVoltage;
+        BatteryCharacteristics characteristics;
 
         #if defined(ARDUINO_PORTENTA_C33)
             TwoWire *wire = &Wire3;
