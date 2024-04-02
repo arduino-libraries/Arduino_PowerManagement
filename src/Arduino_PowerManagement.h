@@ -1,6 +1,8 @@
 #ifndef ARDUINO_POWER_MANAGEMENT_H
 #define ARDUINO_POWER_MANAGEMENT_H
 
-#include "PowerManagement.h"
+#include "Battery.h"
+#include "Board.h"
+#include "Charger.h"
 
 #endif

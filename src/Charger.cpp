@@ -109,6 +109,9 @@ std::map<float, InputCurrentLimit> inputCurrentLimitMap = {
 
 Charger::Charger(){}
 
+bool Charger::begin(){
+    return PMIC.begin() == 0;
+}
 
 bool Charger::setChargeCurrent(float current) {
     if (chargeCurrentMap.find(current) != chargeCurrentMap.end()) {

@@ -56,6 +56,13 @@ Board::Board() {
     #endif 
 }
 
+bool Board::begin() {
+    if (PMIC.begin() != 0){
+        return false;
+    }
+    return true;
+}
+
 bool Board::isUSBPowered() {
     uint16_t registerValue = PMIC.readPMICreg(Register::CHARGER_VBUS_SNS);
     return bitRead(registerValue, 2) == 0;

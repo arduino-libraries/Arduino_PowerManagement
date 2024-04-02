@@ -42,6 +42,12 @@ class Board {
         */
         Board();
 
+        /**
+         * @brief Initializes the board by initiating the PMIC.
+         * 
+         * @return true if the board initialization is successful, false otherwise.
+         */
+        bool begin();
 
         /**
          * @brief Check if the board is powered through USB.
