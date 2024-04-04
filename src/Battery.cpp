@@ -1,5 +1,7 @@
 #include "Battery.h"
 #include "PF1550.h"
+#include "WireUtils.h"
+#include "BatteryConstants.h"
 
 Battery::Battery() {
   Battery(BatteryCharacteristics());
