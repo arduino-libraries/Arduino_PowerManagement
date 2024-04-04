@@ -8,73 +8,83 @@ Battery::Battery() {
 Battery::Battery(BatteryCharacteristics batteryCharacteristics) : characteristics(batteryCharacteristics) {
 }
 
-
-bool Battery::begin() {
+bool Battery::begin(bool enforceReload) {
   if(PMIC.begin() != 0){
     return false;
   }
 
-  // If power-on-reset (POR) event has occurred, reconfigure the battery gauge, otherwise, skip the configuration
-  if (getBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, POR_BIT) != 1) {
+  // If hardware / software power-on-reset (POR) event has occurred, reconfigure the battery gauge, otherwise, skip the configuration
+  if (!enforceReload && getBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, POR_BIT) != 1) {
     return true;
   }
+
+  Serial.println("Reconfiguring the battery gauge...");
+
+  while (true){
+    bool dataIsReady = getBit(this->wire, FUEL_GAUGE_ADDRESS, F_STAT_REG, DNR_BIT) == 0;
+    if (dataIsReady) {
+      break;
+    }
+    Serial.println("Waiting for the battery gauge to be ready...");
+    delay(100); // Wait for the data to be ready. This takes 710ms from power-up
+  }
+
+  // See section "Soft-Wakeup" in user manual https://www.analog.com/media/en/technical-documentation/user-guides/max1726x-modelgauge-m5-ez-user-guide.pdf
 
   uint16_t tempHibernateConfigRegister = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG);
 
   // Release from hibernation
-  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, SOFT_WAKEUP_REG, 0x90); // Exit Hibernate Mode step 1
-  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG, 0x0);      // Exit Hibernate Mode step 2
-  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, SOFT_WAKEUP_REG, 0x0);  // Exit Hibernate Mode step 3
+  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG, 0x0);      // Exit Hibernate Mode
+  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, SOFT_WAKEUP_REG, 0x90); // Wakes up the fuel gauge from hibernate mode to reduce the response time of the IC to configuration changes  
+  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, SOFT_WAKEUP_REG, 0x0);  // This command must be manually cleared (0000h) afterward to keep proper fuel gauge timing
 
-  // Set the empty voltage
-  uint16_t emptyVoltageValue = (uint16_t)((characteristics.emptyVoltage * 1000) / VOLTAGE_MULTIPLIER);
-  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, V_EMPTY_REG, emptyVoltageValue);
-
-  // Set the battery capacity
-  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, DESIGN_CAP_REG, (uint16_t)(characteristics.capacity / CAP_MULTIPLIER));
-
-  // Set the charge termination current
-  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, I_CHG_TERM_REG, (uint16_t)(5 / CURRENT_MULTIPLIER));
+  // Set the battery characteristics
+  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, DESIGN_CAP_REG, characteristics.capacity / CAPACITY_MULTIPLIER_MAH);
+  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, I_CHG_TERM_REG, characteristics.endOfChargeCurrent / CURRENT_MULTIPLIER_MA);
+  
+  uint16_t emptyVoltageValue = (uint16_t)((characteristics.emptyVoltage * 1000) / EMPTY_VOLTAGE_MULTIPLIER_MV);
+  uint8_t recoveryVoltageValue = (uint8_t)((characteristics.recoveryVoltage * 1000) / RECOVERY_VOLTAGE_MULTIPLIER_MV);
+  uint16_t emptyVoltageRegisterValue = emptyVoltageValue << 7 | recoveryVoltageValue;
+  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, V_EMPTY_REG, emptyVoltageRegisterValue);
 
   if(!refreshBatteryGaugeModel()){
     return false;
   }
-
+  
+  // Restore the original Hibernate Config Register value
   writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG, tempHibernateConfigRegister); // Restore Original HibCFG value
-  replaceRegisterBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, 0, POR_BIT); // Clear POR bit after reset
+  replaceRegisterBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, 0x0, POR_BIT); // Clear POR bit after reset
   return true;
 }
 
 bool Battery::refreshBatteryGaugeModel(){
-  // uint16_t currentRegisterValue = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, MODEL_CFG_REG);
+  uint16_t registerValue = 1 << MODEL_CFG_REFRESH_BIT;
+  
+  // Set NTC resistor option for 100k resistor
+  if (characteristics.ntcResistor == NTCResistor::Resistor100K) {
+    registerValue |= 1 << R100_BIT;
+  }
 
-  // if(characteristics.chargeVoltage > 4.275f) {
-  //   // Set bit 10 to 1
-  //   currentRegisterValue |= 1 << 10;
-  // } else {
-  //   // Set bit 10 to 0
-  //   currentRegisterValue &= ~(1 << 10);
-  // }
+  // Set the charge voltage option for voltages above 4.25V
+  if(characteristics.chargeVoltage > 4.25f) {
+    // Set bit 10 to 1
+    registerValue |= 1 << 10;
+  }
 
-  // // Set bit MODEL_CFG_REFRESH_BIT to 1
-  // currentRegisterValue |= 1 << MODEL_CFG_REFRESH_BIT;
-
-  // writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, MODEL_CFG_REG, currentRegisterValue);
-  replaceRegisterBit(this->wire, FUEL_GAUGE_ADDRESS, MODEL_CFG_REG, 1, MODEL_CFG_REFRESH_BIT);
-
+  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, MODEL_CFG_REG, registerValue);
   unsigned long startTime = millis();
 
   while (true) {
     // Read back the model configuration register to ensure the refresh bit is cleared
-    bool isRefreshBitSet = getBit(this->wire, FUEL_GAUGE_ADDRESS, MODEL_CFG_REG, MODEL_CFG_REFRESH_BIT) == 1;
-    if (!isRefreshBitSet) {
+    bool refreshComplete = getBit(this->wire, FUEL_GAUGE_ADDRESS, MODEL_CFG_REG, MODEL_CFG_REFRESH_BIT) == 0;
+    if (refreshComplete) {
       return true; // Exit the loop if the refresh bit is cleared
     }
     
-    if (millis() - startTime > 2000) {
-      return false; // Exit the loop if the refresh bit is not cleared after 2 seconds
+    if (millis() - startTime > 1000) {
+      return false; // Exit the loop if the refresh bit is not cleared after 1 second
     }
-    delay(1);
+    delay(10);
   }
 }
 
@@ -88,7 +98,7 @@ float Battery::voltage(){
     return -1;
   }
   
-  auto voltageInMV = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, VCELL_REG) * VOLTAGE_MULTIPLIER;
+  auto voltageInMV = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, VCELL_REG) * VOLTAGE_MULTIPLIER_MV;
   return voltageInMV / 1000.0f;
 }
 
@@ -97,7 +107,7 @@ float Battery::averageVoltage(){
     return -1;
   }
   
-  auto voltageInMV = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, AVG_VCELL_REG) * VOLTAGE_MULTIPLIER;
+  auto voltageInMV = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, AVG_VCELL_REG) * VOLTAGE_MULTIPLIER_MV;
   return voltageInMV / 1000.0f;
 }
 
@@ -122,7 +132,7 @@ int Battery::current(){
     return -1;
   }
   
-  return (int16_t)readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, CURRENT_REG) * CURRENT_MULTIPLIER;
+  return (int16_t)readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, CURRENT_REG) * CURRENT_MULTIPLIER_MA;
 }
 
 int Battery::averageCurrent(){
@@ -130,7 +140,7 @@ int Battery::averageCurrent(){
     return -1;
   }
 
-  return (int16_t)readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, AVG_CURRENT_REG) * CURRENT_MULTIPLIER;
+  return (int16_t)readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, AVG_CURRENT_REG) * CURRENT_MULTIPLIER_MA;
 }
 
 int Battery::percentage(){
@@ -150,5 +160,9 @@ int Battery::percentage(){
     return -1;
   }
   
-  return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, REP_CAP_REG) * CAP_MULTIPLIER;
+  return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, REP_CAP_REG) * CAPACITY_MULTIPLIER_MAH;
+}
+
+bool Battery::isEmpty(){  
+  return getBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, E_DET_BIT) == 1;
 }
