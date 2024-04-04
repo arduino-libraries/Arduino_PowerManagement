@@ -3,8 +3,6 @@
 
 #include "Arduino.h"
 #include "Wire.h"
-#include "BatteryConstants.h"
-#include "WireUtils.h"
 
 constexpr int FUEL_GAUGE_ADDRESS = 0x36; // I2C address of the fuel gauge
 constexpr float DEFAULT_BATTERY_EMPTY_VOLTAGE = 3.3f; // V
