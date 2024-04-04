@@ -139,7 +139,7 @@ float Battery::maximumVoltage(){
   return (maximumVoltageValue * MAXMIN_VOLT_MULTIPLIER_MV) / 1000.0f;
 }
 
-bool Battery::resetMinimumMaximumVoltage(){
+bool Battery::resetMaximumMinimumVoltage(){
   writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, MAXMIN_VOLT_REG, MAXMIN_VOLT_INITIAL_VALUE) == 0;
 }
 
@@ -164,7 +164,7 @@ void Battery::setTemperatureMeasurementMode(bool externalTemperature){
   if(externalTemperature){
     configRegister = bitSet(configRegister, TSEL_BIT);
     configRegister = bitSet(configRegister, ETHRM_BIT);
-    // TODO
+    // FIXME: The external thermistor temperature measurement is not working as expected
     // In oder to support this, probably more configuration is needed
     // Currently after taking the first reading, the battery gets reported as disconnected
     // plus the register value is reset to the default value.
@@ -276,5 +276,9 @@ int Battery::fullCapacity(){
 }
 
 bool Battery::isEmpty(){  
-  return getBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, E_DET_BIT) == 1;
+  return getBit(this->wire, FUEL_GAUGE_ADDRESS, F_STAT_REG, E_DET_BIT) == 1;
+}
+
+bool Battery::isFullyCharged(){
+  return getBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS2_REG, FULL_DET_BIT) == 1;
 }
