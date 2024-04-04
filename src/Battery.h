@@ -21,6 +21,8 @@ struct BatteryCharacteristics {
     int capacity = 0;
     
     /// @brief The voltage in volts (V) at which the battery is considered empty.
+    /// If you don't know this value you can use the minimumVoltage() function to find out
+    /// while you let the battery completely discharge.
     float emptyVoltage = DEFAULT_BATTERY_EMPTY_VOLTAGE;
 
     /// @brief The voltage in volts (V) at which the battery is being charged.
@@ -73,6 +75,11 @@ class Battery {
         */
         float averageVoltage();
 
+        float minimumVoltage();
+        float maximumVoltage();
+
+        bool resetMinimumMaximumVoltage();
+
         /**
          * @brief Reads the current flowing from the battery at the moment.
          * Negative values indicate that the battery is charging, 
@@ -90,10 +97,19 @@ class Battery {
 
         /**
          * @brief Reads the current temperature of the battery.
-         * Note: This only works if the battery is equipped with a thermistor.
          * @return The current temperature in degrees Celsius.
         */
-        int temperature();
+        int internalTemperature();
+
+        /**
+         * @brief Reads an average of temperature readings of the battery.
+         * Note: If the battery temperature was read before,
+         * this function will change the configuration to read the internal temperature.
+         * You will have to await a couple of temperature readings before 
+         * getting a meaningful average temperature.
+         * @return The average temperature in degrees Celsius.
+        */
+        int averageInternalTemperature();
 
         /**
          * @brief Reads the battery's state of charge (SOC). 
@@ -111,15 +127,22 @@ class Battery {
         */
         int remainingCapacity();
 
+        /**
+         * Returns the full capacity of the battery.
+         * For this to work, the capacity of the battery must be set 
+         * when initializing the battery object.
+         * @return The full capacity of the battery.
+         */
+        int fullCapacity();
+
+        /**
+         * @brief Checks if the battery is empty.
+         * // TODO: Check when this retruns true in the datasheet
+         * @return true if the battery is empty, false otherwise.
+         */
         bool isEmpty();
 
     private:
-        /**
-         * @brief Reads the average temperature of the battery.
-         * @return The average temperature in degrees Celsius.
-        */
-        int averageTemperature();
-
         /** 
          * @brief Refreshes the battery gauge model. This is required when
          * changing the battery's characteristics and is used by the EZ algorithm (battery characterization).
@@ -129,6 +152,22 @@ class Battery {
          * @return true if the battery gauge model was successfully refreshed, false otherwise.
          */
         bool refreshBatteryGaugeModel();
+
+        // TODO: Implement this function
+        // TODO: DOcuemnt this function
+        //  * Note: This only works if the battery is equipped with a thermistor.
+        int batteryTemperature();
+
+        // TODO: DOcuemnt this function
+        int averageBatteryTemperature();
+
+        void releaseFromHibernation();
+
+        void awaitDataReady();
+
+        void configureBatteryCharacteristics();
+
+        void setTemperatureMeasurementMode(bool externalTemperature);
 
         BatteryCharacteristics characteristics;
 
