@@ -18,11 +18,8 @@ bool Battery::begin(bool enforceReload) {
     return true;
   }
 
-  Serial.println("Reconfiguring the battery gauge...");
   awaitDataReady();
-
   uint16_t tempHibernateConfigRegister = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG);
-  
   releaseFromHibernation();
   configureBatteryCharacteristics();
 
@@ -279,6 +276,33 @@ bool Battery::isEmpty(){
   return getBit(this->wire, FUEL_GAUGE_ADDRESS, F_STAT_REG, E_DET_BIT) == 1;
 }
 
+// FIXME The battery is not detected as fully charged for some reason
 bool Battery::isFullyCharged(){
   return getBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS2_REG, FULL_DET_BIT) == 1;
+}
+
+int Battery::timeToEmpty(){
+  if(!isConnected()){
+    return -1;
+  }
+
+  int16_t current = this->averageCurrent();
+  if(current >= 0){
+    return -1; // The battery is charging, so the time to empty is not valid
+  }
+
+  return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, TTE_REG) * TIME_MULTIPLIER_S;
+}
+
+int Battery::timeToFull(){
+  if(!isConnected()){
+    return -1;
+  }
+
+  int16_t current = this->averageCurrent();
+  if(current <= 0){
+    return -1; // The battery is discharging, so the time to full is not valid
+  }
+
+  return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, TTF_REG) * TIME_MULTIPLIER_S;
 }

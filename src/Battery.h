@@ -165,6 +165,21 @@ class Battery {
          */
         bool isFullyCharged();
 
+        /**
+         * Calculates the estimated time until the battery is empty.
+         * @return The estimated time until the battery is empty, in seconds.
+         * If the battery is charging, the function returns -1.
+         */
+        int timeToEmpty();
+
+        /**
+         * Calculates the estimated time until the battery is fully charged.
+         * The value is determined by learning from the experience of prior charge cycles.
+         * @return The estimated time until the battery is fully charged in seconds.
+         * If the battery is discharging, the function returns -1.
+         */
+        int timeToFull();
+
     private:
         /** 
          * @brief Refreshes the battery gauge model. This is required when
