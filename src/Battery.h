@@ -10,6 +10,7 @@ constexpr int FUEL_GAUGE_ADDRESS = 0x36; // I2C address of the fuel gauge
 constexpr float DEFAULT_BATTERY_EMPTY_VOLTAGE = 3.3f; // V
 constexpr float DEFAULT_CHARGE_VOLTAGE = 4.2f; // V
 constexpr int DEFAULT_END_OF_CHARGE_CURRENT = 50; // mA
+constexpr float DEFAULT_RECOVERY_VOLTAGE = 3.88f; // V
 
 enum class NTCResistor {
     Resistor10K,
@@ -34,7 +35,7 @@ struct BatteryCharacteristics {
     /// @brief The NTC resistor value used in the battery pack (10K or 100K Ohm).
     NTCResistor ntcResistor = NTCResistor::Resistor10K;
 
-    float recoveryVoltage = 3.88f;
+    float recoveryVoltage = DEFAULT_RECOVERY_VOLTAGE;
 };
 
 /**
@@ -75,10 +76,25 @@ class Battery {
         */
         float averageVoltage();
 
+        /**
+         * @brief Returns the minimum voltage value measured since the last device reset.
+         * At power-up the minimum voltage value is set to FFh (the maximum).
+         * @return The minimum voltage value in volts (V).
+         */
         float minimumVoltage();
+        
+        /**
+         * @brief Returns the maximum voltage value measured since the last device reset.
+         * At power-up the maximum voltage value is set to 00h (the minimum).
+         * @return The maximum voltage value in volts (V).
+         */
         float maximumVoltage();
 
-        bool resetMinimumMaximumVoltage();
+        /**
+         * @brief Resets the minimum and maximum voltage values.
+         * @return True if the minimum and maximum voltage values were successfully reset, false otherwise.
+         */
+        bool resetMaximumMinimumVoltage();
 
         /**
          * @brief Reads the current flowing from the battery at the moment.
@@ -96,13 +112,13 @@ class Battery {
         int averageCurrent();
 
         /**
-         * @brief Reads the current temperature of the battery.
+         * @brief Reads the current temperature of the internal die.
          * @return The current temperature in degrees Celsius.
         */
         int internalTemperature();
 
         /**
-         * @brief Reads an average of temperature readings of the battery.
+         * @brief Reads an average of internal temperature readings of the battery.
          * Note: If the battery temperature was read before,
          * this function will change the configuration to read the internal temperature.
          * You will have to await a couple of temperature readings before 
@@ -137,10 +153,17 @@ class Battery {
 
         /**
          * @brief Checks if the battery is empty.
-         * // TODO: Check when this retruns true in the datasheet
+         * Returns false once the cell voltage rises above the recovery threshold.
          * @return true if the battery is empty, false otherwise.
          */
         bool isEmpty();
+
+        /**
+         * @brief Checks if the battery is fully charged.
+         * 
+         * @return true if the battery is fully charged, false otherwise.
+         */
+        bool isFullyCharged();
 
     private:
         /** 
@@ -153,20 +176,43 @@ class Battery {
          */
         bool refreshBatteryGaugeModel();
 
-        // TODO: Implement this function
-        // TODO: DOcuemnt this function
-        //  * Note: This only works if the battery is equipped with a thermistor.
+        /**
+         * @brief Reads the battery's temperature.
+         * Note: This only works if the battery is equipped with a thermistor.
+         * @return The battery temperature in degrees Celsius.
+         */
         int batteryTemperature();
 
-        // TODO: DOcuemnt this function
+        /**
+         * @brief Reads the average battery temperature.
+         * Note: This only works if the battery is equipped with a thermistor.
+         * @return The average battery temperature in degrees Celsius.
+         */
         int averageBatteryTemperature();
 
+        /**
+         * @brief Releases the device from hibernation mode.
+         * This is used during the initialization process to wake up the device.
+         * 
+         * This function is used to release the device from hibernation mode and resume normal operation.
+         */
         void releaseFromHibernation();
 
+        /**
+         * Waits for the data of the EZ algorithm's output registers to be ready.
+         */
         void awaitDataReady();
 
+        /**
+         * Configures the characteristics of the battery as part of the initialization process.
+         */
         void configureBatteryCharacteristics();
 
+        /**
+         * Sets the temperature measurement mode for the battery.
+         * 
+         * @param externalTemperature Flag indicating whether to measeure the internal die temperature or the battery temperature.
+         */
         void setTemperatureMeasurementMode(bool externalTemperature);
 
         BatteryCharacteristics characteristics;
