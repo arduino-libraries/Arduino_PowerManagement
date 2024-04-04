@@ -11,6 +11,11 @@ constexpr float DEFAULT_BATTERY_EMPTY_VOLTAGE = 3.3f; // V
 constexpr float DEFAULT_CHARGE_VOLTAGE = 4.2f; // V
 constexpr int DEFAULT_END_OF_CHARGE_CURRENT = 50; // mA
 
+enum class NTCResistor {
+    Resistor10K,
+    Resistor100K
+};
+
 struct BatteryCharacteristics {
     /// @brief The battery's capacity in milliampere-hours (mAh).
     int capacity = 0;
@@ -23,6 +28,11 @@ struct BatteryCharacteristics {
 
     /// @brief The current in milli amperes (mA) that is used to keep the battery charged at the end of the charging process.
     int endOfChargeCurrent = DEFAULT_END_OF_CHARGE_CURRENT;
+
+    /// @brief The NTC resistor value used in the battery pack (10K or 100K Ohm).
+    NTCResistor ntcResistor = NTCResistor::Resistor10K;
+
+    float recoveryVoltage = 3.88f;
 };
 
 /**
@@ -39,9 +49,10 @@ class Battery {
 
         /**
          * @brief Initializes the battery communication and configuration.
+         * @param enforceReload If set to true, the battery gauge config will be reloaded.
          * @return True if the initialization was successful, false otherwise.
         */
-        bool begin();
+        bool begin(bool enforceReload = false);
 
         /**
          * @brief Checks if a battery is connected to the system. 
@@ -57,6 +68,12 @@ class Battery {
         float voltage();
 
         /**
+         * @brief Reads an average of voltage readings of the battery.
+         * @return The average voltage in volts (V). 
+        */
+        float averageVoltage();
+
+        /**
          * @brief Reads the current flowing from the battery at the moment.
          * Negative values indicate that the battery is charging, 
          * positive values indicate that the battery is discharging.
@@ -64,6 +81,12 @@ class Battery {
          * @return The current flowing from the battery in milli amperes (mA).
         */
         int current();
+
+        /**
+         * @brief Reads an average of current readings of the battery.
+         * @return The average current in milli amperes (mA).
+        */
+        int averageCurrent();
 
         /**
          * @brief Reads the current temperature of the battery.
@@ -88,24 +111,14 @@ class Battery {
         */
         int remainingCapacity();
 
+        bool isEmpty();
+
     private:
         /**
          * @brief Reads the average temperature of the battery.
          * @return The average temperature in degrees Celsius.
         */
         int averageTemperature();
-
-        /**
-         * @brief Reads the average current of the battery.
-         * @return The average current in milli amperes (mA).
-        */
-        int averageCurrent();
-
-        /**
-         * @brief Reads the average voltage of the battery.
-         * @return The average voltage in volts (V). 
-        */
-        float averageVoltage();
 
         /** 
          * @brief Refreshes the battery gauge model. This is required when
