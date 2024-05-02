@@ -47,8 +47,14 @@ static inline uint8_t writeRegister16Bits(TwoWire *wire, uint8_t address, uint8_
     lsb = (data & 0x00FF);
     wire->beginTransmission(address);
     wire->write(reg);
-    wire->write(msb);
+    /**
+     * See section "Data Order" in https://www.analog.com/media/en/technical-documentation/user-guides/max1726x-modelgauge-m5-ez-user-guide.pdf
+     * With I2C communication, a byte of data consists of 8 bits ordered most significant bit (MSb) first.
+     * The least significant bit (LSb) of each byte is followed by the Acknowledge bit. IC registers
+     * comprising multibyte values are ordered least significant byte (LSB) first.
+    */
     wire->write(lsb);
+    wire->write(msb);
     return (wire->endTransmission());
 }
 
@@ -96,7 +102,7 @@ static inline bool bitIsSetInRegister(TwoWire *wire, uint8_t address, uint8_t re
  * @param reg The register to modify.
  * @param data The new data (bits) to write to the register.
  * @param indexFrom The index of the first bit to replace starting from LSB (0)
- * @param indexTo The index of the last bit to replace starting from LSB (0)
+ * @param indexTo The index of the last bit (included) to replace starting from LSB (0)
  */
 static inline void replaceRegisterBits(TwoWire *wire, uint8_t address, uint8_t reg, uint16_t data, uint16_t indexFrom, uint8_t indexTo) {
     uint16_t registerValue = readRegister16Bits(wire, address, reg);
