@@ -19,7 +19,7 @@ static inline int extractBits(int value, int startBit, int endBit) {
     if (startBit < 0 || startBit > 31 || endBit < 0 || endBit > 31 || startBit > endBit) {
         // Handle invalid bit range
         return -1;
-    }
+    }    
 
     int mask = (1 << (endBit - startBit + 1)) - 1;
     return (value >> startBit) & mask;
@@ -79,20 +79,18 @@ static inline uint16_t readRegister16Bits(TwoWire *wire, uint8_t address, uint8_
 
 }
 
-/**
- * Checks if a specific bit is set in a register value.
- *
+/** 
+ * Gets the value of a specific bit in a register.
  * @param wire The I2C object used for communication.
  * @param address The address of the device.
  * @param reg The register to check.
  * @param index The bit index within the register value.
- * @return True if the bit is set, false otherwise.
- */
-static inline bool bitIsSetInRegister(TwoWire *wire, uint8_t address, uint8_t reg, uint8_t index) {
+ * @return The value of the bit at the specified index. 
+*/
+static inline uint8_t getBit(TwoWire *wire, uint8_t address, uint8_t reg, uint8_t index) {
     uint16_t regValue = readRegister16Bits(wire, address, reg);
-    return bitRead(regValue, index) == 1;
+    return (regValue >> index) & 0x01;
 }
-
 
 /**
  * Replaces specific bits in a register value of a device connected to the I2C bus.
