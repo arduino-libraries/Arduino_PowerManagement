@@ -77,7 +77,7 @@ bool Battery::refreshBatteryGaugeModel(){
   // Set the charge voltage option for voltages above 4.25V according to the datasheet
   if(characteristics.chargeVoltage > 4.25f) {
     // Set bit 10 to 1
-    registerValue |= 1 << 10;
+    registerValue |= 1 << VCHG_BIT;
   }
 
   writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, MODEL_CFG_REG, registerValue);
