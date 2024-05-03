@@ -201,7 +201,7 @@ void Battery::setTemperatureMeasurementMode(bool externalTemperature){
 
 }
 
-int Battery::internalTemperature(){
+uint8_t Battery::internalTemperature(){
   if(!isConnected()){
     return -1;
   }
@@ -211,7 +211,7 @@ int Battery::internalTemperature(){
   return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, TEMP_REG) * TEMPERATURE_MULTIPLIER_C;
 }
 
-int Battery::averageInternalTemperature(){
+uint8_t Battery::averageInternalTemperature(){
   if(!isConnected()){
     return -1;
   }
@@ -220,7 +220,7 @@ int Battery::averageInternalTemperature(){
   return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, AVG_TA_REG) * TEMPERATURE_MULTIPLIER_C;
 }
 
-int Battery::batteryTemperature(){
+uint8_t Battery::batteryTemperature(){
   if(!isConnected()){
     return -1;
   }
@@ -230,7 +230,7 @@ int Battery::batteryTemperature(){
   return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, TEMP_REG) * TEMPERATURE_MULTIPLIER_C;
 }
 
-int Battery::averageBatteryTemperature(){
+uint8_t Battery::averageBatteryTemperature(){
   if(!isConnected()){
     return -1;
   }
@@ -239,7 +239,7 @@ int Battery::averageBatteryTemperature(){
   return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, AVG_TA_REG) * TEMPERATURE_MULTIPLIER_C;
 }
 
-int Battery::current(){
+int16_t Battery::current(){
   if(!isConnected()){
     return -1;
   }
@@ -247,7 +247,7 @@ int Battery::current(){
   return (int16_t)readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, CURRENT_REG) * CURRENT_MULTIPLIER_MA;
 }
 
-int Battery::averageCurrent(){
+int16_t Battery::averageCurrent(){
   if(!isConnected()){
     return -1;
   }
@@ -255,7 +255,23 @@ int Battery::averageCurrent(){
   return (int16_t)readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, AVG_CURRENT_REG) * CURRENT_MULTIPLIER_MA;
 }
 
-int Battery::percentage(){
+int16_t Battery::power(){
+  if(!isConnected()){
+    return -1;
+  }
+
+  return (int16_t)readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, POWER_REG) * POWER_MULTIPLIER_MW;
+}
+
+int16_t Battery::averagePower(){
+  if(!isConnected()){
+    return -1;
+  }
+
+  return (int16_t)readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, AVG_POWER_REG) * POWER_MULTIPLIER_MW;
+}
+
+uint8_t Battery::percentage(){
   if(!isConnected()){
     return -1;
   }
@@ -263,7 +279,7 @@ int Battery::percentage(){
   return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, REP_SOC_REG) * PERCENTAGE_MULTIPLIER;
 }
 
- int Battery::remainingCapacity(){
+ uint16_t Battery::remainingCapacity(){
   if(!isConnected()){
     return -1;
   }
@@ -275,7 +291,7 @@ int Battery::percentage(){
   return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, REP_CAP_REG) * CAPACITY_MULTIPLIER_MAH;
 }
 
-int Battery::fullCapacity(){
+uint16_t Battery::fullCapacity(){
   if(!isConnected()){
     return -1;
   }
@@ -296,7 +312,7 @@ bool Battery::isFullyCharged(){
   return getBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS2_REG, FULL_DET_BIT) == 1;
 }
 
-int Battery::timeToEmpty(){
+int32_t Battery::timeToEmpty(){
   if(!isConnected()){
     return -1;
   }
@@ -309,7 +325,7 @@ int Battery::timeToEmpty(){
   return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, TTE_REG) * TIME_MULTIPLIER_S;
 }
 
-int Battery::timeToFull(){
+int32_t Battery::timeToFull(){
   if(!isConnected()){
     return -1;
   }
