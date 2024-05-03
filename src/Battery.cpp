@@ -150,7 +150,7 @@ float Battery::maximumVoltage(){
 }
 
 bool Battery::resetMaximumMinimumVoltage(){
-  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, MAXMIN_VOLT_REG, MAXMIN_VOLT_INITIAL_VALUE) == 0;
+  return writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, MAXMIN_VOLT_REG, MAXMIN_VOLT_INITIAL_VALUE) == 0;
 }
 
 void Battery::setTemperatureMeasurementMode(bool externalTemperature){
