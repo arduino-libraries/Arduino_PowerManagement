@@ -74,7 +74,7 @@ void Battery::releaseFromHibernation(){
   // See section "Soft-Wakeup" in user manual https://www.analog.com/media/en/technical-documentation/user-guides/max1726x-modelgauge-m5-ez-user-guide.pdf
   writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG, 0x0);      // Exit Hibernate Mode
   writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, SOFT_WAKEUP_REG, 0x90); // Wakes up the fuel gauge from hibernate mode to reduce the response time of the IC to configuration changes  
-  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, SOFT_WAKEUP_REG, 0x0);  // This command must be manually cleared (0000h) afterward to keep proper fuel gauge timing
+  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, SOFT_WAKEUP_REG, 0x0);  // This command must be manually cleared (0x0000) afterward to keep proper fuel gauge timing
 }
 
 bool Battery::refreshBatteryGaugeModel(){
@@ -206,7 +206,8 @@ int Battery::internalTemperature(){
     return -1;
   }
 
-  setTemperatureMeasurementMode(false);
+  setTemperatureMeasurementMode(false);  
+  // TODO also see DieTemp Register (034h) for the internal die temperature p. 24 in DS  
   return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, TEMP_REG) * TEMPERATURE_MULTIPLIER_C;
 }
 
@@ -225,6 +226,7 @@ int Battery::batteryTemperature(){
   }
 
   setTemperatureMeasurementMode(true);
+  // TODO possibly await a couple of readings before getting a meaningful temperature
   return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, TEMP_REG) * TEMPERATURE_MULTIPLIER_C;
 }
 
