@@ -20,7 +20,10 @@ bool Battery::begin(bool enforceReload) {
     return true;
   }
 
-  awaitDataReady();
+  if(!awaitDataReady()){
+    return false; // Timeout while waiting for the battery gauge to be ready
+  }
+
   uint16_t tempHibernateConfigRegister = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG);
   releaseFromHibernation();
   configureBatteryCharacteristics();
@@ -35,12 +38,20 @@ bool Battery::begin(bool enforceReload) {
   return true;
 }
 
-void Battery::awaitDataReady(){
+bool Battery::awaitDataReady(uint16_t timeout){
+  unsigned long startTime = millis();
+
   while (true){
     bool dataIsReady = getBit(this->wire, FUEL_GAUGE_ADDRESS, F_STAT_REG, DNR_BIT) == 0;
     if (dataIsReady) {
-      return;
+      return true;
     }
+
+    if (millis() - startTime > timeout) {
+      return false;
+    }
+
+    // TODO Remove the print statement
     Serial.println("Waiting for the battery gauge to be ready...");
     delay(100); // Wait for the data to be ready. This takes 710ms from power-up
   } 
