@@ -172,11 +172,11 @@ class Battery {
         bool isEmpty();
 
         /**
-         * @brief Checks if the battery is fully charged.
+         * @brief Checks if the battery charging is complete.
          * 
-         * @return true if the battery is fully charged, false otherwise.
+         * @return true if the charging is complete, false otherwise.
          */
-        bool isFullyCharged();
+        bool chargingComplete();
 
         /**
          * Calculates the estimated time until the battery is empty.

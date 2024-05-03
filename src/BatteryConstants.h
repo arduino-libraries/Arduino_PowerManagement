@@ -99,7 +99,8 @@
 #define POR_BIT 1
 #define DNR_BIT 0 // Data Not Ready. This bit is set to 1 at cell insertion and remains set until the output registers have been updated. Afterward, the IC clears this bit, indicating the fuel gauge calculations are up to date. This takes 710ms from power-up
 #define E_DET_BIT 8 // FStat Register: Empty Detection. This bit is set to 1 when the IC detects that the cell empty point has been reached. This bit is reset to 0 when the cell voltage rises above the recovery threshold.
-#define FULL_DET_BIT 5 // Status2 Register: Full Detection. This bit is set to 1 when the IC detects that the cell full point has been reached.
+#define FULL_DET_BIT 5 // Status2 Register: Full Detection.
+#define FQ_BIT 7 // FStat Register: Full Qualified. This bit is set when all charge termination conditions have been met. See the End-of-Charge Detection section for details.
 #define EN_HIBERNATION_BIT 15
 #define HIB_BIT 1 // Hibernate Status. This bit is set to a 1 when the device is in hibernate mode or 0 when the device is in active mode. Hib is set to 0 at power-up.
 #define R100_BIT 13 // The R100 bit needs to be set when using a 100k NTC resistor
