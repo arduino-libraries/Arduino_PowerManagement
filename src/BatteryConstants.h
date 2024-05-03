@@ -15,6 +15,7 @@
 #define EMPTY_VOLTAGE_MULTIPLIER_MV 10 // Resolution: 10mV per LSB
 #define RECOVERY_VOLTAGE_MULTIPLIER_MV 40 // Resolution: 40mV per LSB
 #define MAXMIN_VOLT_MULTIPLIER_MV 20 // Resolution: 20mV per LSB
+#define POWER_MULTIPLIER_MW 1.6 // Resolution: 1.6mW per LSB
 
 // Voltage Registers
 #define VCELL_REG 0x09 // VCell reports the voltage measured between BATT and GND.
@@ -89,7 +90,7 @@
 #define MODEL_CFG_REG 0xDB
 #define CYCLES_REG 0x17
 #define DEV_NAME_REG 0x21
-#define POWER_REG 0xB1
+#define POWER_REG 0xB1 // Instant power calculation from immediate current and voltage
 #define AVG_POWER_REG 0xB3
 
 // POR (Power-On Reset): This bit is set to 1 when the device detects that 

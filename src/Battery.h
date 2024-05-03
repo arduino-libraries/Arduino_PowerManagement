@@ -101,19 +101,34 @@ class Battery {
          * When no battery is connected, the value is -1.
          * @return The current flowing from the battery in milli amperes (mA).
         */
-        int current();
+        int16_t current();
 
         /**
          * @brief Reads an average of current readings of the battery.
          * @return The average current in milli amperes (mA).
         */
-        int averageCurrent();
+        int16_t averageCurrent();
+
+
+        /**
+         * @brief Reads the current power of the battery in milliwatts (mW).
+         * This value is calculated based on the current and voltage of the battery.
+         * @return The current power in milliwatts (mW).
+        */
+        int16_t power();
+
+        /**
+         * @brief Reads an average of power readings of the battery in milliwatts (mW).
+         * This value is calculated based on the current and voltage of the battery.
+         * @return The average power in milliwatts (mW).
+        */
+        int16_t averagePower();
 
         /**
          * @brief Reads the current temperature of the internal die.
          * @return The current temperature in degrees Celsius.
         */
-        int internalTemperature();
+        uint8_t internalTemperature();
 
         /**
          * @brief Reads an average of internal temperature readings of the battery.
@@ -123,7 +138,7 @@ class Battery {
          * getting a meaningful average temperature.
          * @return The average temperature in degrees Celsius.
         */
-        int averageInternalTemperature();
+        uint8_t averageInternalTemperature();
 
         /**
          * @brief Reads the battery's state of charge (SOC). 
@@ -131,7 +146,7 @@ class Battery {
          * compensation for the battery's age and temperature and discharge rate.
          * @return The state of charge as a percentage (Range: 0% - 100%).
         */
-        int percentage();
+        uint8_t percentage();
 
         /**
          * @brief Reads the remaining capacity of the battery.
@@ -139,7 +154,7 @@ class Battery {
          * the remaining time until the battery is empty.
          * @return The remaining capacity in milliampere-hours (mAh).
         */
-        int remainingCapacity();
+        uint16_t remainingCapacity();
 
         /**
          * Returns the full capacity of the battery.
@@ -147,7 +162,7 @@ class Battery {
          * when initializing the battery object.
          * @return The full capacity of the battery.
          */
-        int fullCapacity();
+        uint16_t fullCapacity();
 
         /**
          * @brief Checks if the battery is empty.
@@ -168,7 +183,7 @@ class Battery {
          * @return The estimated time until the battery is empty, in seconds.
          * If the battery is charging, the function returns -1.
          */
-        int timeToEmpty();
+        int32_t timeToEmpty();
 
         /**
          * Calculates the estimated time until the battery is fully charged.
@@ -176,7 +191,7 @@ class Battery {
          * @return The estimated time until the battery is fully charged in seconds.
          * If the battery is discharging, the function returns -1.
          */
-        int timeToFull();
+        int32_t timeToFull();
 
     private:
         /** 
@@ -194,14 +209,14 @@ class Battery {
          * Note: This only works if the battery is equipped with a thermistor.
          * @return The battery temperature in degrees Celsius.
          */
-        int batteryTemperature();
+        uint8_t batteryTemperature();
 
         /**
          * @brief Reads the average battery temperature.
          * Note: This only works if the battery is equipped with a thermistor.
          * @return The average battery temperature in degrees Celsius.
          */
-        int averageBatteryTemperature();
+        uint8_t averageBatteryTemperature();
 
         /**
          * @brief Releases the device from hibernation mode.
