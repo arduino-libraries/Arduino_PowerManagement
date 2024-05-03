@@ -213,8 +213,9 @@ class Battery {
 
         /**
          * Waits for the data of the EZ algorithm's output registers to be ready.
+         * @return True when the data has become ready, false when the timeout is reached.
          */
-        void awaitDataReady();
+        bool awaitDataReady(uint16_t timeout = 1000);
 
         /**
          * Configures the characteristics of the battery as part of the initialization process.
