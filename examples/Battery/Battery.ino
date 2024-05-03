@@ -58,52 +58,59 @@ void setup() {
    }
 
    battery.resetMaximumMinimumVoltage();
+   battery.resetMaximumMinimumCurrent();
 }
 
 void printTimeToEmpty(){
    auto timeToEmptySeconds = battery.timeToEmpty();
    if(timeToEmptySeconds == -1){
-      Serial.println("* Time to empty: N/A");
+      Serial.println("* ⏱️ Time to empty: N/A");
       return;
    }
    auto timeToEmptyHours = timeToEmptySeconds / 3600;
    timeToEmptySeconds = timeToEmptySeconds % 3600;
    auto timeToEmptyMinutes = timeToEmptySeconds / 60;
    timeToEmptySeconds = timeToEmptySeconds % 60;
-   Serial.println("* Time to empty: " + String(timeToEmptyHours) + "h " + String(timeToEmptyMinutes) + "m " + String(timeToEmptySeconds) + "s");
+   Serial.println("* ⏱️ Time to empty: " + String(timeToEmptyHours) + "h " + String(timeToEmptyMinutes) + "m " + String(timeToEmptySeconds) + "s");
 }
 
 void printTimeToFull(){
    auto timeToFullSeconds = battery.timeToFull();
    if(timeToFullSeconds == -1){
-      Serial.println("* Time to full: N/A");
+      Serial.println("* ⏱️ Time to full: N/A");
       return;
    }
    auto timeToFullHours = timeToFullSeconds / 3600;
    timeToFullSeconds = timeToFullSeconds % 3600;
    auto timeToFullMinutes = timeToFullSeconds / 60;
    timeToFullSeconds = timeToFullSeconds % 60;
-   Serial.println("* Time to full: " + String(timeToFullHours) + "h " + String(timeToFullMinutes) + "m " + String(timeToFullSeconds) + "s");
+   Serial.println("* ⏱️ Time to full: " + String(timeToFullHours) + "h " + String(timeToFullMinutes) + "m " + String(timeToFullSeconds) + "s");
 }
 
 void loop() {
    bool batteryConnected = battery.isConnected();
-   Serial.println("* Battery is connected: " + ( batteryConnected ? String("Yes") : String("No")));
+   Serial.println("* 🔌 Battery is connected: " + ( batteryConnected ? String("Yes") : String("No")));
    
    if(batteryConnected){
-      Serial.println("* Battery is empty: " + ( battery.isEmpty() ? String("Yes") : String("No")));
-      Serial.println("* Is fully charged: " + ( battery.isFullyCharged() ? String("Yes") : String("No")));
-      Serial.println("* Voltage: " + String(battery.voltage()) + " V");
-      Serial.println("* Average Voltage: " + String(battery.averageVoltage()) + " V");
-      Serial.println("* Minimum Voltage: " + String(battery.minimumVoltage()) + " V");
-      Serial.println("* Maximum Voltage: " + String(battery.maximumVoltage()) + " V");
-      Serial.println("* Current: " + String(battery.current()) + " mA");
-      Serial.println("* Average Current: " + String(battery.averageCurrent()) + " mA");
-      Serial.println("* Percentage: " + String(battery.percentage()) + "%");
-      Serial.println("* Remaining Capacity: " + String(battery.remainingCapacity()) + " mAh");
-      Serial.println("* Full Capacity: " + String(battery.fullCapacity()) + " mAh");
-      Serial.println("* Internal Temperature: " + String(battery.internalTemperature()) + "°C");
-      Serial.println("* Average internal Temperature: " + String(battery.averageInternalTemperature()) + "°C");
+      Serial.println("* 🪫 Battery is empty: " + ( battery.isEmpty() ? String("Yes") : String("No")));
+      Serial.println("* 💯 Charging complete: " + ( battery.chargingComplete() ? String("Yes") : String("No")));
+      
+      Serial.println("* ⚡️ Voltage: " + String(battery.voltage()) + " V");
+      Serial.println("* ⚡️ Average Voltage: " + String(battery.averageVoltage()) + " V");
+      Serial.println("* ⚡️ Minimum Voltage since reset: " + String(battery.minimumVoltage()) + " V");
+      Serial.println("* ⚡️ Maximum Voltage since reset: " + String(battery.maximumVoltage()) + " V");
+      Serial.println("* ⚡️ Current: " + String(battery.current()) + " mA");
+      Serial.println("* ⚡️ Average Current: " + String(battery.averageCurrent()) + " mA");
+      Serial.println("* ⚡️ Minimum Current since reset (160mA resolution): " + String(battery.minimumCurrent()) + " mA");
+      Serial.println("* ⚡️ Maximum Current since reset (160mA resolution): " + String(battery.maximumCurrent()) + " mA");
+      Serial.println("* ⚡️ Power: " + String(battery.power()) + " mW");
+      Serial.println("* ⚡️ Average Power: " + String(battery.averagePower()) + " mW");
+
+      Serial.println("* 🔋 Percentage: " + String(battery.percentage()) + "%");
+      Serial.println("* 🔋 Remaining Capacity: " + String(battery.remainingCapacity()) + " mAh");
+      Serial.println("* 🔋 Full Capacity: " + String(battery.fullCapacity()) + " mAh");
+      Serial.println("* 🌡️ Internal Temperature: " + String(battery.internalTemperature()) + "°C");
+      Serial.println("* 🌡️ Average internal Temperature: " + String(battery.averageInternalTemperature()) + "°C");
       printTimeToEmpty();
       printTimeToFull();
       Serial.println();

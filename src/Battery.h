@@ -109,6 +109,27 @@ class Battery {
         */
         int16_t averageCurrent();
 
+        /**
+         * @brief Reads the minimum current values measured since the last device reset.
+         * Note: The resolution of the minimum current value is 160mA so the value
+         * is rounded to the nearest 160mA.
+         * @return The minimum current values in milli amperes (mA).
+         */
+        int16_t minimumCurrent();
+
+        /**
+         * @brief Reads the maximum current values measured since the last device reset.
+         * Note: The resolution of the minimum current value is 160mA so the value
+         * is rounded to the nearest 160mA.
+         * @return The maximum current values in milli amperes (mA).
+         */
+        int16_t maximumCurrent();
+
+        /**
+         * @brief Resets the minimum and maximum current values.
+         * @return True if the minimum and maximum current values were successfully reset, false otherwise.
+        */
+        bool resetMaximumMinimumCurrent();
 
         /**
          * @brief Reads the current power of the battery in milliwatts (mW).

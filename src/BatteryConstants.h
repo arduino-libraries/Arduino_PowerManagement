@@ -4,10 +4,12 @@
 
 // Initial Values (for resetting registers)
 #define MAXMIN_VOLT_INITIAL_VALUE 0x00FF
+#define MAXMIN_CURRENT_INITIAL_VALUE 0x807F
 
 // Conversion factors (See section "ModelGauge m5 Register Standard Resolutions" in the datasheet)
 #define VOLTAGE_MULTIPLIER_MV (1.25 / 16) // Resolution: 78.125 μV per LSB
 #define CURRENT_MULTIPLIER_MA 0.15625 // Resolution: 0.15625 mA per LSB for MAX17262R
+#define MAXMIN_CURRENT_MULTIPLIER_MA 160 // Resolution: 160mA per LSB
 #define CAPACITY_MULTIPLIER_MAH 0.5 // Resolution: 0.5mAh per LSB for MAX17262R
 #define PERCENTAGE_MULTIPLIER (1.0 / 256) // Resolution: 1/256% per LSB
 #define TIME_MULTIPLIER_S 5.625 // Resolution: 5.625 seconds per LSB
@@ -49,6 +51,7 @@
 #define AT_RATE_REG 0x04
 #define CURRENT_REG 0x0A // The MAX17262 uses internal current sensing to monitor the current through the SYS pin. The measurement value is stored in two's-complement format.
 #define AVG_CURRENT_REG 0x0B // The AvgCurrent register reports an average of Current register readings.
+#define MAXMIN_CURRENT_REG 0x1C // The MaxMinCurr register maintains the maximum and minimum Current register values since the last IC reset or until cleared by host software.
 #define TTE_REG 0x11 // The TTE register holds the estimated time to empty for the application under present temperature and load conditions. TTE register is only valid when current register is negative.
 #define TTF_REG 0x20 // The TTF register holds the estimated time to full for the application under present conditions. The TTF register is only valid when the current register is positive.
 #define TIMER_REG 0x3E

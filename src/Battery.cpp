@@ -255,6 +255,39 @@ int16_t Battery::averageCurrent(){
   return (int16_t)readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, AVG_CURRENT_REG) * CURRENT_MULTIPLIER_MA;
 }
 
+int16_t Battery::minimumCurrent(){
+  if(!isConnected()){
+    return -1;
+  }
+
+  uint16_t registerValue = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, MAXMIN_CURRENT_REG);
+  if(registerValue == MAXMIN_CURRENT_INITIAL_VALUE){
+    return 0; // The minimum current is not valid
+  }
+
+  int8_t lowerByte = static_cast<int8_t>( registerValue & 0xFF);
+  return static_cast<int16_t>(lowerByte * MAXMIN_CURRENT_MULTIPLIER_MA);
+}
+
+int16_t Battery::maximumCurrent(){
+  if(!isConnected()){
+    return -1;
+  }
+
+  uint16_t registerValue = readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, MAXMIN_CURRENT_REG);
+  if(registerValue == MAXMIN_CURRENT_INITIAL_VALUE){
+    return 0; // The minimum current is not valid
+  }
+
+  // The maximum current is stored in the upper byte
+  int8_t upperByte = static_cast<int8_t>( registerValue >> 8);  
+  return static_cast<int16_t>(upperByte * MAXMIN_CURRENT_MULTIPLIER_MA);
+}
+
+bool Battery::resetMaximumMinimumCurrent(){
+  return writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, MAXMIN_CURRENT_REG, MAXMIN_CURRENT_INITIAL_VALUE) == 0;
+}
+
 int16_t Battery::power(){
   if(!isConnected()){
     return -1;
