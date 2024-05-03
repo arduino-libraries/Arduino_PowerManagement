@@ -102,6 +102,7 @@
 #define EN_HIBERNATION_BIT 15
 #define HIB_BIT 1 // Hibernate Status. This bit is set to a 1 when the device is in hibernate mode or 0 when the device is in active mode. Hib is set to 0 at power-up.
 #define R100_BIT 13 // The R100 bit needs to be set when using a 100k NTC resistor
+#define VCHG_BIT 10 // Set to 1 for charge voltage higher than 4.25V (4.3V–4.4V). Set VChg to 0 for 4.2V charge voltage.
 #define MODEL_CFG_REFRESH_BIT 15 // Model Configuration Refresh. This bit is set to 1 to refresh the ModelGauge m5 algorithm configuration. This bit is automatically cleared to 0 after the refresh is complete.
 #define BATTERY_STATUS_BIT 3 //  Useful when the IC is used in a host-side application. This bit is set to 0 when a battery is present in the system, and set to 1 when the battery is absent. Bst is set to 0 at power-up.
 #define TSEL_BIT 15 // Temperature sensor select. Set to 0 to use internal die temperature. Set to 1 to use temperature information from thermistor. ETHRM bit must be set to 1 when TSel is 1.
