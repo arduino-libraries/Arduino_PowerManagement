@@ -17,12 +17,21 @@
 #define CONTEXT_SW1 3 
 #define CONTEXT_SW2 4 
 
-enum class LowPowerStandbyType {
-    None = 0,
-    UntilPinActivity = 1,
-    UntilTimeElapsed = 2,
-    UntilBothAreTrue = 3
+enum class StandbyType : uint8_t {
+    none = 0,
+    untilPinActivity = 1,
+    untilTimeElapsed = 2,
+    untilEither = 3
+
 };
+
+inline constexpr StandbyType operator|(StandbyType x, StandbyType y){
+    return static_cast<StandbyType>(static_cast<int>(x) | static_cast<int>(y));
+}
+
+inline constexpr StandbyType operator|=(StandbyType& x, StandbyType y){
+    return x = x | y;
+}
 
 constexpr int EMPTY_REGISTER = 0xFF;
 
@@ -225,7 +234,7 @@ class Board {
         #if defined(ARDUINO_PORTENTA_C33)
             LowPower * lowPower;
         #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
-            LowPowerStandbyType standbyType = LowPowerStandbyType::None;
+            StandbyType standbyType = StandbyType::none;
             RTCWakeupDelay rtcWakeupDelay = RTCWakeupDelay(0, 0, 0);
         #endif         
 };
