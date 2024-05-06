@@ -122,13 +122,7 @@ void Board::enableWakeupFromPin(uint8_t pin, PinStatus direction){
 
 #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
 void Board::enableWakeupFromPin(){
-    // If no wake up method is selected yet, set it to wake up from pin activity
-    if(standbyType == LowPowerStandbyType::None){
-        standbyType = LowPowerStandbyType::UntilPinActivity;
-    // If there is already a wake up method selected, set it to wake up from both pin activity and time elapsed
-    } else if (standbyType == LowPowerStandbyType::UntilTimeElapsed){
-        standbyType = LowPowerStandbyType::UntilBothAreTrue;
-    }
+    standbyType |= StandbyType::untilPinActivity;
 }
 
 void Board::enableSleepWhenIdle(){
@@ -141,12 +135,7 @@ void Board::enableWakeupFromRTC(){
     #if defined(ARDUINO_PORTENTA_C33)
         lowPower->enableWakeupFromRTC();
     #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
-       // If no wake up method is selected yet, set it to wake up from RTC
-        if(standbyType == LowPowerStandbyType::None){
-            standbyType = LowPowerStandbyType::UntilTimeElapsed;
-        } else if (standbyType == LowPowerStandbyType::UntilPinActivity){
-            standbyType = LowPowerStandbyType::UntilBothAreTrue;
-        }
+       standbyType |= StandbyType::untilTimeElapsed;
     #endif
 }
 
@@ -210,12 +199,12 @@ void Board::deepSleepUntilWakeupEvent(){
     #if defined(ARDUINO_PORTENTA_C33)
         lowPower -> deepSleep();
     #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
-        if(standbyType == LowPowerStandbyType::UntilBothAreTrue)
-            LowPower.standbyM7(LowPowerStandbyType::UntilPinActivity | LowPowerStandbyType::UntilTimeElapsed, rtcWakeupDelay);
-        else if (standbyType == LowPowerStandbyType::UntilPinActivity)
-            LowPower.standbyM7(LowPowerStandbyType::UntilPinActivity);
-        else if (standbyType == LowPowerStandbyType::UntilTimeElapsed)
-           LowPower.standbyM7(LowPowerStandbyType::UntilTimeElapsed, rtcWakeupDelay);
+        if(standbyType == StandbyType::untilEither)
+            LowPower.standbyM7(LowPowerStandbyType::untilPinActivity | LowPowerStandbyType::untilTimeElapsed, rtcWakeupDelay);
+        else if (standbyType == StandbyType::untilPinActivity)
+            LowPower.standbyM7(LowPowerStandbyType::untilPinActivity);
+        else if (standbyType == StandbyType::untilTimeElapsed)
+           LowPower.standbyM7(LowPowerStandbyType::untilTimeElapsed, rtcWakeupDelay);
     #endif
 }
 
