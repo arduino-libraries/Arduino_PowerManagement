@@ -1,5 +1,7 @@
+#ifndef CHARGER_H
+
 #include <Arduino_PF1550.h>
-#include "wireUtils.h"
+#include "WireUtils.h"
 
 typedef VFastCharge ChargeVoltage;
 typedef IFastCharge ChargeCurrent;
@@ -97,18 +99,18 @@ public:
 
     /**
      * @brief Set the charging current. 
-     * The default charging current is set to 0.1A.
-     * @param current Charging current in amperes (A).
-     * Supported values: 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0
+     * The default charging current is set to 100mA.
+     * @param current Charging current in milli amperes (mA).
+     * Supported values: 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000
      * @return True if successful, false if an invalid value was provided or if the PMIC communication failed.
      */
-    bool setChargeCurrent(float current);
+    bool setChargeCurrent(uint16_t current);
 
     /**
-     * @brief Get the charge current in amperes (A).
+     * @brief Get the charge current in milli amperes (mA).
      * @return The charge current in float.
      */
-    float getChargeCurrent();
+    uint16_t getChargeCurrent();
 
     /**
      * @brief Set the charging voltage in volts (V).
@@ -130,11 +132,11 @@ public:
     /**
      * @brief Set the end-of-charge current.
      * The default end-of-charge current is set to 0.05A.
-     * @param current End-of-charge current in amperes (A).
-     * Supported values: 0.005, 0.01, 0.02, 0.03, 0.05
+     * @param current End-of-charge current in milli amperes (mA).
+    * Supported values: 5, 10, 20, 30, 50
      * @return True if successful, false if an invalid value was provided or if the PMIC communication failed.
      */
-    bool setEndOfChargeCurrent(float current);
+    bool setEndOfChargeCurrent(uint16_t current);
 
     /**
      * @brief Get the end of charge current.
@@ -144,19 +146,19 @@ public:
      * 
      * @return The end of charge current.
      */
-    float getEndOfChargeCurrent();
+    uint16_t getEndOfChargeCurrent();
 
     /**
      * @brief The input current limit (ILIM) safeguards the device by preventing overcurrent, 
      * ensuring the charging current is within safe levels for the battery, and adapting to the maximum 
      * current the power source can provide, allowing you to charge and use the system at the same time. 
      * The default input current limit is set to 1.5A.
-     * @param current Maximum input current in amperes (A).
-     * Supported values: 0.01, 0.015, 0.02, 0.025, 0.03, 0.035, 0.04, 0.045, 0.05, 0.1, 0.15, 0.2, 0.3, 
-     * 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.5
+     * @param current Maximum input current in milli amperes (mA).
+    * Supported values: 10, 15, 20, 25, 30, 35, 40, 45, 50, 100, 150, 200, 300, 
+    * 400, 500, 600, 700, 800, 900, 1000, 1500
      * @return True if successful, false if an invalid value was provided or if the PMIC communication failed.
      */
-    bool setInputCurrentLimit(float current);
+    bool setInputCurrentLimit(uint16_t current);
 
     /**
      * @brief Get the input current limit. It is a safeguard to prevent overcurrent when charging
@@ -166,7 +168,7 @@ public:
      * 
      * @return The input current limit in amps.
      */
-    float getInputCurrentLimit();
+    uint16_t getInputCurrentLimit();
 
     /**
      * @brief Get the current charging status.
@@ -189,3 +191,5 @@ public:
      */
     bool setEnabled(bool enabled);
 };
+
+#endif // CHARGER_H

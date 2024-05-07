@@ -1,26 +1,26 @@
 #include "Charger.h"
 #include <map>
 
-std::map<float, ChargeCurrent> chargeCurrentMap = {
-    {0.1, ChargeCurrent::I_100_mA},
-    {0.15, ChargeCurrent::I_150_mA},
-    {0.2, ChargeCurrent::I_200_mA},
-    {0.25, ChargeCurrent::I_250_mA},
-    {0.3, ChargeCurrent::I_300_mA},
-    {0.35, ChargeCurrent::I_350_mA},
-    {0.4, ChargeCurrent::I_400_mA},
-    {0.45, ChargeCurrent::I_450_mA},
-    {0.5, ChargeCurrent::I_500_mA},
-    {0.55, ChargeCurrent::I_550_mA},
-    {0.6, ChargeCurrent::I_600_mA},
-    {0.65, ChargeCurrent::I_650_mA},
-    {0.7, ChargeCurrent::I_700_mA},
-    {0.75, ChargeCurrent::I_750_mA},
-    {0.8, ChargeCurrent::I_800_mA},
-    {0.85, ChargeCurrent::I_850_mA},
-    {0.9, ChargeCurrent::I_900_mA},
-    {0.95, ChargeCurrent::I_950_mA},
-    {1.0, ChargeCurrent::I_1000_mA}
+std::map<uint16_t, ChargeCurrent> chargeCurrentMap = {
+    {100, ChargeCurrent::I_100_mA},
+    {150, ChargeCurrent::I_150_mA},
+    {200, ChargeCurrent::I_200_mA},
+    {250, ChargeCurrent::I_250_mA},
+    {300, ChargeCurrent::I_300_mA},
+    {350, ChargeCurrent::I_350_mA},
+    {400, ChargeCurrent::I_400_mA},
+    {450, ChargeCurrent::I_450_mA},
+    {500, ChargeCurrent::I_500_mA},
+    {550, ChargeCurrent::I_550_mA},
+    {600, ChargeCurrent::I_600_mA},
+    {650, ChargeCurrent::I_650_mA},
+    {700, ChargeCurrent::I_700_mA},
+    {750, ChargeCurrent::I_750_mA},
+    {800, ChargeCurrent::I_800_mA},
+    {850, ChargeCurrent::I_850_mA},
+    {900, ChargeCurrent::I_900_mA},
+    {950, ChargeCurrent::I_950_mA},
+    {1000, ChargeCurrent::I_1000_mA}
 };
 
 std::map<float, ChargeVoltage> chargeVoltageMap = {
@@ -74,36 +74,36 @@ std::map<float, ChargeVoltage> chargeVoltageMap = {
     {4.44, ChargeVoltage::V_4_44}
 };
 
-std::map<float, EndOfChargeCurrent> endOfChargeCurrentMap = {
-    {0.005, EndOfChargeCurrent::I_5_mA},
-    {0.01, EndOfChargeCurrent::I_10_mA},
-    {0.02, EndOfChargeCurrent::I_20_mA},
-    {0.03, EndOfChargeCurrent::I_30_mA},
-    {0.05, EndOfChargeCurrent::I_50_mA}
+std::map<uint16_t, EndOfChargeCurrent> endOfChargeCurrentMap = {
+    {5, EndOfChargeCurrent::I_5_mA},
+    {10, EndOfChargeCurrent::I_10_mA},
+    {20, EndOfChargeCurrent::I_20_mA},
+    {30, EndOfChargeCurrent::I_30_mA},
+    {50, EndOfChargeCurrent::I_50_mA}
 };
 
-std::map<float, InputCurrentLimit> inputCurrentLimitMap = {
-    {0.01, InputCurrentLimit::I_10_mA},
-    {0.015, InputCurrentLimit::I_15_mA},
-    {0.02, InputCurrentLimit::I_20_mA},
-    {0.025, InputCurrentLimit::I_25_mA},
-    {0.03, InputCurrentLimit::I_30_mA},
-    {0.035, InputCurrentLimit::I_35_mA},
-    {0.04, InputCurrentLimit::I_40_mA},
-    {0.045, InputCurrentLimit::I_45_mA},
-    {0.05, InputCurrentLimit::I_50_mA},
-    {0.1, InputCurrentLimit::I_100_mA},
-    {0.15, InputCurrentLimit::I_150_mA},
-    {0.2, InputCurrentLimit::I_200_mA},
-    {0.3, InputCurrentLimit::I_300_mA},
-    {0.4, InputCurrentLimit::I_400_mA},
-    {0.5, InputCurrentLimit::I_500_mA},
-    {0.6, InputCurrentLimit::I_600_mA},
-    {0.7, InputCurrentLimit::I_700_mA},
-    {0.8, InputCurrentLimit::I_800_mA},
-    {0.9, InputCurrentLimit::I_900_mA},
-    {1.0, InputCurrentLimit::I_1000_mA},
-    {1.5, InputCurrentLimit::I_1500_mA}
+std::map<uint16_t, InputCurrentLimit> inputCurrentLimitMap = {
+    {10, InputCurrentLimit::I_10_mA},
+    {15, InputCurrentLimit::I_15_mA},
+    {20, InputCurrentLimit::I_20_mA},
+    {25, InputCurrentLimit::I_25_mA},
+    {30, InputCurrentLimit::I_30_mA},
+    {35, InputCurrentLimit::I_35_mA},
+    {40, InputCurrentLimit::I_40_mA},
+    {45, InputCurrentLimit::I_45_mA},
+    {50, InputCurrentLimit::I_50_mA},
+    {100, InputCurrentLimit::I_100_mA},
+    {150, InputCurrentLimit::I_150_mA},
+    {200, InputCurrentLimit::I_200_mA},
+    {300, InputCurrentLimit::I_300_mA},
+    {400, InputCurrentLimit::I_400_mA},
+    {500, InputCurrentLimit::I_500_mA},
+    {600, InputCurrentLimit::I_600_mA},
+    {700, InputCurrentLimit::I_700_mA},
+    {800, InputCurrentLimit::I_800_mA},
+    {900, InputCurrentLimit::I_900_mA},
+    {1000, InputCurrentLimit::I_1000_mA},
+    {1500, InputCurrentLimit::I_1500_mA}
 };
 
 
@@ -113,7 +113,11 @@ bool Charger::begin(){
     return PMIC.begin() == 0;
 }
 
-bool Charger::setChargeCurrent(float current) {
+bool Charger::setChargeCurrent(uint16_t current) {
+    #if defined(ARDUINO_NICLA_VISION)
+        return false; // Not supported on Nicla Vision
+    #endif
+
     if (chargeCurrentMap.find(current) != chargeCurrentMap.end()) {
         ChargeCurrent convertedCurrent = chargeCurrentMap[current];
         PMIC.getControl() -> setFastChargeCurrent(convertedCurrent);
@@ -122,7 +126,7 @@ bool Charger::setChargeCurrent(float current) {
     return false;
 }
 
-float Charger::getChargeCurrent() {
+uint16_t Charger::getChargeCurrent() {
     auto currentValue = PMIC.readPMICreg(Register::CHARGER_CHG_CURR_CFG);
     currentValue = (currentValue & REG_CHG_CURR_CFG_CHG_CC_mask);
     ChargeCurrent current = static_cast<ChargeCurrent>(currentValue);
@@ -157,7 +161,10 @@ bool Charger::setChargeVoltage(float voltage) {
     return false;
 }
 
-bool Charger::setEndOfChargeCurrent(float current) {
+bool Charger::setEndOfChargeCurrent(uint16_t current) {
+    #if defined(ARDUINO_NICLA_VISION)
+        return false; // Not supported on Nicla Vision
+    #endif
     if(endOfChargeCurrentMap.find(current) != endOfChargeCurrentMap.end()) {
         EndOfChargeCurrent convertedCurrent = endOfChargeCurrentMap[current];
         PMIC.getControl() -> setEndOfChargeCurrent(convertedCurrent);
@@ -166,7 +173,7 @@ bool Charger::setEndOfChargeCurrent(float current) {
     return false;
 }
 
-float Charger::getEndOfChargeCurrent() {
+uint16_t Charger::getEndOfChargeCurrent() {
     uint8_t currentValue = PMIC.readPMICreg(Register::CHARGER_CHG_EOC_CNFG);
     currentValue = (currentValue & REG_CHG_EOC_CNFG_IEOC_mask);
     EndOfChargeCurrent current = static_cast<EndOfChargeCurrent>(currentValue);
@@ -178,7 +185,7 @@ float Charger::getEndOfChargeCurrent() {
     return -1;
 }
 
-bool Charger::setInputCurrentLimit(float current) {
+bool Charger::setInputCurrentLimit(uint16_t current) {
     if(inputCurrentLimitMap.find(current) != inputCurrentLimitMap.end()) {
         InputCurrentLimit convertedCurrent = inputCurrentLimitMap[current];
         PMIC.getControl() -> setInputCurrentLimit(convertedCurrent);
@@ -187,7 +194,7 @@ bool Charger::setInputCurrentLimit(float current) {
     return false;
 }
 
-float Charger::getInputCurrentLimit() {
+uint16_t Charger::getInputCurrentLimit() {
     uint8_t currentValue = PMIC.readPMICreg(Register::CHARGER_VBUS_INLIM_CNFG);
     currentValue = (currentValue & REG_VBUS_INLIM_CNFG_VBUS_LIN_INLIM_mask);
     InputCurrentLimit current = static_cast<InputCurrentLimit>(currentValue);
