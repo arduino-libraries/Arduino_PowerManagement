@@ -60,6 +60,7 @@ static inline uint8_t writeRegister16Bits(TwoWire *wire, uint8_t address, uint8_
 
 /**
  * @brief Reads a 16-bit register from a specified address using the given I2C wire object.
+ * The data order is LSB(yte) first.
  * 
  * @param wire The I2C wire object to use for communication.
  * @param address The address of the device to read from.
@@ -70,13 +71,11 @@ static inline uint16_t readRegister16Bits(TwoWire *wire, uint8_t address, uint8_
 {
     wire->beginTransmission(address);
     wire->write(reg);
-    wire->endTransmission();
-    wire->requestFrom(address, 2);
-    uint16_t registerValue = (uint16_t)wire->read();
-    registerValue |= (uint16_t)wire->read() << 8;
-    wire->endTransmission();
+    wire->endTransmission(false);
+    wire->requestFrom(address, 2, true);
+    uint16_t registerValue = (uint16_t)wire->read(); // Read LSB
+    registerValue |= (uint16_t)wire->read() << 8; // Read MSB
     return registerValue;
-
 }
 
 /** 
