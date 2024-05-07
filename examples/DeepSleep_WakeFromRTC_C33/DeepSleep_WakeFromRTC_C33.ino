@@ -11,9 +11,10 @@ Board board;
 Charger charger;
 
 void setup() {
+    pinMode(LED_BUILTIN, OUTPUT);
+    digitalWrite(LED_BUILTIN, LOW);
+    
     RTC.begin();
-
-    digitalWrite(LED_BUILTIN, digitalRead(LED_BUILTIN));
     
     manager = PowerManagement();
     manager.begin();
@@ -25,10 +26,12 @@ void setup() {
    
     if (!RTC.isRunning()) {
         RTC.setTime(initial_time);
-        board.sleepFor(0, 0, 1);
     }
 
-    pinMode(LED_BUILTIN, OUTPUT);
+    digitalWrite(LED_BUILTIN, HIGH);
+    board.sleepFor(0, 0, 10);
+
+    // Turn LED on to indicate the board is awake
     digitalWrite(LED_BUILTIN, LOW);
 }
 
