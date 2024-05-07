@@ -57,10 +57,7 @@ Board::Board() {
 }
 
 bool Board::begin() {
-    if (PMIC.begin() != 0){
-        return false;
-    }
-    return true;
+    return PMIC.begin() == 0;
 }
 
 bool Board::isUSBPowered() {

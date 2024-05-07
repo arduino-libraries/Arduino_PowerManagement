@@ -38,15 +38,21 @@ void setup() {
    while (!Serial);
    delay(1000); // Delay to give time to load the Serial Monitor
 
-
-   // Charger charger = Charger();
-   // charger.begin();
+   charger = Charger();
+   charger.begin();
+   auto chargeVoltage = charger.getChargeVoltage();
+   auto endOfChargeCurrent = charger.getEndOfChargeCurrent();
+   // charger.setChargeVoltage(4.2); // Set the charge voltage in V
    // charger.setEndOfChargeCurrent(5); // Set the end of charge current in mA
-   Serial.println("Charger initialized.");
+   Serial.println("* 🔌 Charger initialized.");
+   Serial.println("* ⚡️ Charge voltage: " + String(chargeVoltage) + " V");
+   Serial.println("* ⚡️ End of charge current: " + String(endOfChargeCurrent) + " mA");
 
    BatteryCharacteristics characteristics = BatteryCharacteristics();
    characteristics.capacity = 200; // Battery capacity in mAh. Change this value to match your battery's capacity.
-   characteristics.endOfChargeCurrent = 5; // End of charge current in mA
+   characteristics.ntcResistor = NTCResistor::Resistor10K; // NTC resistor value 10 or 100 kOhm
+   characteristics.endOfChargeCurrent = endOfChargeCurrent; // End of charge current in mA
+   characteristics.chargeVoltage = chargeVoltage; // Charge voltage in V
 
    battery = Battery(characteristics);
    bool batteryInitialized = battery.begin(true);
