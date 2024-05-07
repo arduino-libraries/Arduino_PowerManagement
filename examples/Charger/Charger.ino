@@ -26,58 +26,49 @@ This sketch demonstrates how to write charging parameters,read charger state and
      - Set the baud rate to 115200.
      - You will see the sketch continuously printing battery status and charger state.
 */
-#include "PowerManagement.h"
+#include "Arduino_PowerManagement.h"
 
-PowerManagement manager;
 Battery battery; 
 Charger charger;
+
+// Charge current in mA, a safe value for most batteries is half the battery capacity
+constexpr int CHARGE_CURRENT_MA = 100; // mA
+constexpr int END_OF_CHARGE_CURRENT_MA = 5; // mA
 
 void setup() {
     Serial.begin(115200);
     // Wait for Serial to be ready with a timeout of 5 seconds
     for (auto start = millis(); !Serial && millis() - start < 5000;);
+    delay(1000); // Delay to give time to load the Serial Monitor
 
-    manager = PowerManagement();
-    manager.begin();
-
-    battery = manager.getBattery();
-    charger = manager.getCharger();
-
-    Serial.print("Charging is enabled: ");
+    charger = Charger();
+    if(!charger.begin()){
+        Serial.println("Charger initialization failed.");
+        while (true);
+    }
+    
+    Serial.print("* ✅ Charging is enabled: ");
     Serial.println(charger.isEnabled() ? "true" : "false");
 
-    Serial.print("Charge current: ");
-    Serial.println(charger.getChargeCurrent());
+    auto chargeCurrent = charger.getChargeCurrent();
+    auto chargeVoltage = charger.getChargeVoltage();
+    auto endOfChargeCurrent = charger.getEndOfChargeCurrent();
+    auto inputCurrentLimit = charger.getInputCurrentLimit();
 
-    Serial.print("Charge voltage: ");
-    Serial.println(charger.getChargeVoltage());
+    Serial.println("* ⚡️ Charge current: " + String(chargeCurrent) + " mA");
+    Serial.println("* ⚡️ Charge voltage: " + String(chargeVoltage) + " V");
+    Serial.println("* ⚡️ End of charge current: " + String(endOfChargeCurrent) + " mA");
+    Serial.println("* ⚡️ Input current limit: " + String(inputCurrentLimit) + " mA");
 
-    Serial.print("End of charge current: ");
-    Serial.println(charger.getEndOfChargeCurrent());
+    if (!charger.setChargeCurrent(CHARGE_CURRENT_MA)){
+        Serial.println("Failed to set charge current");
+        Serial.println("Please double check the supported values in the documentation");
+    }
 
-    Serial.print("Input current limit: ");
-    Serial.println(charger.getInputCurrentLimit());
-
-    // The following charger settings are not supported on Nicla Vision
-    #if !defined(ARDUINO_NICLA_VISION)
-        if (!charger.setChargeCurrent(0.2))
-        {
-            Serial.println("Failed to set charge current");
-            Serial.println("Please double check the supported values in the documentation");
-        }
-
-        if (!charger.setChargeVoltage(3.8))
-        {
-            Serial.println("Failed to set charge voltage");
-            Serial.println("Please double check the supported values in the documentation");
-        }
-
-        if (!charger.setEndOfChargeCurrent(0.005))
-        {
-            Serial.println("Failed to set end of charge current");
-            Serial.println("Please double check the supported values in the documentation");
-        }
-    #endif
+    if (!charger.setEndOfChargeCurrent(END_OF_CHARGE_CURRENT_MA)){
+        Serial.println("Failed to set end of charge current");
+        Serial.println("Please double check the supported values in the documentation");
+    }
 }
 
 String getChargerState(){
@@ -121,20 +112,13 @@ String getChargerState(){
 }
 
 void loop(){
-    ChargingState status = charger.getState();
+    static ChargingState status = ChargingState::None;
 
-    Serial.print("* Voltage: ");
-    Serial.println(String(battery.voltage()) + "mV");
+    if (status != charger.getState()) {
+        status = charger.getState();
+        Serial.print("* 👀 Charger state: ");
+        Serial.println(getChargerState());
+    }
 
-    Serial.print("* Current: ");
-    Serial.println(String(battery.current()) + " mA");
-
-    Serial.print("* Percentage: ");
-    Serial.println(String(battery.percentage()) + "%");
-
-    Serial.print("* Charger state: ");
-    Serial.println(getChargerState());
-
-    Serial.println();
     delay(1000);
 }
