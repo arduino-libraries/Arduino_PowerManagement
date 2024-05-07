@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include <Arduino_PF1550.h>
-#include "wireUtils.h"
+#include "WireUtils.h"
 
 
 #if defined(ARDUINO_PORTENTA_C33) 
@@ -199,12 +199,12 @@ class Board {
          */
         void deepSleepUntilWakeupEvent();
 
-        #if defined(ARDUINO_PORTENTA_C33)
         /**
          * @brief Toggle the peripherals' power on Portenta C33 (ADC, RGB LED, Secure Element, Wifi and Bluetooth).
          * @param on True to turn on the power, false to turn it off.
         */
         void setAllPeripheralsPower(bool on);
+
 
         /**
          * @brief Toggles the communication peripherials' power on Portenta C33 (Wifi, Bluetooth and Secure Element)
@@ -212,12 +212,14 @@ class Board {
         */
         void setCommunicationPeripheralsPower(bool on);
         
+        #if defined(ARDUINO_PORTENTA_C33)
         /**
          * @brief Toggles the power of the analog digital converter on Portenta C33.
          * @param on True to turn on the power, false to turn it off.
         */
         void setAnalogDigitalConverterPower(bool on);
 
+        #endif
         /**
          * @brief Set the reference voltage on Portenta C33. This value is used by the ADC to convert analog values to digital values.
          * This can be particularly useful to increase the accuracy of the ADC when working with low voltages
@@ -226,7 +228,8 @@ class Board {
          * @return True if the voltage was set successfully, false otherwise.
         */
         bool setReferenceVoltage(float voltage);
-        #endif
+
+        // TODO add function to shut down the fuel gauge / and hibernate mode
 
     private:
         static uint8_t getRailVoltage(float voltage, int context);

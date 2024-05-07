@@ -248,6 +248,7 @@ void Board::setAllPeripheralsPower(bool on){
     #endif
 }
 
+#if defined(ARDUINO_PORTENTA_C33)
 void Board::setAnalogDigitalConverterPower(bool on){
     if(on){
         PMIC.getControl()->turnLDO1On(Ldo1Mode::Normal);
@@ -259,6 +260,7 @@ void Board::setAnalogDigitalConverterPower(bool on){
         PMIC.getControl()->turnLDO1Off(Ldo1Mode::Standby);
     }
 }
+#endif
 
 void Board::setCommunicationPeripheralsPower(bool on){
     if(on)
