@@ -1,14 +1,15 @@
 #include "Arduino.h"
 #include "Arduino_PowerManagement.h"
 
-PowerManagement manager;
 Board board; 
 
 
 void setup() {
-    manager = PowerManagement();
-    manager.begin();
-    board = manager.getBoard();
+    board = Board();
+    if(!board.begin()){
+        Serial.println("Board initialization failed.");
+        while (true);
+    }
     board.enableWakeupFromRTC();
     board.sleepFor(0, 0, 1);
 
