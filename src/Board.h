@@ -5,11 +5,12 @@
 #include <Arduino_PF1550.h>
 #include "WireUtils.h"
 
+#define ARDUINO_PORTENTA_H7 defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_GENERIC_STM32H747_M4)
 
 #if defined(ARDUINO_PORTENTA_C33) 
     #include "Arduino_Portenta_C33_LowPower.h"
     #include "RTC.h"
-#elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
+#elif defined(ARDUINO_PORTENTA_H7) || defined(ARDUINO_NICLA_VISION)
     #include "Arduino_LowPowerPortentaH7.h"
 #endif 
 
@@ -92,7 +93,7 @@ class Board {
         void setCameraPowerEnabled(bool enabled); 
 
 
-        #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
+        #if defined(ARDUINO_PORTENTA_H7)
 
         /**
          * Enables wakeup from pin GPIO0 on Portenta H7.
@@ -132,7 +133,7 @@ class Board {
         void enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds, void (* const callbackFunction)() = nullptr, RTClock * rtc = &RTC);
         #endif
 
-        #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
+        #if defined(ARDUINO_PORTENTA_H7)
         void enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds);
         #endif
 
