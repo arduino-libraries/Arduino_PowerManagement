@@ -269,7 +269,7 @@ class Battery {
 
         #if defined(ARDUINO_PORTENTA_C33)
             TwoWire *wire = &Wire3;
-        #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
+        #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_GENERIC_STM32H747_M4)
             TwoWire *wire = &Wire1;
         #elif defined(ARDUINO_NICLA_VISION)
             TwoWire *wire = &Wire1;
