@@ -128,16 +128,10 @@ void Board::enableSleepWhenIdle(){
 #endif
 
 
-void Board::enableWakeupFromRTC(){
-    #if defined(ARDUINO_PORTENTA_C33)
-        lowPower->enableWakeupFromRTC();
-    #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
-       standbyType |= StandbyType::untilTimeElapsed;
-    #endif
-}
-
 #if defined(ARDUINO_PORTENTA_C33)
-bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)(), RTClock * rtc){
+void Board::enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds, void (* const callbackFunction)() = nullptr, RTClock * rtc = &RTC){
+    lowPower->enableWakeupFromRTC();
+
     RTCTime currentTime;
     if (!rtc -> getTime(currentTime)) {
         return false; 
@@ -162,30 +156,19 @@ bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callback
         return false; // Failed to set the alarm
     }
     delay(1);
-    return true;   
-}
-
-bool Board::sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)()){
-    return this -> sleepFor(hours, minutes, seconds, callbackFunction, &RTC);
+    return true; 
 }
 #endif
 
-bool Board::sleepFor(int hours, int minutes, int seconds){
-    #if defined(ARDUINO_PORTENTA_C33)
-        return this -> sleepFor(hours, minutes, seconds, NULL, &RTC);
-    #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
-        this -> rtcWakeupDelay = RTCWakeupDelay(hours, minutes, seconds);
-        return true;
-    #endif
-}
-
-#if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
-bool Board::sleepFor(RTCWakeupDelay delay){
-    this -> rtcWakeupDelay = delay;
-    return true;
+#if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
+void Board::enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds){
+    standbyType |= StandbyType::untilTimeElapsed;
+    wakeupDelayHours = hours;
+    wakeupDelayMinutes = minutes;
+    wakeupDelaySeconds = seconds;
 }
 #endif
-    
+
 #if defined(ARDUINO_PORTENTA_C33)
 void Board::sleepUntilWakeupEvent(){
     lowPower -> sleep();
@@ -196,6 +179,7 @@ void Board::standByUntilWakeupEvent(){
     #if defined(ARDUINO_PORTENTA_C33)
         lowPower -> deepSleep();
     #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
+        RTCWakeupDelay rtcWakeupDelay = RTCWakeupDelay(wakeupDelayHours, wakeupDelayMinutes, wakeupDelaySeconds);
         if(standbyType == StandbyType::untilEither)
             LowPower.standbyM7(LowPowerStandbyType::untilPinActivity | LowPowerStandbyType::untilTimeElapsed, rtcWakeupDelay);
         else if (standbyType == StandbyType::untilPinActivity)
@@ -214,6 +198,7 @@ void Board::setAllPeripheralsPower(bool on){
         // to communicate with the MCU.
         Wire3.end();
     #else if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
+    // TODO Can we extract this into functions?
     if(on){
         PMIC.getControl() -> turnLDO2On(Ldo2Mode::Normal);
         PMIC.getControl() -> turnLDO2On(Ldo2Mode::Sleep);
@@ -248,8 +233,9 @@ void Board::setAllPeripheralsPower(bool on){
     #endif
 }
 
-#if defined(ARDUINO_PORTENTA_C33)
 void Board::setAnalogDigitalConverterPower(bool on){
+// TODO Not available on the Portenta H7?
+#if defined(ARDUINO_PORTENTA_C33)
     if(on){
         PMIC.getControl()->turnLDO1On(Ldo1Mode::Normal);
         PMIC.getControl()->turnLDO1On(Ldo1Mode::Sleep);
@@ -259,8 +245,8 @@ void Board::setAnalogDigitalConverterPower(bool on){
         PMIC.getControl()->turnLDO1Off(Ldo1Mode::Sleep);
         PMIC.getControl()->turnLDO1Off(Ldo1Mode::Standby);
     }
-}
 #endif
+}
 
 void Board::setCommunicationPeripheralsPower(bool on){
     // TODO: Why do we only use the normal mode here?
