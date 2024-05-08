@@ -24,7 +24,7 @@ void setup() {
     // On Portenta C33, you can specify which pin to use to wake up the device from sleep mode
     // Please read the documentation to understand which pins can be used to wake up the device.
     board.enableWakeupFromPin(WAKE_UP_PIN, RISING);
-    #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
+    #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_GENERIC_STM32H747_M4) || defined(ARDUINO_NICLA_VISION)
     // On Portenta only pin GPIO0 can be used to wake up the device from sleep mode
     board.enableWakeupFromPin();
     #endif
