@@ -9,7 +9,7 @@ This library streamlines the interaction with complex hardware components such a
 ## ✅ Supported Boards
 
 - Arduino Portenta H7
-- Arduino Nicla Vision
+- Arduino Nicla Vision (Low power features not supported yet)
 - Arduino Portenta C33
 
 ## Core Components of the Library
