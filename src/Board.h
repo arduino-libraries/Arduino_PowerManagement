@@ -13,16 +13,15 @@
     #include "Arduino_LowPowerPortentaH7.h"
 #endif 
 
-#define CONTEXT_LDO2 2
-#define CONTEXT_SW1 3 
-#define CONTEXT_SW2 4 
+#define CONTEXT_LDO2 2 // LDO regulator: 1.8 V to 3.3 V, 400 mA
+#define CONTEXT_SW1 3 // Buck converter: 1.0 A; 0.6 V to 1.3875 V 
+#define CONTEXT_SW2 4 // Buck converter: 1.0 A; 0.6 V to 1.3875 V
 
 enum class StandbyType : uint8_t {
     none = 0,
     untilPinActivity = 1,
     untilTimeElapsed = 2,
     untilEither = 3
-
 };
 
 inline constexpr StandbyType operator|(StandbyType x, StandbyType y){
@@ -32,8 +31,6 @@ inline constexpr StandbyType operator|(StandbyType x, StandbyType y){
 inline constexpr StandbyType operator|=(StandbyType& x, StandbyType y){
     return x = x | y;
 }
-
-constexpr int EMPTY_REGISTER = 0xFF;
 
 /**
  * @brief Represents a board with power management capabilities.
@@ -185,7 +182,7 @@ class Board {
          * A wakeup event can be an interrupt on a pin or the RTC, 
          * depending on what you set with enableWakeupFromPin() and enableWakeupFromRTC().
          */
-        void sleepUntilWakeupEvent();
+        void standByUntilWakeupEvent();
         #endif
 
         // TODO Same as above
@@ -197,14 +194,13 @@ class Board {
          * A wakeup event can be an interrupt on a pin or the RTC, depending on what 
          * you set with enableWakeupFromPin() and enableWakeupFromRTC().
          */
-        void deepSleepUntilWakeupEvent();
+        void standByUntilWakeupEvent();
 
         /**
          * @brief Toggle the peripherals' power on Portenta C33 (ADC, RGB LED, Secure Element, Wifi and Bluetooth).
          * @param on True to turn on the power, false to turn it off.
         */
         void setAllPeripheralsPower(bool on);
-
 
         /**
          * @brief Toggles the communication peripherials' power on Portenta C33 (Wifi, Bluetooth and Secure Element)
@@ -221,7 +217,7 @@ class Board {
 
         #endif
         /**
-         * @brief Set the reference voltage on Portenta C33. This value is used by the ADC to convert analog values to digital values.
+         * @brief Set the reference voltage. This value is used by the ADC to convert analog values to digital values.
          * This can be particularly useful to increase the accuracy of the ADC when working with low voltages
          * @param voltage Reference voltage value in volts. It can be anything between 1.80V and 3.30V in steps of 0.10V. 
          * Any value outside this range or with different steps will not be accepted by the library.
@@ -232,7 +228,10 @@ class Board {
         // TODO add function to shut down the fuel gauge / and hibernate mode
 
     private:
-        static uint8_t getRailVoltage(float voltage, int context);
+        /**
+        * Convert a numeric voltage value to the corresponding enum value for the PMIC library.
+        */
+        static uint8_t getRailVoltageEnum(float voltage, int context);
 
         #if defined(ARDUINO_PORTENTA_C33)
             LowPower * lowPower;

@@ -37,6 +37,6 @@ void setup() {
 
 void loop(){
     //board.setAllPeripheralsPower(false);
-    board.deepSleepUntilWakeupEvent();
+    board.standByUntilWakeupEvent();
 }
 
