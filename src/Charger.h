@@ -9,75 +9,64 @@ typedef IEndOfCharge EndOfChargeCurrent;
 typedef IInputCurrentLimit InputCurrentLimit;
 
 /**
- * Enum representing different states of charging. 
- * @see #None
- * @see #PreCharge
- * @see #FastChargeConstantCurrent
- * @see #FastChargeConstantVoltage
- * @see #EndOfCharge
- * @see #Done
- * @see #TimerFaultError
- * @see #ThermistorSuspendError
- * @see #ChargerDisabled
- * @see #BatteryOvervoltageError
- * @see #ChargerBypassed
+ * Enum representing different states of charging.
  */
 
 enum class ChargingState {
     /**
      * Provided by the registers, not used in this API.
      */
-    None = -1,
+    none = -1,
 
     /**
      * First stage of the charging process, prepares battery for the charging process.
      */
-    PreCharge = 0,
+    preCharge = 0,
 
     /**
      * Second phase of the charging process where the battery is charging in constant current mode until it reaches the voltage where the it's considered fully charged. (4.2V)
      */
-    FastChargeConstantCurrent = 1,
+    fastChargeConstantCurrent = 1,
 
     /**
      * Third phase of the charging process where the battery is kept at the fully charged voltage and current is slowly decreased to the end of charge current.
      */
-    FastChargeConstantVoltage = 2,
+    fastChargeConstantVoltage = 2,
 
     /**
      * If the battery is still connected, the charger will ensure it's kept at 4.2V by topping up the voltage to avoid self discharge.
      */
-    EndOfCharge = 3,
+    endOfCharge = 3,
 
     /** 
      * Battery is fully charged
      */
-    Done = 4,
+    done = 4,
     
     /** 
      * The timer that is monitoring the charge status has encountered an error.
      */
-    TimerFaultError = 6,
+    timerFaultError = 6,
     
     /** 
      * Charging was suspended due to overheating
      */
-    ThermistorSuspendError = 7,
+    thermistorSuspendError = 7,
     
     /** 
      * Charger is disabled
      */
-    ChargerDisabled = 8,
+    chargerDisabled = 8,
     
     /** 
      *  Charging was suspended due to an overvoltage fault
      */
-    BatteryOvervoltageError = 9,
+    batteryOvervoltageError = 9,
     
     /** 
      * The charger is bypassed completely and the USB voltage is powering the board
      */
-    ChargerBypassed = 12
+    chargerBypassed = 12
 };
 
 /**
@@ -131,9 +120,15 @@ public:
 
     /**
      * @brief Set the end-of-charge current.
-     * The default end-of-charge current is set to 0.05A.
+     * The charger IC determines when to terminate the charge cycle based on the current going into the battery 
+     * dropping below the given threshold during the constant voltage phase. At this point, the battery 
+     * is considered fully charged and charging is completed. If charge termination is disabled, 
+     * the charge current will naturally decay to 0mA, but this is rarely done in practice. 
+     * This is because the amount of charge going into the battery exponentially decreases during CV charging, 
+     * and it would take a significantly longer time to recharge the battery with a very little increase in capacity.
      * @param current End-of-charge current in milli amperes (mA).
-    * Supported values: 5, 10, 20, 30, 50
+     * The default end-of-charge current is set to 5 mA.
+     * Supported values: 5, 10, 20, 30, 50
      * @return True if successful, false if an invalid value was provided or if the PMIC communication failed.
      */
     bool setEndOfChargeCurrent(uint16_t current);
@@ -164,20 +159,30 @@ public:
      * @brief Get the input current limit. It is a safeguard to prevent overcurrent when charging
      * respectively to the maximum current the power source can provide.
      * 
-     * This function returns the current limit of the input power source.
-     * 
-     * @return The input current limit in amps.
+     * @return The input current limit in milli amperes (mA).
      */
     uint16_t getInputCurrentLimit();
 
     /**
      * @brief Get the current charging status.
      * @return Charging status enum value (ChargingState).
+     * The possible states are:
+     * - none: Provided by the registers, not used in this API.
+     * - preCharge: First stage of the charging process, prepares battery for the charging process.
+     * - fastChargeConstantCurrent: Second phase of the charging process where the battery is charging in constant current mode until it reaches the voltage where the it's considered fully charged. (4.2V)
+     * - fastChargeConstantVoltage: Third phase of the charging process where the battery is kept at the fully charged voltage and current is slowly decreased to the end of charge current.
+     * - endOfCharge: If the battery is still connected, the charger will ensure it's kept at 4.2V by topping up the voltage to avoid self discharge.
+     * - done: Battery is fully charged
+     * - timerFaultError: The timer that is monitoring the charge status has encountered an error.
+     * - thermistorSuspendError: Charging was suspended due to overheating
+     * - chargerDisabled: Charger is disabled
+     * - batteryOvervoltageError: Charging was suspended due to an overvoltage fault
+     * - chargerBypassed: The charger is bypassed completely and the USB voltage is powering the board
      */
     ChargingState getState();
 
     /**
-     * @brief Checks if the charger is enabled.
+     * @brief Checks if the charger and thus charging is enabled.
      * By default, the charger is enabled.
      * @return true if the charger is enabled, false otherwise.
      */
