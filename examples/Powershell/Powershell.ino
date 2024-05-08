@@ -115,14 +115,14 @@ void setRailVoltage(std::vector<String> args){
     #endif
 
   } else if (rail == "H7_external"){
-    #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
+    #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_GENERIC_STM32H747_M4)
       board.setExternalVoltage(voltage);
     #else
       Serial.println("Current board is not an arduino portenta h7");
     #endif
 
   } else if (rail == "nicla_external"){
-    #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
+    #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_GENERIC_STM32H747_M4)
       board.setExternalVoltage(voltage);
     #else
       Serial.println("Current board is not an arduino nicla vision");
@@ -150,7 +150,7 @@ void toggleRail(std::vector<String> args){
     #endif
 
   } else if (rail == "H7_external"){
-    #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
+    #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_GENERIC_STM32H747_M4)
       board.setExternalPowerEnabled(on);
     #else
       Serial.println("Current board is not an arduino portenta h7");
