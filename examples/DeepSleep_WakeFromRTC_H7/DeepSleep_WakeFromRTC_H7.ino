@@ -16,7 +16,7 @@ void setup() {
     pinMode(LEDB, OUTPUT);
     digitalWrite(LEDB, LOW);
     board.setAllPeripheralsPower(false);
-    board.deepSleepUntilWakeupEvent();
+    board.standByUntilWakeupEvent();
 }
 
 void loop() {

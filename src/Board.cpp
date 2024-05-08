@@ -1,6 +1,8 @@
 #include "Board.h"
 #include <map>
 
+constexpr int UNKNOWN_VALUE = 0xFF;
+
 std::map<float, Ldo2Voltage> ldo2VoltageMap = {
     {1.80f, Ldo2Voltage::V_1_80},
     {1.90f, Ldo2Voltage::V_1_90},
@@ -43,20 +45,20 @@ std::map<float, Sw2Voltage> sw2VoltageMap = {
 };
 
 Board::Board() {
- #if defined(ARDUINO_PORTENTA_C33)
-        this -> lowPower = new LowPower();
-    #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_NICLA_VISION)
-        if (CM7_CPUID == HAL_GetCurrentCPUID())
-        {
+    #if defined(ARDUINO_PORTENTA_C33)
+        this->lowPower = new LowPower();
+    #endif
+}
+
+bool Board::begin() {
+    #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_NICLA_VISION)
+        if (CM7_CPUID == HAL_GetCurrentCPUID()){
             if (LowPowerReturnCode::success != LowPower.checkOptionBytes()){
                 LowPower.prepareOptionBytes();
             }
             bootM4();
         }
     #endif 
-}
-
-bool Board::begin() {
     return PMIC.begin() == 0;
 }
 
@@ -80,19 +82,19 @@ void Board::setExternalPowerEnabled(bool on) {
 
 bool Board::setExternalVoltage(float voltage) {
         this -> setExternalPowerEnabled(false);
-        uint8_t voltageRegisterValue = getRailVoltage(voltage, 4);
+        uint8_t targetVoltage = getRailVoltageEnum(voltage, CONTEXT_SW2);
 
-        if (voltageRegisterValue == EMPTY_REGISTER){                    
+        if (targetVoltage == UNKNOWN_VALUE){                    
             return false;
         }
 
-        PMIC.writePMICreg(Register::PMIC_SW2_VOLT, voltageRegisterValue);
-        if(PMIC.readPMICreg(Register::PMIC_SW2_VOLT) == voltageRegisterValue){
+        PMIC.writePMICreg(Register::PMIC_SW2_VOLT, targetVoltage);
+        if(PMIC.readPMICreg(Register::PMIC_SW2_VOLT) == targetVoltage){
             this -> setExternalPowerEnabled(true);
             return true;
-        } else {
-            return false;
         }
+ 
+        return false;
 }
 
 void Board::setCameraPowerEnabled(bool on) {
@@ -106,8 +108,6 @@ void Board::setCameraPowerEnabled(bool on) {
             PMIC.getControl()->turnLDO2Off(Ldo2Mode::Normal);
             PMIC.getControl()->turnLDO3Off(Ldo3Mode::Normal);
         }
-    #else 
-        #warning "This feature is currently only supported on the Nicla Vision Board"
     #endif
 }
 
@@ -192,7 +192,7 @@ void Board::sleepUntilWakeupEvent(){
 }
 #endif
 
-void Board::deepSleepUntilWakeupEvent(){
+void Board::standByUntilWakeupEvent(){
     #if defined(ARDUINO_PORTENTA_C33)
         lowPower -> deepSleep();
     #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
@@ -263,6 +263,7 @@ void Board::setAnalogDigitalConverterPower(bool on){
 #endif
 
 void Board::setCommunicationPeripheralsPower(bool on){
+    // TODO: Why do we only use the normal mode here?
     if(on)
         PMIC.getControl()->turnSw1On(Sw1Mode::Normal);
     else
@@ -271,11 +272,11 @@ void Board::setCommunicationPeripheralsPower(bool on){
 
 
 bool Board::setReferenceVoltage(float voltage) {
-    uint8_t voltageRegisterValue = getRailVoltage(voltage, CONTEXT_LDO2);
+    uint8_t voltageRegisterValue = getRailVoltageEnum(voltage, CONTEXT_LDO2);
 
     // If voltageRegisterValue is not empty, write it to the PMIC register 
     // and return the result of the comparison directly.
-    if (voltageRegisterValue != EMPTY_REGISTER) {
+    if (voltageRegisterValue != UNKNOWN_VALUE) {
         PMIC.writePMICreg(Register::PMIC_LDO2_VOLT, voltageRegisterValue);
         return (PMIC.readPMICreg(Register::PMIC_LDO2_VOLT) == voltageRegisterValue);
     }
@@ -283,7 +284,7 @@ bool Board::setReferenceVoltage(float voltage) {
     return false;
 }
 
- uint8_t Board::getRailVoltage(float voltage, int context) {
+ uint8_t Board::getRailVoltageEnum(float voltage, int context) {
     switch (context) {
         case CONTEXT_LDO2:
             if (ldo2VoltageMap.find(voltage) != ldo2VoltageMap.end()) {
@@ -304,10 +305,9 @@ bool Board::setReferenceVoltage(float voltage) {
             break;
 
         default:
-            return EMPTY_REGISTER;
-            break;
+            return UNKNOWN_VALUE;
     }
     
 
-    return EMPTY_REGISTER;
+    return UNKNOWN_VALUE;
 }

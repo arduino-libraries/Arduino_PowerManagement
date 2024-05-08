@@ -45,7 +45,7 @@ void loop() {
         sleepFlag = false;
 
         //board.setAllPeripheralsPower(false);
-        board.deepSleepUntilWakeupEvent();
+        board.standByUntilWakeupEvent();
     } else {
 
         digitalWrite(LEDB, HIGH);
