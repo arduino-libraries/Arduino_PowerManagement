@@ -100,7 +100,6 @@ class Board {
          */
         void enableWakeupFromPin();
 
-
         /**
          * Enables sleep mode when the board is idle.
          */
@@ -117,62 +116,29 @@ class Board {
         #endif
 
         
-        /**
-         * Enables wake-up of the device from the RTC.
-         */
-        void enableWakeupFromRTC();
-
         #if defined(ARDUINO_PORTENTA_C33)
-        // TODO Do I needs to call enableWakeupFromRTC() before calling this function?
         /**
-         * @brief Put the device in sleep mode for a specified amount of time. Restarts after waking up.
+         * @brief Enables wake-up of the device from the RTC.
          * This function allows to use a custom RTC instance to put the device in sleep mode.
          * @param hours The number of hours to sleep.
          * @param minutes The number of minutes to sleep.
          * @param seconds The number of seconds to sleep.
          * @param callbackFunction The function to call when the device wakes up.
+         * If no callback function is provided, the device will wake up without calling any function.
          * @param rtc The RTC instance to use for the sleep function.
+         * If no RTC instance is provided, the default RTC instance is used.
          * @return True if successful, false otherwise.
         */
-        bool sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)(), RTClock * rtc);
-
-        /**
-         * @brief Put the device in sleep mode for a specified amount of time.
-         * This function uses the default RTC instance to put the device in sleep mode.
-         * @param hours The number of hours to sleep.
-         * @param minutes The number of minutes to sleep.
-         * @param seconds The number of seconds to sleep.
-         * @param callbackFunction The function to call when the device wakes up.
-         * @return True if successful, false otherwise.
-        */
-        bool sleepFor(int hours, int minutes, int seconds, void (* const callbackFunction)());
+        void enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds, void (* const callbackFunction)() = nullptr, RTClock * rtc = &RTC);
         #endif
 
-        /** 
-         * @brief Put the device in sleep mode for a specified amount of time. It restarts after waking up.
-         * This function uses the default RTC instance to put the device in sleep mode and 
-         * does not call a function when the device wakes up.
-         * @param hours The number of hours to sleep.
-         * @param minutes The number of minutes to sleep.
-         * @param seconds The number of seconds to sleep.
-         * @return True if successful, false otherwise.
-        */
-        bool sleepFor(int hours, int minutes, int seconds);
-
-        #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)        
-        
-        /**
-         * Sleeps the board for a specified delay.
-         * 
-         * @param delay The delay as an RTCWakeupDelay object.
-         * @return True if the board successfully sleeps, false otherwise.
-         */
-        bool sleepFor(RTCWakeupDelay delay);
+        #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
+        void enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds);
         #endif
-   
+
 
         #if defined(ARDUINO_PORTENTA_C33)
-        // TODO How to use this with the RTC? enableWakeupFromRTC(), then sleepFor, then this?
+        // TODO Restarts after waking up.?
         /**
          * Put the device into sleep mode until a wakeup event occurs
          * This sleep mode is ideal for applications requiring periodic wake-ups or 
@@ -182,13 +148,13 @@ class Board {
          * A wakeup event can be an interrupt on a pin or the RTC, 
          * depending on what you set with enableWakeupFromPin() and enableWakeupFromRTC().
          */
-        void standByUntilWakeupEvent();
+        void sleepUntilWakeupEvent();
         #endif
 
-        // TODO Same as above
+        // TODO measurements are board specific. Need adjustments for Portenta H7.
         /**
-         * Put the device into deep sleep mode until a wakeup event occurs.
-         * For scenarios demanding drastic power conservation, the Deep Sleep Mode significantly reduces 
+         * Put the device into standby mode until a wakeup event occurs.
+         * For scenarios demanding drastic power conservation, the standby Mode significantly reduces 
          * the board's power usage to range between 90uA and 11mA depending on the state of the peripherals. 
          * This mode restarts the board on wake-up, effectively running the setup() function again.
          * A wakeup event can be an interrupt on a pin or the RTC, depending on what 
@@ -208,14 +174,13 @@ class Board {
         */
         void setCommunicationPeripheralsPower(bool on);
         
-        #if defined(ARDUINO_PORTENTA_C33)
         /**
          * @brief Toggles the power of the analog digital converter on Portenta C33.
+         * This is not available on the Portenta H7.
          * @param on True to turn on the power, false to turn it off.
         */
         void setAnalogDigitalConverterPower(bool on);
 
-        #endif
         /**
          * @brief Set the reference voltage. This value is used by the ADC to convert analog values to digital values.
          * This can be particularly useful to increase the accuracy of the ADC when working with low voltages
@@ -235,10 +200,12 @@ class Board {
 
         #if defined(ARDUINO_PORTENTA_C33)
             LowPower * lowPower;
-        #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) || defined(ARDUINO_NICLA_VISION)
-            StandbyType standbyType = StandbyType::none;
-            RTCWakeupDelay rtcWakeupDelay = RTCWakeupDelay(0, 0, 0);
         #endif         
+        
+        StandbyType standbyType = StandbyType::none;
+        uint32_t wakeupDelayHours;
+        uint32_t wakeupDelayMinutes;
+        uint32_t wakeupDelaySeconds;
 };
 
 #endif
