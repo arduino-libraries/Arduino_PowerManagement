@@ -1,9 +1,9 @@
 /*
-Charger Demo
+  Charger Demo
 
-This sketch demonstrates how to write charging parameters,read charger state and monitor charging using the PowerManagement library:
-* In the setup() function, it sets the charging parameters
-* In the loop() functionit prints the battery's voltage, current, percentage and the charger's state allowing you to monitor charging. 
+  This sketch demonstrates how to write charging parameters,read charger state and monitor charging using the PowerManagement library:
+  * In the setup() function, it sets the charging parameters
+  * In the loop() functionit prints the battery's voltage, current, percentage and the charger's state allowing you to monitor charging. 
 
   Requirements:
   - Arduino Portenta C33, Arduino Portenta H7, Arduino Nicla Vision
@@ -11,20 +11,18 @@ This sketch demonstrates how to write charging parameters,read charger state and
   - PowerManagement library (installable from the Arduino Library Manager)
 
   Usage:
-  1. Install the required library:
-     - Open the Arduino IDE.
-     - Go to "Sketch" -> "Include Library" -> "Manage Libraries..."
-     - Search for "PowerManagement" and install it.
 
+  1. Connect the Battery:
+  
   2. Upload the Sketch:
-     - Open the provided sketch in the Arduino IDE.
-     - Select your board type and port from the "Tools" menu.
-     - Click the "Upload" button to upload the sketch to your board.
+    - Open the provided sketch in the Arduino IDE.
+    - Select your board type and port from the "Tools" menu.
+    - Click the "Upload" button to upload the sketch to your board.
 
   3. Monitor Serial Output:
-     - Open the Serial Monitor in the Arduino IDE.
-     - Set the baud rate to 115200.
-     - You will see the sketch continuously printing battery status and charger state.
+    - Open the Serial Monitor in the Arduino IDE.
+    - Set the baud rate to 115200.
+    - You will see the sketch continuously printing charger state information.
 */
 #include "Arduino_PowerManagement.h"
 
@@ -75,34 +73,34 @@ String getChargerState(){
     ChargingState status = charger.getState();
 
     switch (status) {
-        case ChargingState::PreCharge:
+        case ChargingState::preCharge:
             return "precharge";
             break;
-        case ChargingState::FastChargeConstantCurrent:
+        case ChargingState::fastChargeConstantCurrent:
             return "fast-charge constant current";
             break;
-        case ChargingState::FastChargeConstantVoltage:
+        case ChargingState::fastChargeConstantVoltage:
             return "fast-charge constant voltage";
             break;
-        case ChargingState::EndOfCharge:
+        case ChargingState::endOfCharge:
             return "end-of-charge";
             break;
-        case ChargingState::Done:
+        case ChargingState::done:
             return "done";
             break;
-        case ChargingState::TimerFaultError:
+        case ChargingState::timerFaultError:
             return "timer fault";
             break;
-        case ChargingState::ThermistorSuspendError:
+        case ChargingState::thermistorSuspendError:
             return "thermistor suspend";
             break;
-        case ChargingState::ChargerDisabled:
+        case ChargingState::chargerDisabled:
             return "off";
             break;
-        case ChargingState::BatteryOvervoltageError:
+        case ChargingState::batteryOvervoltageError:
             return "overvoltage condition";
             break;
-        case ChargingState::ChargerBypassed:
+        case ChargingState::chargerBypassed:
             return "disabled";
             break;
         default:
@@ -112,7 +110,7 @@ String getChargerState(){
 }
 
 void loop(){
-    static ChargingState status = ChargingState::None;
+    static ChargingState status = ChargingState::none;
 
     if (status != charger.getState()) {
         status = charger.getState();
