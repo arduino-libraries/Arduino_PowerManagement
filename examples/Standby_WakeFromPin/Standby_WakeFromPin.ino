@@ -29,7 +29,8 @@ void setup() {
     board.enableWakeupFromPin();
     #endif
 
-    // TODO why is this needed? Why true?
+    // TODO why is this needed? Why true? -> Peripherals still off after reset?
+    // only necessary for C33
     board.setAllPeripheralsPower(true);
     // TODO why is this needed?
     charger.setEnabled(false);

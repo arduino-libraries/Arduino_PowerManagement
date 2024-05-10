@@ -12,7 +12,7 @@
 
   Usage:
 
-  1. Connect the Battery:
+  1. Connect a Battery to the board
   
   2. Upload the Sketch:
     - Open the provided sketch in the Arduino IDE.
