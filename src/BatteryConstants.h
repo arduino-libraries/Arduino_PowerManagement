@@ -104,7 +104,8 @@
 #define E_DET_BIT 8 // FStat Register: Empty Detection. This bit is set to 1 when the IC detects that the cell empty point has been reached. This bit is reset to 0 when the cell voltage rises above the recovery threshold.
 #define FULL_DET_BIT 5 // Status2 Register: Full Detection.
 #define FQ_BIT 7 // FStat Register: Full Qualified. This bit is set when all charge termination conditions have been met. See the End-of-Charge Detection section for details.
-#define EN_HIBERNATION_BIT 15
+#define EN_HIBERNATION_BIT 15 // HibCfg Register: Enable Hibernate Mode. When set to 1, the IC will enter hibernate mode if conditions are met. When set to 0, the IC always remains in the active mode of operation.
+#define SHDN_BIT 7 // Config Register: Write this bit to logic 1 to force a shutdown of the device after timeout of the ShdnTimer register
 #define HIB_BIT 1 // Hibernate Status. This bit is set to a 1 when the device is in hibernate mode or 0 when the device is in active mode. Hib is set to 0 at power-up.
 #define R100_BIT 13 // The R100 bit needs to be set when using a 100k NTC resistor
 #define VCHG_BIT 10 // Set to 1 for charge voltage higher than 4.25V (4.3V–4.4V). Set VChg to 0 for 4.2V charge voltage.

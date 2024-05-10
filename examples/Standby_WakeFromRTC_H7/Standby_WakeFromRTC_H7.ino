@@ -33,17 +33,20 @@
 */
 
 #include "Arduino_PowerManagement.h"
+#include "MAX1726Driver.h"
 
-Board board; 
+Board board;
+Charger charger;
+MAX1726Driver fuelgauge(&Wire1);
 
 void setup() {
-    board = Board();
-
     // When uploading this sketch to the M4 core, it just goes to standby mode.
     #if defined(ARDUINO_GENERIC_STM32H747_M4)
       board.standByUntilWakeupEvent();
       return;
     #endif
+    
+    charger.begin();
 
     // Turn off the built-in LED
     pinMode(LED_BUILTIN, OUTPUT);
@@ -64,14 +67,17 @@ void setup() {
         }
     }
 
+    charger.setEnabled(false); // -> Please measure if it makes a difference
+    delay(10000); // -> Give time to take the measurement
 
-    board.enableWakeupFromRTC(0, 0, 10); // Sleep for 10 seconds
-
+    // Takes 45s to get into shutdown mode
+    fuelgauge.setOperationMode(FuelGaugeOperationMode::shutdown);
+    
     // The LED should go off when the board goes to sleep
-    board.setAllPeripheralsPower(false);
+    board.setAllPeripheralsPower(false);    
+
+    board.enableWakeupFromRTC(0, 0, 60); // Go to standby for 60 seconds
     board.standByUntilWakeupEvent();
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-} 
+void loop() {} 
