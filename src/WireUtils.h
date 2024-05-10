@@ -101,6 +101,7 @@ static inline uint8_t getBit(TwoWire *wire, uint8_t address, uint8_t reg, uint8_
  * @param indexFrom The index of the first bit to replace starting from LSB (0)
  * @param indexTo The index of the last bit (included) to replace starting from LSB (0)
  */
+// TODO switch order of parameters to conform with bitWrite()
 static inline void replaceRegisterBits(TwoWire *wire, uint8_t address, uint8_t reg, uint16_t data, uint16_t indexFrom, uint8_t indexTo) {
     uint16_t registerValue = readRegister16Bits(wire, address, reg);
 
@@ -126,6 +127,7 @@ static inline void replaceRegisterBits(TwoWire *wire, uint8_t address, uint8_t r
  * @param data The new data (1 bit) to write to the register.
  * @param index The index of the bit to replace.
  */
+// TODO switch order of parameters to conform with bitWrite()
 static inline void replaceRegisterBit(TwoWire *wire, uint8_t address, uint8_t reg, uint16_t data, uint16_t index) {
     replaceRegisterBits(wire, address, reg, data, index, index);
 }

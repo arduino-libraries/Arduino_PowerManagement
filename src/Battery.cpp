@@ -11,6 +11,7 @@ Battery::Battery(BatteryCharacteristics batteryCharacteristics) : characteristic
 }
 
 bool Battery::begin(bool enforceReload) {
+  // PMIC already initializes the I2C bus, so no need to call Wire.begin() for the fuel gauge
   if(PMIC.begin() != 0){
     return false;
   }
@@ -72,6 +73,7 @@ void Battery::configureBatteryCharacteristics(){
 
 void Battery::releaseFromHibernation(){
   // See section "Soft-Wakeup" in user manual https://www.analog.com/media/en/technical-documentation/user-guides/max1726x-modelgauge-m5-ez-user-guide.pdf
+  // TODO to preserve the hiberation config, probably better to only set bit 15 to 0
   writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG, 0x0);      // Exit Hibernate Mode
   writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, SOFT_WAKEUP_REG, 0x90); // Wakes up the fuel gauge from hibernate mode to reduce the response time of the IC to configuration changes  
   writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, SOFT_WAKEUP_REG, 0x0);  // This command must be manually cleared (0x0000) afterward to keep proper fuel gauge timing
