@@ -38,7 +38,6 @@ void setup() {
    while (!Serial);
    delay(1000); // Delay to give time to load the Serial Monitor
 
-   charger = Charger();
    charger.begin();
    auto chargeVoltage = charger.getChargeVoltage();
    auto endOfChargeCurrent = charger.getEndOfChargeCurrent();
