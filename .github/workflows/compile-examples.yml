@@ -24,9 +24,7 @@ env:
   UNIVERSAL_SKETCH_PATHS: |
         - examples/Battery
         - examples/Charger
-        - examples/DeepSleep_WakeFromPin
-        - examples/DeepSleep_WakeFromRTC
-        - examples/Powershell
+        - examples/Standby_WakeFromPin
   SKETCHES_REPORTS_PATH: sketches-reports
   SKETCHES_REPORTS_ARTIFACT_NAME: sketches-reports
 
@@ -46,6 +44,13 @@ jobs:
           - fqbn: arduino:renesas_portenta:portenta_c33
             platforms: |
               - name: arduino:renesas_portenta
+            artifact-name-suffix: arduino-renesas_portenta-portenta_c33
+            additional-sketch-paths: examples/ChargStandby_WakeFromRTC_C33er
+          - fqbn: arduino:mbed_portenta:envie_m7
+            platforms: |
+              - name: arduino:mbed_portenta
+            artifact-name-suffix: arduino-mbed_portenta-envie_m7
+            additional-sketch-paths: examples/Standby_WakeFromRTC_H7
 
 
     steps:
@@ -62,8 +67,8 @@ jobs:
             # Install the library from the local path.
             - source-path: ./
             # - name: Arduino_PF1550
-            - source-url: https://github.com/arduino-libraries/Arduino_PF1550_old.git
-            - source-url: https://github.com/arduino-libraries/Arduino_Portenta_C33_LowPower.git
+            - source-url: https://github.com/arduino-libraries/Arduino_PF1550.git
+            - source-url: https://github.com/arduino-libraries/Arduino_LowPowerPortentaC33.git
           sketch-paths: |
             ${{ env.UNIVERSAL_SKETCH_PATHS }}
             ${{ matrix.board.additional-sketch-paths }}
