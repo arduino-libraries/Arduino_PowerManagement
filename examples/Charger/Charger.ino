@@ -39,7 +39,6 @@ void setup() {
     for (auto start = millis(); !Serial && millis() - start < 5000;);
     delay(1000); // Delay to give time to load the Serial Monitor
 
-    charger = Charger();
     if(!charger.begin()){
         Serial.println("Charger initialization failed.");
         while (true);
