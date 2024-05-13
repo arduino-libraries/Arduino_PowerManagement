@@ -26,7 +26,6 @@
 */
 #include "Arduino_PowerManagement.h"
 
-Battery battery; 
 Charger charger;
 
 // Charge current in mA, a safe value for most batteries is half the battery capacity
