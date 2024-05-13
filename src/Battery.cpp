@@ -177,7 +177,7 @@ void Battery::setTemperatureMeasurementMode(bool externalTemperature){
     configRegister = bitSet(configRegister, TSEL_BIT);
     configRegister = bitSet(configRegister, ETHRM_BIT);
     // FIXME: The external thermistor temperature measurement is not working as expected
-    // In oder to support this, probably more configuration is needed
+    // In order to support this, probably more configuration is needed
     // Currently after taking the first reading, the battery gets reported as disconnected
     // plus the register value is reset to the default value.
   } else {

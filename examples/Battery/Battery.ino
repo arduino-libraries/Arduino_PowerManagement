@@ -1,4 +1,3 @@
-
 /*
   Battery Information Display Demo
 
