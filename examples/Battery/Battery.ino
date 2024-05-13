@@ -39,11 +39,9 @@ void setup() {
    delay(1000); // Delay to give time to load the Serial Monitor
 
    charger.begin();
+   Serial.println("* 🔌 Charger initialized.");
    auto chargeVoltage = charger.getChargeVoltage();
    auto endOfChargeCurrent = charger.getEndOfChargeCurrent();
-   // charger.setChargeVoltage(4.2); // Set the charge voltage in V
-   // charger.setEndOfChargeCurrent(5); // Set the end of charge current in mA
-   Serial.println("* 🔌 Charger initialized.");
    Serial.println("* ⚡️ Charge voltage: " + String(chargeVoltage) + " V");
    Serial.println("* ⚡️ End of charge current: " + String(endOfChargeCurrent) + " mA");
 
