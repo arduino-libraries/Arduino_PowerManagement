@@ -50,6 +50,11 @@ class Board {
         Board();
 
         /**
+         * @brief Destroy the Board object.
+        */
+        ~Board();
+
+        /**
          * @brief Initializes the board by initiating the PMIC.
          * 
          * @return true if the board initialization is successful, false otherwise.
