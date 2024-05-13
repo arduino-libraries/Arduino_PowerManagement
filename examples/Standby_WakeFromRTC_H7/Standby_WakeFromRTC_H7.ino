@@ -39,34 +39,44 @@ Board board;
 Charger charger;
 MAX1726Driver fuelgauge(&Wire1);
 
+void blinkLed(int ledPin, int delayTime = 1000){
+    digitalWrite(ledPin, LOW);
+    delay(delayTime);
+    digitalWrite(ledPin, HIGH);
+    delay(delayTime);
+}
+
 void setup() {
     // When uploading this sketch to the M4 core, it just goes to standby mode.
     #if defined(ARDUINO_GENERIC_STM32H747_M4)
       board.standByUntilWakeupEvent();
       return;
     #endif
-    
-    charger.begin();
 
-    // Turn off the built-in LED
+    pinMode(LEDR, OUTPUT); // Used to indicate errors
+    digitalWrite(LEDR, HIGH); // Turn off the red LED
     pinMode(LED_BUILTIN, OUTPUT);
-    digitalWrite(LED_BUILTIN, HIGH);
+    digitalWrite(LED_BUILTIN, HIGH); // Turn off the built-in LED
+    pinMode(LEDB, OUTPUT); // Used to indicate that the board is awake    
     
     // Turn on the blue LED to show that the board is still awake
-    pinMode(LEDB, OUTPUT);    
     digitalWrite(LEDB, LOW);
 
-    if(!board.begin()){
-        // If the board fails to initialize, it will blink the red LED
-        pinMode(LEDR, OUTPUT);
+    if(!charger.begin()){
+        // If the charger fails to initialize, it will blink the red LED
         while (true){
-            digitalWrite(LEDR, LOW);
-            delay(1000);
-            digitalWrite(LEDR, HIGH);
-            delay(1000);
+            blinkLed(LEDR);
         }
     }
 
+    if(!board.begin()){
+        // If the board fails to initialize, it will blink the red LED
+        while (true){
+            blinkLed(LEDR);
+        }
+    }
+
+    delay(10000); // -> Give time to take the measurement
     charger.setEnabled(false); // -> Please measure if it makes a difference
     delay(10000); // -> Give time to take the measurement
 
