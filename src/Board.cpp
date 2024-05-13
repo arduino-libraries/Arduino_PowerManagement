@@ -137,7 +137,7 @@ void Board::enableSleepWhenIdle(){
 
 
 #if defined(ARDUINO_PORTENTA_C33)
-void Board::enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds, void (* const callbackFunction)() = nullptr, RTClock * rtc = &RTC){
+bool Board::enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds, void (* const callbackFunction)(), RTClock * rtc){
     lowPower->enableWakeupFromRTC();
 
     RTCTime currentTime;
@@ -169,11 +169,12 @@ void Board::enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t secon
 #endif
 
 #if defined(ARDUINO_PORTENTA_H7) || defined(ARDUINO_NICLA_VISION)
-void Board::enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds){
+bool Board::enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds){
     standbyType |= StandbyType::untilTimeElapsed;
     wakeupDelayHours = hours;
     wakeupDelayMinutes = minutes;
     wakeupDelaySeconds = seconds;
+    return true;
 }
 #endif
 

@@ -5,7 +5,9 @@
 #include <Arduino_PF1550.h>
 #include "WireUtils.h"
 
-#define ARDUINO_PORTENTA_H7 defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_GENERIC_STM32H747_M4)
+#if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_GENERIC_STM32H747_M4)
+#define ARDUINO_PORTENTA_H7
+#endif
 
 #if defined(ARDUINO_PORTENTA_C33) 
     #include "Arduino_Portenta_C33_LowPower.h"
@@ -135,11 +137,11 @@ class Board {
          * If no RTC instance is provided, the default RTC instance is used.
          * @return True if successful, false otherwise.
         */
-        void enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds, void (* const callbackFunction)() = nullptr, RTClock * rtc = &RTC);
+        bool enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds, void (* const callbackFunction)() = nullptr, RTClock * rtc = &RTC);
         #endif
 
         #if defined(ARDUINO_PORTENTA_H7)
-        void enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds);
+        bool enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds);
         #endif
 
 
