@@ -50,6 +50,12 @@ Board::Board() {
     #endif
 }
 
+Board::~Board() {
+    #if defined(ARDUINO_PORTENTA_C33)
+        delete lowPower;
+    #endif
+}
+
 bool Board::begin() {
     #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_NICLA_VISION)
         if (CM7_CPUID == HAL_GetCurrentCPUID()){
@@ -64,13 +70,15 @@ bool Board::begin() {
 
 bool Board::isUSBPowered() {
     uint16_t registerValue = PMIC.readPMICreg(Register::CHARGER_VBUS_SNS);
-    return bitRead(registerValue, 2) == 0;
+    // TODO: Check which one works
+    // return bitRead(registerValue, 2) == 0;
+    return bitRead(registerValue, 5) == 1; // — VBUS is valid -> USB powered
 }
 
 bool Board::isBatteryPowered() {
     uint8_t registerValue = PMIC.readPMICreg(Register::CHARGER_BATT_SNS);
     uint8_t batteryPower = extractBits(registerValue, 0, 2);
-    return batteryPower == 0;
+    return batteryPower == 0; // No valid VBUS input -> battery powered
 }
 
 void Board::setExternalPowerEnabled(bool on) {
