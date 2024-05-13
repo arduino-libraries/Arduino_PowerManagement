@@ -62,8 +62,8 @@ jobs:
             # Install the library from the local path.
             - source-path: ./
             # - name: Arduino_PF1550
-            - source-url: https://github.com/cristidragomir97/Arduino_PF1550_old.git
-            - source-url: https://github.com/cristidragomir97/Arduino_Portenta_C33_LowPower.git
+            - source-url: https://github.com/arduino-libraries/Arduino_PF1550_old.git
+            - source-url: https://github.com/arduino-libraries/Arduino_Portenta_C33_LowPower.git
           sketch-paths: |
             ${{ env.UNIVERSAL_SKETCH_PATHS }}
             ${{ matrix.board.additional-sketch-paths }}
