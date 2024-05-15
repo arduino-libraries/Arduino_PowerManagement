@@ -160,8 +160,13 @@ bool Board::enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t secon
     match.addMatchHour();   // Trigger the alarm when the hours match
 
     // Set the alarm callback (assuming you have a callback function named alarmCallback)
-    if (!rtc -> setAlarmCallback(callbackFunction, alarmTime, match)) {
+    if (callbackFunction && !rtc -> setAlarmCallback(callbackFunction, alarmTime, match)) {
         return false; // Failed to set the alarm
+    } else {
+        // Set the alarm without a callback
+        // if (!rtc -> setAlarm(alarmTime, match)) {
+        //     return false; // Failed to set the alarm
+        // }
     }
     delay(1);
     return true; 
