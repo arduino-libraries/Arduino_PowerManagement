@@ -268,10 +268,15 @@ void Board::setAnalogDigitalConverterPower(bool on){
 
 void Board::setCommunicationPeripheralsPower(bool on){
     // TODO: Why do we only use the normal mode here?
-    if(on)
+    if(on){
         PMIC.getControl()->turnSw1On(Sw1Mode::Normal);
-    else
+        // PMIC.getControl()->turnSw1On(Sw1Mode::Sleep);
+        // PMIC.getControl()->turnSw1On(Sw1Mode::Standby);
+    } else {
         PMIC.getControl()->turnSw1Off(Sw1Mode::Normal);
+        // PMIC.getControl()->turnSw1Off(Sw1Mode::Sleep);
+        // PMIC.getControl()->turnSw1Off(Sw1Mode::Standby);
+    }
 }
 
 
