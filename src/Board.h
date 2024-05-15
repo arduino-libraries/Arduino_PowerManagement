@@ -10,7 +10,7 @@
 #endif
 
 #if defined(ARDUINO_PORTENTA_C33) 
-    #include "Arduino_Portenta_C33_LowPower.h"
+    #include "Arduino_LowPowerPortentaC33.h"
     #include "RTC.h"
 #elif defined(ARDUINO_PORTENTA_H7) || defined(ARDUINO_NICLA_VISION)
     #include "Arduino_LowPowerPortentaH7.h"
