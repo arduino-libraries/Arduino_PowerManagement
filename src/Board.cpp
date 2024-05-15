@@ -205,9 +205,11 @@ void Board::setAllPeripheralsPower(bool on){
         this -> setCommunicationPeripheralsPower(on);
         this -> setExternalPowerEnabled(on);
         this -> setAnalogDigitalConverterPower(on);
-        // I2C needs to be shut down because the PMIC would still try
-        // to communicate with the MCU.
-        Wire3.end();
+        if(!on){
+            // I2C needs to be shut down because the PMIC would still try
+            // to communicate with the MCU.
+            Wire3.end();
+        }
     #else if defined(ARDUINO_PORTENTA_H7)
     // TODO Can we extract this into functions?
     if(on){
