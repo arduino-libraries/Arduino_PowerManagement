@@ -14,7 +14,7 @@ void blinkLed(int ledPin, int delayTime = 1000){
 }
 
 void setup() {
-    board.setAllPeripheralsPower(true); // TODO: Check if this is necessary
+
 
     pinMode(LEDR, OUTPUT); // Used to indicate errors
     digitalWrite(LEDR, HIGH); // Turn off the red LED
@@ -24,14 +24,17 @@ void setup() {
     digitalWrite(LED_BUILTIN, HIGH); // Turn off the built-in LED
     pinMode(LEDB, OUTPUT); // Used to indicate that the board is awake    
     
-    // Turn on the blue LED to show that the board is still awake
-    digitalWrite(LEDB, LOW);
+  
     
     if(!board.begin()){
         while (true){
             blinkLed(LEDR);
         }
     }
+
+    board.setAllPeripheralsPower(true); // TODO: Check if this is necessary
+      // Turn on the blue LED to show that the board is still awake
+    digitalWrite(LEDB, LOW);
     
     RTC.begin();
     if (!RTC.isRunning()) {
@@ -43,7 +46,10 @@ void setup() {
     }
 
     board.enableWakeupFromRTC(0, 0, 10, [](){}, &RTC); // Sleep for 10 seconds
-    // board.setAllPeripheralsPower(false);
+
+    delay(1000); // Let the user see that the board is ready to sleep
+
+    board.setAllPeripheralsPower(false);
     board.standByUntilWakeupEvent();
 }
 
