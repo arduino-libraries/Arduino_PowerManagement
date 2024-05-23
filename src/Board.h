@@ -137,7 +137,8 @@ class Board {
          * If no RTC instance is provided, the default RTC instance is used.
          * @return True if successful, false otherwise.
         */
-        bool enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds, void (* const callbackFunction)() = nullptr, RTClock * rtc = &RTC);
+        bool enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds, void (* const callbackFunction)(), RTClock * rtc = &RTC);
+        bool enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds, RTClock * rtc = &RTC);
         #endif
 
         #if defined(ARDUINO_PORTENTA_H7)

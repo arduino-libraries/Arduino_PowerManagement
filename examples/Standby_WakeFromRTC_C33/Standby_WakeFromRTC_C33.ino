@@ -45,7 +45,8 @@ void setup() {
         }
     }
 
-    board.enableWakeupFromRTC(0, 0, 10, [](){}, &RTC); // Sleep for 10 seconds
+    // board.enableWakeupFromRTC(0, 0, 10, [](){}); // Sleep for 10 seconds
+    board.enableWakeupFromRTC(0, 0, 10); // Sleep for 10 seconds
 
     delay(1000); // Let the user see that the board is ready to sleep
 
