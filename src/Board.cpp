@@ -164,13 +164,18 @@ bool Board::enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t secon
         return false; // Failed to set the alarm
     } else {
         // Set the alarm without a callback
-        // if (!rtc -> setAlarm(alarmTime, match)) {
-        //     return false; // Failed to set the alarm
-        // }
+        if (!rtc -> setAlarm(alarmTime, match)) {
+            return false; // Failed to set the alarm
+        }
     }
     delay(1);
     return true; 
 }
+
+bool Board::enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds, RTClock * rtc){
+    return enableWakeupFromRTC(hours, minutes, seconds, nullptr, rtc);
+}
+
 #endif
 
 #if defined(ARDUINO_PORTENTA_H7) || defined(ARDUINO_NICLA_VISION)
