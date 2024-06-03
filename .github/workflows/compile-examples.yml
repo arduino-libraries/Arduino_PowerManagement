@@ -1,3 +1,4 @@
+# Source: https://github.com/per1234/.github/blob/main/workflow-templates/compile-examples-private.md
 name: Compile Examples
 
 # See: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
@@ -41,17 +42,16 @@ jobs:
 
       matrix:
         board:
-          - fqbn: arduino:renesas_portenta:portenta_c33
-            platforms: |
-              - name: arduino:renesas_portenta
-            artifact-name-suffix: arduino-renesas_portenta-portenta_c33
-            additional-sketch-paths: examples/Standby_WakeFromRTC_C33
           - fqbn: arduino:mbed_portenta:envie_m7
             platforms: |
               - name: arduino:mbed_portenta
             artifact-name-suffix: arduino-mbed_portenta-envie_m7
+            additional-sketch-paths: examples/Standby_WakeFromRTC_C33
+          - fqbn: arduino:renesas_portenta:portenta_c33
+            platforms: |
+              - name: arduino:renesas_portenta
+            artifact-name-suffix: arduino-renesas_portenta-portenta_c33
             additional-sketch-paths: examples/Standby_WakeFromRTC_H7
-
 
     steps:
       - name: Checkout repository
@@ -66,8 +66,7 @@ jobs:
           libraries: |
             # Install the library from the local path.
             - source-path: ./
-            # - name: Arduino_PF1550
-            - source-url: https://github.com/arduino-libraries/Arduino_PF1550.git
+            - name: Arduino_PF1550
             - source-url: https://github.com/arduino-libraries/Arduino_LowPowerPortentaC33.git
           sketch-paths: |
             ${{ env.UNIVERSAL_SKETCH_PATHS }}
@@ -79,29 +78,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           if-no-files-found: error
+          name: sketches-report-${{ matrix.board.artifact-name-suffix }}
           path: ${{ env.SKETCHES_REPORTS_PATH }}
-          name: ${{ env.SKETCHES_REPORTS_ARTIFACT_NAME }}
-
-  report-size-deltas:
-    needs: build
-    # Run even if some compilations failed.
-    if: always() && github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-
-    steps:
-      - name: Download sketches reports artifact
-        id: download-artifact
-        continue-on-error: true # If compilation failed for all boards then there are no artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.SKETCHES_REPORTS_ARTIFACT_NAME }}
-          path: ${{ env.SKETCHES_REPORTS_PATH }}
-
-      - name: Comment size deltas report to PR
-        uses: arduino/report-size-deltas@v1
-        # If actions/download-artifact failed, there are no artifacts to report from.
-        if: steps.download-artifact.outcome == 'success'
-        with:
-          sketches-reports-source: ${{ env.SKETCHES_REPORTS_PATH }}
