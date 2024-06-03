@@ -52,8 +52,6 @@ bool Battery::awaitDataReady(uint16_t timeout){
       return false;
     }
 
-    // TODO Remove the print statement
-    Serial.println("Waiting for the battery gauge to be ready...");
     delay(100); // Wait for the data to be ready. This takes 710ms from power-up
   } 
 }

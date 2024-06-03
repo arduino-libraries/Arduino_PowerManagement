@@ -36,7 +36,6 @@
 #include "MAX1726Driver.h"
 
 Board board;
-Charger charger;
 MAX1726Driver fuelgauge(&Wire1);
 
 void blinkLed(int ledPin, int delayTime = 1000){
@@ -62,12 +61,6 @@ void setup() {
     // Turn on the blue LED to show that the board is still awake
     digitalWrite(LEDB, LOW);
 
-    if(!charger.begin()){
-        // If the charger fails to initialize, it will blink the red LED
-        while (true){
-            blinkLed(LEDR);
-        }
-    }
 
     if(!board.begin()){
         // If the board fails to initialize, it will blink the red LED
@@ -76,17 +69,15 @@ void setup() {
         }
     }
 
-    delay(10000); // -> Give time to take the measurement
-    charger.setEnabled(false); // -> Please measure if it makes a difference
-    delay(10000); // -> Give time to take the measurement
 
     // Takes 45s to get into shutdown mode
     fuelgauge.setOperationMode(FuelGaugeOperationMode::shutdown);
-    
+    delay(10000); // keep the board awake for 10 seconds, so we can se it working
+
     // The LED should go off when the board goes to sleep
     board.setAllPeripheralsPower(false);    
 
-    board.enableWakeupFromRTC(0, 0, 60); // Go to standby for 60 seconds
+    board.enableWakeupFromRTC(0, 0, 10); // Go to standby for 10 seconds
     board.standByUntilWakeupEvent();
 }
 

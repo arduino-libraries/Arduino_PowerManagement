@@ -1,5 +1,4 @@
 #include "WireUtils.h"
-// TODO extract into a separate header file and check how PF1550Driver is implemented
 #include "BatteryConstants.h"
 
 enum class FuelGaugeOperationMode

@@ -13,6 +13,9 @@
     #include "Arduino_LowPowerPortentaC33.h"
     #include "RTC.h"
 #elif defined(ARDUINO_PORTENTA_H7) || defined(ARDUINO_NICLA_VISION)
+    // When used standalone the LowPowerPortentaH7 library will turn off the Ethernet interface to avoid issues with the line termination resistors, 
+    // but in this library we can turn of the Ethernet interface using the PMIC, so we set the NO_ETHERNET_TURN_OFF flag to avoid turning off the Ethernet interface from both sides. 
+    #define NO_ETHERNET_TURN_OFF
     #include "Arduino_LowPowerPortentaH7.h"
 #endif 
 
@@ -147,24 +150,23 @@ class Board {
 
 
         #if defined(ARDUINO_PORTENTA_C33)
-        // TODO Restarts after waking up.?
         /**
          * Put the device into sleep mode until a wakeup event occurs
          * This sleep mode is ideal for applications requiring periodic wake-ups or 
          * brief intervals of inactivity and reduces consumption to a range between 
          * 6mA and 18mA depending on the state of the peripherals. 
-         * This sleep mode resumes the operation from the last operation.
+         * This sleep mode resumes the operation from the last operation without resetting the board.
          * A wakeup event can be an interrupt on a pin or the RTC, 
          * depending on what you set with enableWakeupFromPin() and enableWakeupFromRTC().
          */
         void sleepUntilWakeupEvent();
         #endif
 
-        // TODO measurements are board specific. Need adjustments for Portenta H7.
+    
         /**
          * Put the device into standby mode until a wakeup event occurs.
          * For scenarios demanding drastic power conservation, the standby Mode significantly reduces 
-         * the board's power usage to range between 90uA and 11mA depending on the state of the peripherals. 
+         * the board's power usage to micro amperes range depending on the state of the peripherals.
          * This mode restarts the board on wake-up, effectively running the setup() function again.
          * A wakeup event can be an interrupt on a pin or the RTC, depending on what 
          * you set with enableWakeupFromPin() and enableWakeupFromRTC().
