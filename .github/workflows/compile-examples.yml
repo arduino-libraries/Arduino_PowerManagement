@@ -23,9 +23,9 @@ on:
 
 env:
   UNIVERSAL_SKETCH_PATHS: |
-        - examples/Battery
-        - examples/Charger
-        - examples/Standby_WakeFromPin
+    - examples/Battery
+    - examples/Charger
+    - examples/Standby_WakeFromPin
   SKETCHES_REPORTS_PATH: sketches-reports
   SKETCHES_REPORTS_ARTIFACT_NAME: sketches-reports
 
@@ -64,7 +64,6 @@ jobs:
           fqbn: ${{ matrix.board.fqbn }}
           platforms: ${{ matrix.board.platforms }}
           libraries: |
-            # Install the library from the local path.
             - source-path: ./
             - name: Arduino_PF1550
             - source-url: https://github.com/arduino-libraries/Arduino_LowPowerPortentaC33.git
