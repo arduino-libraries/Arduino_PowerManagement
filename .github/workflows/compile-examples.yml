@@ -45,7 +45,7 @@ jobs:
             platforms: |
               - name: arduino:renesas_portenta
             artifact-name-suffix: arduino-renesas_portenta-portenta_c33
-            additional-sketch-paths: examples/ChargStandby_WakeFromRTC_C33er
+            additional-sketch-paths: examples/Standby_WakeFromRTC_C33
           - fqbn: arduino:mbed_portenta:envie_m7
             platforms: |
               - name: arduino:mbed_portenta
