@@ -70,15 +70,13 @@ bool Board::begin() {
 
 bool Board::isUSBPowered() {
     uint16_t registerValue = PMIC.readPMICreg(Register::CHARGER_VBUS_SNS);
-    // TODO: Check which one works
-    // return bitRead(registerValue, 2) == 0;
     return bitRead(registerValue, 5) == 1; // — VBUS is valid -> USB powered
 }
 
 bool Board::isBatteryPowered() {
     uint8_t registerValue = PMIC.readPMICreg(Register::CHARGER_BATT_SNS);
     uint8_t batteryPower = extractBits(registerValue, 0, 2);
-    return batteryPower == 0; // No valid VBUS input -> battery powered
+    return batteryPower == 0; 
 }
 
 void Board::setExternalPowerEnabled(bool on) {
@@ -212,76 +210,49 @@ void Board::standByUntilWakeupEvent(){
 
 void Board::setAllPeripheralsPower(bool on){
     #if defined(ARDUINO_PORTENTA_C33)
+    // The power architecture on the C33 puts peripherals on sepparate power lanes which are independent, so we can turn off the peripherals separately. 
+    // Turning these rails will not interfere with your sketch. 
         this -> setCommunicationPeripheralsPower(on);
         this -> setExternalPowerEnabled(on);
         this -> setAnalogDigitalConverterPower(on);
-        if(!on){
-            // I2C needs to be shut down because the PMIC would still try
-            // to communicate with the MCU.
-            Wire3.end();
-        }
     #else if defined(ARDUINO_PORTENTA_H7)
-    // TODO Can we extract this into functions?
+    // On the H7 several chips need different voltages, so we cannot turn the lanes that are dependent on eachother separately.
+    // This should only be used when going into standby mode, as turning off the USB-C PHY, Ethernet or Video bridge might cause undefined behaviour. 
     if(on){
         PMIC.getControl() -> turnLDO2On(Ldo2Mode::Normal);
-        PMIC.getControl() -> turnLDO2On(Ldo2Mode::Sleep);
-        PMIC.getControl() -> turnLDO2On(Ldo2Mode::Standby);
         PMIC.getControl() -> turnLDO1On(Ldo1Mode::Normal);
-        PMIC.getControl() -> turnLDO1On(Ldo1Mode::Sleep);
-        PMIC.getControl() -> turnLDO1On(Ldo1Mode::Standby);
         PMIC.getControl() -> turnLDO3On(Ldo3Mode::Normal);
-        PMIC.getControl() -> turnLDO3On(Ldo3Mode::Sleep);
-        PMIC.getControl() -> turnLDO3On(Ldo3Mode::Standby);
         PMIC.getControl() -> turnSw1On(Sw1Mode::Normal);
-        PMIC.getControl() -> turnSw1On(Sw1Mode::Sleep);
-        PMIC.getControl() -> turnSw1On(Sw1Mode::Standby);
     } else {
         PMIC.getControl() -> turnLDO2Off(Ldo2Mode::Normal);
-        PMIC.getControl() -> turnLDO2Off(Ldo2Mode::Sleep);
-        PMIC.getControl() -> turnLDO2Off(Ldo2Mode::Standby);
         PMIC.getControl() -> turnLDO1Off(Ldo1Mode::Normal);
-        PMIC.getControl() -> turnLDO1Off(Ldo1Mode::Sleep);
-        PMIC.getControl() -> turnLDO1Off(Ldo1Mode::Standby);
         PMIC.getControl() -> turnLDO3Off(Ldo3Mode::Normal);
-        PMIC.getControl() -> turnLDO3Off(Ldo3Mode::Sleep);
-        PMIC.getControl() -> turnLDO3Off(Ldo3Mode::Standby);
         PMIC.getControl() -> turnSw1Off(Sw1Mode::Normal);
-        PMIC.getControl() -> turnSw1Off(Sw1Mode::Sleep);
-        PMIC.getControl() -> turnSw1Off(Sw1Mode::Standby);
-        // I2C needs to be shut down because the PMIC would still try
-        // to communicate with the MCU.
-        Wire1.end();
     }
-        
     #endif
 }
-
+//
 void Board::setAnalogDigitalConverterPower(bool on){
-// TODO Not available on the Portenta H7?
-#if defined(ARDUINO_PORTENTA_C33)
-    if(on){
-        PMIC.getControl()->turnLDO1On(Ldo1Mode::Normal);
-        PMIC.getControl()->turnLDO1On(Ldo1Mode::Sleep);
-        PMIC.getControl()->turnLDO1On(Ldo1Mode::Standby);
-    } else {
-        PMIC.getControl()->turnLDO1Off(Ldo1Mode::Normal);
-        PMIC.getControl()->turnLDO1Off(Ldo1Mode::Sleep);
-        PMIC.getControl()->turnLDO1Off(Ldo1Mode::Standby);
-    }
-#endif
+    #if defined(ARDUINO_PORTENTA_C33)
+        if(on){
+            PMIC.getControl()->turnLDO1On(Ldo1Mode::Normal);
+        } else {
+            PMIC.getControl()->turnLDO1Off(Ldo1Mode::Normal);
+        }
+    #endif
+    // On the H7 the ADC is powered by the main MCU power lane, so we cannot turn it off independently. 
 }
 
 void Board::setCommunicationPeripheralsPower(bool on){
-    // TODO: Why do we only use the normal mode here?
-    if(on){
-        PMIC.getControl()->turnSw1On(Sw1Mode::Normal);
-        // PMIC.getControl()->turnSw1On(Sw1Mode::Sleep);
-        // PMIC.getControl()->turnSw1On(Sw1Mode::Standby);
-    } else {
-        PMIC.getControl()->turnSw1Off(Sw1Mode::Normal);
-        // PMIC.getControl()->turnSw1Off(Sw1Mode::Sleep);
-        // PMIC.getControl()->turnSw1Off(Sw1Mode::Standby);
-    }
+    #if defined(ARDUINO_PORTENTA_C33)
+        if(on){
+            PMIC.getControl()->turnSw1On(Sw1Mode::Normal);
+        } else {
+            PMIC.getControl()->turnSw1Off(Sw1Mode::Normal);
+        }
+    #endif
+    // On the H7 the communication peripherals are powered by the main MCU power lane, 
+    // so we cannot turn them off independently. 
 }
 
 

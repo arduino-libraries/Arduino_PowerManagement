@@ -146,7 +146,7 @@ class Battery {
         int16_t averagePower();
 
         /**
-         * @brief Reads the current temperature of the internal die.
+         * @brief Reads the current temperature of the internal die of the battery gauge chip. 
          * @return The current temperature in degrees Celsius.
         */
         uint8_t internalTemperature();
