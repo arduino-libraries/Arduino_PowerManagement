@@ -216,7 +216,7 @@ void Board::setAllPeripheralsPower(bool on){
         this -> setExternalPowerEnabled(on);
         this -> setAnalogDigitalConverterPower(on);
     #else if defined(ARDUINO_PORTENTA_H7)
-    // On the H7 several chips need different voltages, so we cannot turn the lanes that are dependent on eachother separately.
+    // On the H7 several chips need different voltages, so we cannot turn the lanes that are dependent on each other separately.
     // This should only be used when going into standby mode, as turning off the USB-C PHY, Ethernet or Video bridge might cause undefined behaviour. 
     if(on){
         PMIC.getControl() -> turnLDO2On(Ldo2Mode::Normal);
