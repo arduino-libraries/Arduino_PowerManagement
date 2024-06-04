@@ -1,4 +1,3 @@
-
 /*
   Battery Information Display Demo
 
@@ -38,13 +37,10 @@ void setup() {
    while (!Serial);
    delay(1000); // Delay to give time to load the Serial Monitor
 
-   charger = Charger();
    charger.begin();
+   Serial.println("* 🔌 Charger initialized.");
    auto chargeVoltage = charger.getChargeVoltage();
    auto endOfChargeCurrent = charger.getEndOfChargeCurrent();
-   // charger.setChargeVoltage(4.2); // Set the charge voltage in V
-   // charger.setEndOfChargeCurrent(5); // Set the end of charge current in mA
-   Serial.println("* 🔌 Charger initialized.");
    Serial.println("* ⚡️ Charge voltage: " + String(chargeVoltage) + " V");
    Serial.println("* ⚡️ End of charge current: " + String(endOfChargeCurrent) + " mA");
 
@@ -99,7 +95,6 @@ void loop() {
    
    if(batteryConnected){
       Serial.println("* 🪫 Battery is empty: " + ( battery.isEmpty() ? String("Yes") : String("No")));
-      Serial.println("* 💯 Charging complete: " + ( battery.chargingComplete() ? String("Yes") : String("No")));
       
       Serial.println("* ⚡️ Voltage: " + String(battery.voltage()) + " V");
       Serial.println("* ⚡️ Average Voltage: " + String(battery.averageVoltage()) + " V");

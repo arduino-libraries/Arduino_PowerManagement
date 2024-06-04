@@ -97,11 +97,11 @@ static inline uint8_t getBit(TwoWire *wire, uint8_t address, uint8_t reg, uint8_
  * @param wire The I2C object representing the I2C bus.
  * @param address The address of the device on the I2C bus.
  * @param reg The register to modify.
- * @param data The new data (bits) to write to the register.
  * @param indexFrom The index of the first bit to replace starting from LSB (0)
  * @param indexTo The index of the last bit (included) to replace starting from LSB (0)
+ * @param data The new data (bits) to write to the register.
  */
-static inline void replaceRegisterBits(TwoWire *wire, uint8_t address, uint8_t reg, uint16_t data, uint16_t indexFrom, uint8_t indexTo) {
+static inline void replaceRegisterBits(TwoWire *wire, uint8_t address, uint8_t reg, uint16_t indexFrom, uint8_t indexTo, uint16_t data) {
     uint16_t registerValue = readRegister16Bits(wire, address, reg);
 
     // Create a mask to clear the bits to be replaced
@@ -123,11 +123,11 @@ static inline void replaceRegisterBits(TwoWire *wire, uint8_t address, uint8_t r
  * @param wire The TwoWire object representing the I2C bus.
  * @param address The address of the I2C device.
  * @param reg The register to modify.
- * @param data The new data (1 bit) to write to the register.
  * @param index The index of the bit to replace.
+ * @param data The new data (1 bit) to write to the register.
  */
-static inline void replaceRegisterBit(TwoWire *wire, uint8_t address, uint8_t reg, uint16_t data, uint16_t index) {
-    replaceRegisterBits(wire, address, reg, data, index, index);
+static inline void replaceRegisterBit(TwoWire *wire, uint8_t address, uint8_t reg, uint16_t index, uint16_t data) {
+    replaceRegisterBits(wire, address, reg, index, index, data);
 }
 
 #endif

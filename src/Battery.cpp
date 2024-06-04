@@ -11,6 +11,7 @@ Battery::Battery(BatteryCharacteristics batteryCharacteristics) : characteristic
 }
 
 bool Battery::begin(bool enforceReload) {
+  // PMIC already initializes the I2C bus, so no need to call Wire.begin() for the fuel gauge
   if(PMIC.begin() != 0){
     return false;
   }
@@ -34,7 +35,7 @@ bool Battery::begin(bool enforceReload) {
   
   // Restore the original Hibernate Config Register value
   writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG, tempHibernateConfigRegister); // Restore Original HibCFG value
-  replaceRegisterBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, 0x0, POR_BIT); // Clear POR bit after reset
+  replaceRegisterBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, POR_BIT, 0x0); // Clear POR bit after reset
   return true;
 }
 
@@ -51,8 +52,6 @@ bool Battery::awaitDataReady(uint16_t timeout){
       return false;
     }
 
-    // TODO Remove the print statement
-    Serial.println("Waiting for the battery gauge to be ready...");
     delay(100); // Wait for the data to be ready. This takes 710ms from power-up
   } 
 }
@@ -72,9 +71,9 @@ void Battery::configureBatteryCharacteristics(){
 
 void Battery::releaseFromHibernation(){
   // See section "Soft-Wakeup" in user manual https://www.analog.com/media/en/technical-documentation/user-guides/max1726x-modelgauge-m5-ez-user-guide.pdf
-  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG, 0x0);      // Exit Hibernate Mode
+  replaceRegisterBit(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG, EN_HIBERNATION_BIT, 0); // Exit Hibernate Mode
   writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, SOFT_WAKEUP_REG, 0x90); // Wakes up the fuel gauge from hibernate mode to reduce the response time of the IC to configuration changes  
-  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, SOFT_WAKEUP_REG, 0x0);  // This command must be manually cleared (0x0000) afterward to keep proper fuel gauge timing
+  writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, SOFT_WAKEUP_REG, 0x0);  // Soft wake-up must be manually cleared (0x0000) afterward to keep proper fuel gauge timing
 }
 
 bool Battery::refreshBatteryGaugeModel(){
@@ -175,7 +174,7 @@ void Battery::setTemperatureMeasurementMode(bool externalTemperature){
     configRegister = bitSet(configRegister, TSEL_BIT);
     configRegister = bitSet(configRegister, ETHRM_BIT);
     // FIXME: The external thermistor temperature measurement is not working as expected
-    // In oder to support this, probably more configuration is needed
+    // In order to support this, probably more configuration is needed
     // Currently after taking the first reading, the battery gets reported as disconnected
     // plus the register value is reset to the default value.
   } else {
@@ -207,7 +206,8 @@ uint8_t Battery::internalTemperature(){
   }
 
   setTemperatureMeasurementMode(false);  
-  // TODO also see DieTemp Register (034h) for the internal die temperature p. 24 in DS  
+  // Also see DieTemp Register (034h) for the internal die temperature p. 24 in DS  
+  // If Config.TSel = 0, DieTemp and Temp registers have the value of the die temperature.
   return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, TEMP_REG) * TEMPERATURE_MULTIPLIER_C;
 }
 
@@ -226,7 +226,6 @@ uint8_t Battery::batteryTemperature(){
   }
 
   setTemperatureMeasurementMode(true);
-  // TODO possibly await a couple of readings before getting a meaningful temperature
   return readRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, TEMP_REG) * TEMPERATURE_MULTIPLIER_C;
 }
 
@@ -338,13 +337,6 @@ uint16_t Battery::fullCapacity(){
 
 bool Battery::isEmpty(){  
   return getBit(this->wire, FUEL_GAUGE_ADDRESS, F_STAT_REG, E_DET_BIT) == 1;
-}
-
-bool Battery::chargingComplete(){
-  // TODO This needs to be tested, probably it's a valua that only temporarily indicates the end-of-charge condition.
-  // TODO there is also a FULL_DET_BIT in the STATUS2 register but the datasheet does not explain it
-  // return getBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS2_REG, FULL_DET_BIT) == 1;
-  return getBit(this->wire, FUEL_GAUGE_ADDRESS, F_STAT_REG, FQ_BIT) == 1;
 }
 
 int32_t Battery::timeToEmpty(){

@@ -224,26 +224,26 @@ ChargingState Charger::getState(){
     uint8_t reg_val = PMIC.readPMICreg(Register::CHARGER_CHG_SNS);
     switch (extractBits(reg_val, 0, 3)) {
         case 0:
-            return ChargingState::PreCharge;
+            return ChargingState::preCharge;
         case 1:
-            return ChargingState::FastChargeConstantCurrent;
+            return ChargingState::fastChargeConstantCurrent;
         case 2:
-            return ChargingState::FastChargeConstantVoltage;
+            return ChargingState::fastChargeConstantVoltage;
         case 3:
-            return ChargingState::EndOfCharge;
+            return ChargingState::endOfCharge;
         case 4:
-            return ChargingState::Done;
+            return ChargingState::done;
         case 6:
-            return ChargingState::TimerFaultError;
+            return ChargingState::timerFaultError;
         case 7:
-            return ChargingState::ThermistorSuspendError;
+            return ChargingState::thermistorSuspendError;
         case 8:
-            return ChargingState::ChargerDisabled;
+            return ChargingState::chargerDisabled;
         case 9:
-            return ChargingState::BatteryOvervoltageError;
+            return ChargingState::batteryOvervoltageError;
         case 12:
-            return ChargingState::ChargerBypassed;
+            return ChargingState::chargerBypassed;
         default:
-            return ChargingState::None;
+            return ChargingState::none;
     }
 }

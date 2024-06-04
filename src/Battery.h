@@ -15,6 +15,9 @@ enum class NTCResistor {
     Resistor100K
 };
 
+/**
+ * @brief This struct contains the characteristics of the battery.
+*/
 struct BatteryCharacteristics {
     /// @brief The battery's capacity in milliampere-hours (mAh).
     int capacity = 0;
@@ -33,6 +36,7 @@ struct BatteryCharacteristics {
     /// @brief The NTC resistor value used in the battery pack (10K or 100K Ohm).
     NTCResistor ntcResistor = NTCResistor::Resistor10K;
 
+    /// @brief Sets the voltage level for clearing empty detection. Once the cell voltage rises above this point, empty voltage detection is re-enabled.
     float recoveryVoltage = DEFAULT_RECOVERY_VOLTAGE;
 };
 
@@ -46,6 +50,10 @@ class Battery {
         */
         Battery();
 
+        /**
+         * @brief Initializes the battery object with the given battery characteristics.
+         * @param batteryCharacteristics The characteristics of the battery.
+        */
         Battery(BatteryCharacteristics batteryCharacteristics);
 
         /**
@@ -146,7 +154,7 @@ class Battery {
         int16_t averagePower();
 
         /**
-         * @brief Reads the current temperature of the internal die.
+         * @brief Reads the current temperature of the internal die of the battery gauge chip. 
          * @return The current temperature in degrees Celsius.
         */
         uint8_t internalTemperature();
@@ -191,13 +199,6 @@ class Battery {
          * @return true if the battery is empty, false otherwise.
          */
         bool isEmpty();
-
-        /**
-         * @brief Checks if the battery charging is complete.
-         * 
-         * @return true if the charging is complete, false otherwise.
-         */
-        bool chargingComplete();
 
         /**
          * Calculates the estimated time until the battery is empty.
@@ -269,7 +270,7 @@ class Battery {
 
         #if defined(ARDUINO_PORTENTA_C33)
             TwoWire *wire = &Wire3;
-        #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
+        #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_GENERIC_STM32H747_M4)
             TwoWire *wire = &Wire1;
         #elif defined(ARDUINO_NICLA_VISION)
             TwoWire *wire = &Wire1;
