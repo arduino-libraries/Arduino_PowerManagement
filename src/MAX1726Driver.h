@@ -13,7 +13,9 @@ class MAX1726Driver {
 private:
     TwoWire *wire;
     uint8_t i2cAddress;
+    void setHibernateModeEnabled(bool enabled);
 public:
+    bool chargingComplete();
     bool setOperationMode(FuelGaugeOperationMode mode);
     MAX1726Driver(TwoWire *wire, uint8_t i2cAddress);
     ~MAX1726Driver();
