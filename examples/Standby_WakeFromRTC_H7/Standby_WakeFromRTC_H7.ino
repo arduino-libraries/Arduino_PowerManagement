@@ -68,8 +68,8 @@ void setup() {
     }
 
     delay(10000); // keep the board awake for 10 seconds, so we can se it working
-
     board.shutDownFuelGauge();
+
     // The LED should go off when the board goes to sleep
     board.setAllPeripheralsPower(false);    
 

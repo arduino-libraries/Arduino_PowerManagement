@@ -14,8 +14,6 @@ void blinkLed(int ledPin, int delayTime = 1000){
 }
 
 void setup() {
-
-
     pinMode(LEDR, OUTPUT); // Used to indicate errors
     digitalWrite(LEDR, HIGH); // Turn off the red LED
     pinMode(LED_BUILTIN, OUTPUT);
@@ -23,7 +21,6 @@ void setup() {
     delay(1000);
     digitalWrite(LED_BUILTIN, HIGH); // Turn off the built-in LED
     pinMode(LEDB, OUTPUT); // Used to indicate that the board is awake    
-    
   
     if(!board.begin()){
         while (true){
