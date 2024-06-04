@@ -38,7 +38,7 @@ void MAX1726Driver::setHibernateModeEnabled(bool enabled){
 bool MAX1726Driver::setOperationMode(FuelGaugeOperationMode mode) {
     if(mode == FuelGaugeOperationMode::active){
         // See section "Soft-Wakeup" in user manual https://www.analog.com/media/en/technical-documentation/user-guides/max1726x-modelgauge-m5-ez-user-guide.pdf
-        writeRegister16Bits(this->wire, i2cAddress, HIB_CFG_REG, 0x0);      // Exit Hibernate Mode
+        replaceRegisterBit(this->wire, i2cAddress, HIB_CFG_REG, EN_HIBERNATION_BIT, 0); // Exit Hibernate Mode
         writeRegister16Bits(this->wire, i2cAddress, SOFT_WAKEUP_REG, 0x90); // Wakes up the fuel gauge from hibernate mode to reduce the response time of the IC to configuration changes  
         writeRegister16Bits(this->wire, i2cAddress, SOFT_WAKEUP_REG, 0x0);  // This command must be manually cleared (0x0000) afterward to keep proper fuel gauge timing
     } else if(mode == FuelGaugeOperationMode::hibernate){
