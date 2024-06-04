@@ -68,6 +68,7 @@ jobs:
           libraries: |
             - source-path: ./
             - name: Arduino_PF1550
+            - name: Arduino_LowPowerPortentaH7
             - source-url: https://github.com/arduino-libraries/Arduino_LowPowerPortentaC33.git
           sketch-paths: |
             ${{ env.UNIVERSAL_SKETCH_PATHS }}
