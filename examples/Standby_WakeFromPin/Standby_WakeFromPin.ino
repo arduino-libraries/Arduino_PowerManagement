@@ -39,6 +39,7 @@ void goToSleep(){
 void loop() {
     if(shouldGoToSleep){
         shouldGoToSleep = false;
+        board.shutDownFuelGauge();
         board.setAllPeripheralsPower(false); // turn off peripherals before going to sleep 
         board.standByUntilWakeupEvent();
     } else {

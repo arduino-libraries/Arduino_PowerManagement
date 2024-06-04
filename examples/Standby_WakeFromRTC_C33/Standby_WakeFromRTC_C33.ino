@@ -49,6 +49,7 @@ void setup() {
 
     delay(1000); // Keep the board awake for 1 second, so we can se it working
 
+    board.shutDownFuelGauge();
     board.setAllPeripheralsPower(false);
     board.standByUntilWakeupEvent();
 }

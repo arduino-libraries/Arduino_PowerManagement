@@ -33,10 +33,8 @@
 */
 
 #include "Arduino_PowerManagement.h"
-#include "MAX1726Driver.h"
 
 Board board;
-MAX1726Driver fuelgauge(&Wire1);
 
 void blinkLed(int ledPin, int delayTime = 1000){
     digitalWrite(ledPin, LOW);
@@ -69,11 +67,9 @@ void setup() {
         }
     }
 
-
-    // Takes 45s to get into shutdown mode
-    fuelgauge.setOperationMode(FuelGaugeOperationMode::shutdown);
     delay(10000); // keep the board awake for 10 seconds, so we can se it working
 
+    board.shutDownFuelGauge();
     // The LED should go off when the board goes to sleep
     board.setAllPeripheralsPower(false);    
 
