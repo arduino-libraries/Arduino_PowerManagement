@@ -15,6 +15,9 @@ enum class NTCResistor {
     Resistor100K
 };
 
+/**
+ * @brief This struct contains the characteristics of the battery.
+*/
 struct BatteryCharacteristics {
     /// @brief The battery's capacity in milliampere-hours (mAh).
     int capacity = 0;
@@ -33,6 +36,7 @@ struct BatteryCharacteristics {
     /// @brief The NTC resistor value used in the battery pack (10K or 100K Ohm).
     NTCResistor ntcResistor = NTCResistor::Resistor10K;
 
+    /// @brief Sets the voltage level for clearing empty detection. Once the cell voltage rises above this point, empty voltage detection is re-enabled.
     float recoveryVoltage = DEFAULT_RECOVERY_VOLTAGE;
 };
 
@@ -46,6 +50,10 @@ class Battery {
         */
         Battery();
 
+        /**
+         * @brief Initializes the battery object with the given battery characteristics.
+         * @param batteryCharacteristics The characteristics of the battery.
+        */
         Battery(BatteryCharacteristics batteryCharacteristics);
 
         /**

@@ -141,10 +141,26 @@ class Board {
          * @return True if successful, false otherwise.
         */
         bool enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds, void (* const callbackFunction)(), RTClock * rtc = &RTC);
+
+        /**
+         * @brief Enables wake-up of the device from the RTC.
+         * @param hours The number of hours to sleep.
+         * @param minutes The number of minutes to sleep.
+         * @param seconds The number of seconds to sleep.
+         * @param rtc The RTC instance to use for the sleep function. Default is the shared RTC instance.
+         * @return True if successful, false otherwise.
+        */
         bool enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds, RTClock * rtc = &RTC);
         #endif
 
         #if defined(ARDUINO_PORTENTA_H7)
+        /**
+         * Enables wake-up of the device from the RTC.
+         * @param hours The number of hours to sleep.
+         * @param minutes The number of minutes to sleep.
+         * @param seconds The number of seconds to sleep.
+         * @return True if successful, false otherwise.
+        */
         bool enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds);
         #endif
 

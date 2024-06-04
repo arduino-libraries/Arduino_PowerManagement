@@ -9,6 +9,9 @@ enum class FuelGaugeOperationMode {
 
 constexpr uint8_t DEFAULT_I2C_ADDRESS = 0x36;
 
+/**
+ * @brief Driver class for the MAX1726 Fuel Gauge IC.
+ */
 class MAX1726Driver {
 private:
     TwoWire *wire;
