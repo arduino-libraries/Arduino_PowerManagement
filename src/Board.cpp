@@ -299,6 +299,14 @@ bool Board::setReferenceVoltage(float voltage) {
 }
 
 void Board::shutDownFuelGauge() {
-    MAX1726Driver fuelGauge(&Wire);
+    #if defined(ARDUINO_PORTENTA_C33)
+        MAX1726Driver fuelGauge(&Wire3);
+    #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_GENERIC_STM32H747_M4)
+        MAX1726Driver fuelGauge(&Wire1);
+    #elif defined(ARDUINO_NICLA_VISION)
+        MAX1726Driver fuelGauge(&Wire1);
+    #else
+        #error "The selected board is not supported by the Battery class."
+    #endif
     fuelGauge.setOperationMode(FuelGaugeOperationMode::shutdown);
 }
