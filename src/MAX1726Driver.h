@@ -51,3 +51,10 @@ bool MAX1726Driver::setOperationMode(FuelGaugeOperationMode mode) {
     
     return false;
 }
+
+bool MAX1726Driver::chargingComplete(){
+  // TODO This needs to be tested, probably it's a value that only temporarily indicates the end-of-charge condition.
+  // There is also a FULL_DET_BIT in the STATUS2 register but the datasheet does not explain it:
+  // return getBit(this->wire, i2cAddress, STATUS2_REG, FULL_DET_BIT) == 1;
+  return getBit(this->wire, i2cAddress, F_STAT_REG, FQ_BIT) == 1;
+}
