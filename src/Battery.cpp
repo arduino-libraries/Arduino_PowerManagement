@@ -35,7 +35,7 @@ bool Battery::begin(bool enforceReload) {
   
   // Restore the original Hibernate Config Register value
   writeRegister16Bits(this->wire, FUEL_GAUGE_ADDRESS, HIB_CFG_REG, tempHibernateConfigRegister); // Restore Original HibCFG value
-  replaceRegisterBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, 0x0, POR_BIT); // Clear POR bit after reset
+  replaceRegisterBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS_REG, POR_BIT, 0x0); // Clear POR bit after reset
   return true;
 }
 

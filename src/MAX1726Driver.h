@@ -29,9 +29,9 @@ MAX1726Driver::~MAX1726Driver(){}
 void MAX1726Driver::setHibernateModeEnabled(bool enabled){
     if(enabled){
         // Enters hibernate mode somewhere between 2.812s and 5.625s if the threshold conditions are met
-        replaceRegisterBit(this->wire, i2cAddress, HIB_CFG_REG, 1, EN_HIBERNATION_BIT); // Enter Hibernate Mode
+        replaceRegisterBit(this->wire, i2cAddress, HIB_CFG_REG, EN_HIBERNATION_BIT, 1); // Enter Hibernate Mode
     } else {
-        replaceRegisterBit(this->wire, i2cAddress, HIB_CFG_REG, 0, EN_HIBERNATION_BIT); // Exit Hibernate Mode
+        replaceRegisterBit(this->wire, i2cAddress, HIB_CFG_REG, EN_HIBERNATION_BIT, 0); // Exit Hibernate Mode
     }
 }
 
@@ -46,7 +46,7 @@ bool MAX1726Driver::setOperationMode(FuelGaugeOperationMode mode) {
     } else if(mode == FuelGaugeOperationMode::shutdown){        
         this->setHibernateModeEnabled(false); // Enter active mode
         // The default (minimum) shutdown timeout is 45s
-        replaceRegisterBit(this->wire, i2cAddress, CONFIG_REG, 1, SHDN_BIT); // Command shutdown mode
+        replaceRegisterBit(this->wire, i2cAddress, CONFIG_REG, SHDN_BIT, 1); // Command shutdown mode
     }
     
     return false;
