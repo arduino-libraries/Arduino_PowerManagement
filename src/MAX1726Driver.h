@@ -13,10 +13,33 @@ class MAX1726Driver {
 private:
     TwoWire *wire;
     uint8_t i2cAddress;
+    /**
+     * Enables or disables the hibernate mode.
+     *
+     * @param enabled - true to enable hibernate mode, false to disable it.
+     */
     void setHibernateModeEnabled(bool enabled);
 public:
+    /**
+     * Checks if the charging process is complete.
+     *
+     * @return true if the charging process is complete, false otherwise.
+     */
     bool chargingComplete();
+    /**
+     * Sets the operation mode of the Fuel Gauge.
+     *
+     * @param mode The operation mode to set. Possible values are: hibernate, shutdown, active.
+     * @return True if the operation mode was set successfully, false otherwise.
+     */
     bool setOperationMode(FuelGaugeOperationMode mode);
+
+    /**
+     * @brief Constructs a new MAX1726Driver object.
+     *
+     * @param wire Pointer to the TwoWire object for I2C communication.
+     * @param i2cAddress The I2C address of the MAX1726 device. The default value is 0x36.
+     */
     MAX1726Driver(TwoWire *wire, uint8_t i2cAddress);
     ~MAX1726Driver();
 };
