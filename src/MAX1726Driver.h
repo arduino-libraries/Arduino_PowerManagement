@@ -52,6 +52,11 @@ bool MAX1726Driver::setOperationMode(FuelGaugeOperationMode mode) {
     return false;
 }
 
+/**
+ * @brief Checks if the battery charging is complete.
+ * 
+ * @return true if the charging is complete, false otherwise.
+ */
 bool MAX1726Driver::chargingComplete(){
   // TODO This needs to be tested, probably it's a value that only temporarily indicates the end-of-charge condition.
   // There is also a FULL_DET_BIT in the STATUS2 register but the datasheet does not explain it:

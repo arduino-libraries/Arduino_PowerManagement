@@ -95,7 +95,6 @@ void loop() {
    
    if(batteryConnected){
       Serial.println("* 🪫 Battery is empty: " + ( battery.isEmpty() ? String("Yes") : String("No")));
-      Serial.println("* 💯 Charging complete: " + ( battery.chargingComplete() ? String("Yes") : String("No")));
       
       Serial.println("* ⚡️ Voltage: " + String(battery.voltage()) + " V");
       Serial.println("* ⚡️ Average Voltage: " + String(battery.averageVoltage()) + " V");

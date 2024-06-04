@@ -340,13 +340,6 @@ bool Battery::isEmpty(){
   return getBit(this->wire, FUEL_GAUGE_ADDRESS, F_STAT_REG, E_DET_BIT) == 1;
 }
 
-bool Battery::chargingComplete(){
-  // TODO This needs to be tested, probably it's a valua that only temporarily indicates the end-of-charge condition.
-  // TODO there is also a FULL_DET_BIT in the STATUS2 register but the datasheet does not explain it
-  // return getBit(this->wire, FUEL_GAUGE_ADDRESS, STATUS2_REG, FULL_DET_BIT) == 1;
-  return getBit(this->wire, FUEL_GAUGE_ADDRESS, F_STAT_REG, FQ_BIT) == 1;
-}
-
 int32_t Battery::timeToEmpty(){
   if(!isConnected()){
     return -1;
