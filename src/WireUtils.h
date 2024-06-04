@@ -126,7 +126,6 @@ static inline void replaceRegisterBits(TwoWire *wire, uint8_t address, uint8_t r
  * @param index The index of the bit to replace.
  * @param data The new data (1 bit) to write to the register.
  */
-// TODO switch order of parameters to conform with bitWrite()
 static inline void replaceRegisterBit(TwoWire *wire, uint8_t address, uint8_t reg, uint16_t index, uint16_t data) {
     replaceRegisterBits(wire, address, reg, index, index, data);
 }
