@@ -201,7 +201,13 @@ class Board {
         */
         bool setReferenceVoltage(float voltage);
 
-        // TODO add function to shut down the fuel gauge / and hibernate mode
+        /**
+         * @brief Shuts down the fuel gauge to reduce power consumption.
+         * The IC returns to active mode on any edge of any communication line.
+         *  If the IC is power-cycled or the software RESET command is sent the IC 
+         * returns to active mode of operation.
+        */
+        void shutDownFuelGauge();
 
     private:
         /**

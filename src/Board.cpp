@@ -1,4 +1,5 @@
 #include "Board.h"
+#include "MAX1726Driver.h"
 #include <map>
 
 constexpr int UNKNOWN_VALUE = 0xFF;
@@ -295,4 +296,9 @@ bool Board::setReferenceVoltage(float voltage) {
     
 
     return UNKNOWN_VALUE;
+}
+
+void Board::shutDownFuelGauge() {
+    MAX1726Driver fuelGauge(&Wire);
+    fuelGauge.setOperationMode(FuelGaugeOperationMode::shutdown);
 }
