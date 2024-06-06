@@ -59,6 +59,7 @@ void setup() {
     board.shutDownFuelGauge();
 
 
+
     // The LED should go off when the board goes to sleep
     board.setAllPeripheralsPower(false);    
 
