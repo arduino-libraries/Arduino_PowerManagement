@@ -23,7 +23,13 @@
     - Open the Serial Monitor in the Arduino IDE.
     - Set the baud rate to 115200.
     - You will see the sketch continuously printing charger state information.
+
+
+    Please note that the Portenta C33 will not charge bateries that do not have an NTC. 
+
+    Original author: C. Dragomir (http://arduino.cc)
 */
+
 #include "Arduino_PowerManagement.h"
 
 Charger charger;

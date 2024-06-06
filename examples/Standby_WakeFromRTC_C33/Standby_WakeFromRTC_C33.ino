@@ -1,3 +1,22 @@
+/*
+    Standby Wake from RTC Demo for Portenta C33 
+
+    This example demonstrates how to  wake up the Portenta C33 from standby mode using the included RTC (Real Time Clock).
+    The device will go to sleep for 1 second and then wake up. When the device is awake you will see the board's blue LED turned on. 
+    Effectivelly, you will get the same effect as with blink. 
+
+    On the Portenta C33 with the peripherals turned off you can expect around 60uA of current consumption in standby mode.
+    The example also turns off the peripherals before going to sleep and turns them back on after waking up.
+
+    Usage:
+        - Make sure you are running the latest version of the Renesas Core
+        - Select the Portenta C33 board from the Tools menu
+        - Select the Portenta C33 USB port from the Tools menu
+        - Upload the code to your Portenta C33
+
+    Original author: C. Dragomir (http://arduino.cc)
+*/
+
 
 #include "Arduino_PowerManagement.h"
 #include "RTC.h"
@@ -14,8 +33,6 @@ void blinkLed(int ledPin, int delayTime = 1000){
 }
 
 void setup() {
-
-
     pinMode(LEDR, OUTPUT); // Used to indicate errors
     digitalWrite(LEDR, HIGH); // Turn off the red LED
     pinMode(LED_BUILTIN, OUTPUT);
@@ -31,8 +48,8 @@ void setup() {
         }
     }
 
+
     board.setAllPeripheralsPower(true); // TODO: Check if this is necessary
-    
     digitalWrite(LEDB, LOW); // Turn on the blue LED to show that the board is still awake
     
     RTC.begin();
@@ -45,11 +62,11 @@ void setup() {
     }
 
     // board.enableWakeupFromRTC(0, 0, 10, [](){}); // Sleep for 10 seconds
-    board.enableWakeupFromRTC(0, 0, 10); // Sleep for 10 seconds
+    board.enableWakeupFromRTC(0, 0, 1); // Sleep for 10 seconds
 
     delay(1000); // Keep the board awake for 1 second, so we can se it working
 
-    board.setAllPeripheralsPower(false);
+    board.setAllPeripheralsPower(false); // turn off peripherals before going to sleep
     board.standByUntilWakeupEvent();
 }
 
