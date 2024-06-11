@@ -1,35 +1,20 @@
 /*
-  Charger Demo
+Standby Wake from RTC Demo for Portenta H7 
+    This example demonstrates how to  wake up the Portenta H7 from standby mode using the included RTC (Real Time Clock).
+    The device will go to sleep for 10 second and then stay awake for another 10. When the device is awake you will see the board's blue LED turned on. 
+    Effectively, you will get the same effect as with blink. 
 
-  This sketch demonstrates how to use the PowerManagement library enable low power modes on the Arduino Portenta H7.
-  * In the setup() function, it enters standby mode and waits for a wakeup event from the RTC.
-  * The loop() functionit is not used in this sketch.
-  
-  IMPORTANT: Please note that this sketch has to be uploaded to the M4 core too in order to achieve the lowest power consumption.
-
-  Requirements:
-  - Arduino Arduino Portenta H7
-  - Arduino IDE
-  - PowerManagement library (installable from the Arduino Library Manager)
-
-  Usage:
-
-  1. Connect a battery to the board.    
-  
-  2. Upload the Sketch to the M4 core:
-    - Open the provided sketch in the Arduino IDE.
-    - Select your board type and port from the "Tools" menu.
-    - Select the M4 core from the "Tools" menu.
-    - Click the "Upload" button to upload the sketch to your board.
-
-  3. Upload the Sketch to the M7 core:
-    - Select the M7 core from the "Tools" menu.
-    - Click the "Upload" button to upload the sketch to your board.
-
-  4. Observer LED behavior:
-    - The blue LED will turn on when the board is awake.
-    - The blue LED will turn off when the board goes to sleep.
-    - The red LED will blink if the board fails to initialize.
+    On the Portenta H7 with the peripherals turned off you can expect around 300uA of current consumption in standby mode.
+    The example also turns off the peripherals before going to sleep and turns them back on after waking up.
+    Usage:
+        - Make sure you are running the latest version of the Renesas Core
+        - Select the Portenta H7 board from the Tools men
+        - Select the Portenta H7 USB port from the Tools menu
+        - Upload the code to your Portenta H7
+    
+    Initial authors: 
+    Cristian Dragomir (c.dragomir@arduino.cc)
+    Sebastian Romero (s.romero@arduino.cc)
 */
 
 #include "Arduino_PowerManagement.h"

@@ -25,6 +25,8 @@
      - Open the Serial Monitor in the Arduino IDE.
      - Set the baud rate to 115200.
      - You will see the sketch continuously printing battery information.
+
+   Initial author: Sebastian Romero (s.romero@arduino.cc)
 */
 
 #include "Arduino_PowerManagement.h"
