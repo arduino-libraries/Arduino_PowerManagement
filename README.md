@@ -33,6 +33,23 @@ You can manually enable this sleep mode on the Portenta C33, on the H7 and Nicla
 - **Deep Sleep**
 For scenarios demanding drastic power conservation, the Deep Sleep Mode drastically reduces the board's power usage. It's suitable for long-duration, battery-dependent applications where occasional wake-ups are sufficient. This mode restarts the board on wakeup, effectively running the `setup()` function again. 
 
+#### Low Power Measurements
+Here's a table with the current consumption you can expect from each board in Sleep and Standby modes. Clicking on any of the values in the table above will send you to an image of the measurments for that specific scenario. 
+
+|  	| Arduino Portenta C33 	| Arduino Portenta H7 Lite 	| Arduino Portenta H7 	|
+|---	|---	|---	|---	|
+| Without power optimisations 	| [41.37 mA](https://github.com/arduino-libraries/Arduino_LowPowerPortentaC33/blob/main/docs/assets/normal_usage_blink.png) 	| [123.86 mA](https://github.com/arduino-libraries/Arduino_PowerManagement/blob/main/docs/assets/normal_usage.png) 	| [123.86 mA](https://github.com/arduino-libraries/Arduino_PowerManagement/blob/main/docs/assets/normal_usage.png) 	|
+| Standby consumption with peripherals off  	| [58.99 μA](https://github.com/arduino-libraries/Arduino_LowPowerPortentaC33/blob/main/docs/assets/deep_sleep_no_peripherals.png) 	| [75.51 μA](https://github.com/arduino-libraries/Arduino_PowerManagement/blob/main/docs/assets/H7_lite_deep_sleep_peripherals_off.png) 	| [379 μA](https://github.com/arduino-libraries/Arduino_PowerManagement/blob/main/docs/assets/H7_deep_sleep_peripherals_off.png) 	|
+| Standby consumption with peripherals on 	| [11.53 mA](https://github.com/arduino-libraries/Arduino_LowPowerPortentaC33/blob/main/docs/assets/deep_sleep_peripherals_on.png) 	| [4.89 mA](https://github.com/arduino-libraries/Arduino_PowerManagement/blob/main/docs/assets/H7_lite_deep_sleep_peripherals_on.png) 	| [7.98 mA](https://github.com/arduino-libraries/Arduino_PowerManagement/blob/main/docs/assets/H7_deep_sleep_peripherals_on.png) 	|
+| Sleep consumption with peripherals off 	| [7.02 mA](https://github.com/arduino-libraries/Arduino_LowPowerPortentaC33/blob/main/docs/assets/sleep_no_peripherals.png) 	| N/a 	| N/a 	|
+| Sleep consumption with peripherals on 	| [18.26 mA](https://github.com/arduino-libraries/Arduino_LowPowerPortentaC33/blob/main/docs/assets/sleep_peripherals_on.png) 	| N/a 	| N/a 	|
+
+> [!NOTE]  
+> Sleep measurements are not available on the H7 boards because the board goes to sleep automatically when idling.
+
+> [!NOTE]  
+> These measurements have been taken using a [Nordic Power Profiler Kit II](https://www.nordicsemi.com/Products/Development-hardware/Power-Profiler-Kit-2) trough the JST power connector of the Portenta boards,
+> the numbers might be higher when powering  trough the VIN or 5V pins because it involves more power regulators that are not as efficient as the PF1550's integrated regulators. 
 
 ## Examples 
 - [Battery](./examples/Battery/Battery.ino) - Demonstrates battery metrics monitoring.
