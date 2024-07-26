@@ -19,7 +19,7 @@ The library is organized into three primary parts, each addressing specific aspe
 Dedicated to battery management, this class enables real-time monitoring of battery usage and health. By keeping track of various battery parameters, users can optimize their applications for better energy efficiency and battery longevity.
 
 ### 🔌 Charger
-Focused on battery charging dynamics, this class provides a detailed insight into charging parameters. Users can monitor and adjust these parameters, ensuring optimal charging conditions and extending the lifespan of the battery.
+Focused on battery charging dynamics, this class provides a detailed insight into charging parameters. Users can monitor and adjust these parameters, ensuring optimal charging conditions and extending the lifespan of the battery. By default the charger is configured to work with 3.7V batteries which get charged at 4.2V. If you want to use a different type of battery, please take a look at the [API documentation](./docs/api.md).
 
 ### ⚙️ Board
 This class centralizes control over the power distribution within the board. It allows users to enable or disable specific power rails, catering to the needs of energy-efficient designs. 
