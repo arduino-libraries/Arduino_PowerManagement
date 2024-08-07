@@ -12,7 +12,7 @@
 #if defined(ARDUINO_PORTENTA_C33) 
     #include "Arduino_LowPowerPortentaC33.h"
     #include "RTC.h"
-#elif defined(ARDUINO_PORTENTA_H7) || defined(ARDUINO_NICLA_VISION)
+#elif defined(ARDUINO_PORTENTA_H7)
     // When used standalone the LowPowerPortentaH7 library will turn off the Ethernet interface to avoid issues with the line termination resistors, 
     // but in this library we can turn of the Ethernet interface using the PMIC, so we set the NO_ETHERNET_TURN_OFF flag to avoid turning off the Ethernet interface from both sides. 
     #define NO_ETHERNET_TURN_OFF
