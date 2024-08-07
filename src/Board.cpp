@@ -58,7 +58,7 @@ Board::~Board() {
 }
 
 bool Board::begin() {
-    #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_NICLA_VISION)
+    #if defined(ARDUINO_PORTENTA_H7_M7)
         if (CM7_CPUID == HAL_GetCurrentCPUID()){
             if (LowPowerReturnCode::success != LowPower.checkOptionBytes()){
                 LowPower.prepareOptionBytes();
@@ -124,7 +124,7 @@ void Board::enableWakeupFromPin(uint8_t pin, PinStatus direction){
 }
 #endif
 
-#if defined(ARDUINO_PORTENTA_H7) || defined(ARDUINO_NICLA_VISION)
+#if defined(ARDUINO_PORTENTA_H7)
 void Board::enableWakeupFromPin(){
     standbyType |= StandbyType::untilPinActivity;
 }
@@ -177,7 +177,7 @@ bool Board::enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t secon
 
 #endif
 
-#if defined(ARDUINO_PORTENTA_H7) || defined(ARDUINO_NICLA_VISION)
+#if defined(ARDUINO_PORTENTA_H7)
 bool Board::enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds){
     standbyType |= StandbyType::untilTimeElapsed;
     wakeupDelayHours = hours;
@@ -198,7 +198,7 @@ void Board::standByUntilWakeupEvent(){
         lowPower -> deepSleep();
     #elif defined(ARDUINO_GENERIC_STM32H747_M4)
         LowPower.standbyM4();
-    #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_NICLA_VISION)
+    #elif defined(ARDUINO_PORTENTA_H7_M7) 
         RTCWakeupDelay rtcWakeupDelay = RTCWakeupDelay(wakeupDelayHours, wakeupDelayMinutes, wakeupDelaySeconds);
         if(standbyType == StandbyType::untilEither)
             LowPower.standbyM7(LowPowerStandbyType::untilPinActivity | LowPowerStandbyType::untilTimeElapsed, rtcWakeupDelay);
