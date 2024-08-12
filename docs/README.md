@@ -109,7 +109,7 @@ The default end-of-charge current is set to 5 mA.
 Supported values: 5, 10, 20, 30, 50mA.
 
 
-###### Input Current Limit 
+##### Input Current Limit 
 The input current limit (ILIM) safeguards the device by preventing overcurrent, ensuring the charging current is within safe levels for the battery, and adapting to the maximum current the power source can provide, allowing you to charge and use the system at the same time. 
 
 ```cpp
