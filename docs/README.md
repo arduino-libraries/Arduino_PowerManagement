@@ -78,32 +78,46 @@ It will return a value of *ChargeStatus* which can be one of the above:
 This library allows you to change the following charging parameters of the charging process. Please be careful with these and make sure they are supported by the battery you are using as the wrong values might damage your board or the battery. 
 
 ##### Charge Voltage
-Set the voltage that your battery is charged with:
+Set the charging voltage in volts (V).
+Before changing the default values please be aware that changing the charge voltage can damage your battery. 
 
 ```cpp
-charger.setChargeVoltage(ChargeVoltage::V_3_80);
+charger.setChargeVoltage(3.80);
 ```
-
-*ChargeVoltage* is an enum with values ranging from `ChargeVoltage::V_3_50` to `ChargeVoltage::V_4_44` in steps of 0.02V, (`V_3_50`, `V_3_52`, ..., `V_3_42`, `V_4_44`)
+The current charging voltage is set to 4.2V by default. 
+This method accepts float values representing voltages from 3.50V to 4.44V in steps of 0.02V (3.50, 3.52, ...., 4.42, 4.44)
 
 ##### Charge Current
-Set the current used in the constant charging phase. 
-
+Set the current used in the constant charging phase. This method accepts integer values representing milli amperes (mA).
 
 ```cpp
-charger.setChargeCurrent(ChargeCurrent::I_500_mA);
+charger.setChargeCurrent(1000);
 ```
 
-*ChargeCurrent* is an enum with value ranging from `ChargeCurrent::I_100_mA` to `ChargeCurrent::I_100_mA` in steps of 50mA. (`I_100_mA`, `I_150_mA`, ... `I_950_mA`, `I_1000_mA`).
+The default charging current is set to 100mA.
+Supported values: 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000mA
 
 ##### End of Charge Current
-This is the current used in the end-of-charge phase where the voltage is kept at 4.2V. 
+This is the current used in the end-of-charge phase where the voltage is kept at 4.2V. The charger IC determines when to terminate the charge cycle based on the current going into the battery dropping below the given threshold during the constant voltage phase. At this point, the battery is considered fully charged and charging is completed. If charge termination is disabled, the charge current will naturally decay to 0mA, but this is rarely done in practice. 
+This is because the amount of charge going into the battery exponentially decreases during CV charging, and it would take a significantly longer time to recharge the battery with a very little increase in capacity.
 
 ```cpp
-charger.setEndOfChargeCurrent(EndOfChargeCurrent::I_5_mA);
+charger.setEndOfChargeCurrent(5);
 ```
 
-*EndOfChargeCurrent* is an enum with the following values (`I_5_mA`, `I_10_mA`, `I_20_mA`, `I_30_mA`, `I_50_mA`).
+The default end-of-charge current is set to 5 mA. 
+Supported values: 5, 10, 20, 30, 50mA.
+
+
+##### Input Current Limit 
+The input current limit (ILIM) safeguards the device by preventing overcurrent, ensuring the charging current is within safe levels for the battery, and adapting to the maximum current the power source can provide, allowing you to charge and use the system at the same time. 
+
+```cpp
+charger.setInputCurrentLimit(1500);
+```
+
+The default input current limit is set to 1.5A.
+Supported values: 10, 15, 20, 25, 30, 35, 40, 45, 50, 100, 150, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1500mA
 
 ## Board
 The PF1550 power management IC has three LDO regulators, and three DCDC converters, each of these have a configurable voltage range and can be turned on and off. 
@@ -242,7 +256,7 @@ When utilizing Mbed with STM32-based microcontrollers such as the Portenta H7 an
 
 However, initiating this command doesn't guarantee automatic entry into sleep mode due to the presence of Sleep Locks. These locks act as safeguards, preventing the system from sleeping under certain conditions to ensure ongoing operations remain uninterrupted. Common peripherals, such as the USB Stack, may engage a sleep lock, effectively keeping the board awake even during periods of apparent inactivity. This behavior underscores how the effectiveness of sleep mode is closely linked to the specific operations and configurations defined in your sketch.
 
-For those looking to fine-tune their board's energy efficiency by leveraging automatic sleep functionality, a particularly useful resource is [Alrik's example sketch](https://github.com/alrvid/Arduino_LowPowerPortentaH7/blob/main/examples/DeepSleepLockDebug_Example/DeepSleepLockDebug_Example.ino). This sketch provides a comprehensive overview of the active sleep locks, offering insights into what may be preventing the board from entering sleep mode and how to address these obstacles. By incorporating Alrik's insights, developers can more effectively manage their board's power consumption, optimizing for both performance and energy efficiency.
+For those looking to fine-tune their board's energy efficiency by leveraging automatic sleep functionality, a particularly useful resource is [the Sleep Lock Example Sketch](https://github.com/alrvid/Arduino_LowPowerPortentaH7/blob/main/examples/DeepSleepLockDebug_Example/DeepSleepLockDebug_Example.ino). This sketch provides a comprehensive overview of the active sleep locks, offering insights into what may be preventing the board from entering sleep mode and how to address these obstacles. 
 
 #### Send the board to sleep
 `board.deepSleepUntilwakeupEvent()` - Sends the board into the deep sleep state, where it consumes around ~100uA and ~300uA without peripherals.
