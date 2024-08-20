@@ -30,6 +30,7 @@
     Cristian Dragomir (c.dragomir@arduino.cc)
     Sebastian Romero (s.romero@arduino.cc)
 */
+
 #include "Arduino_PowerManagement.h"
 
 Charger charger;
