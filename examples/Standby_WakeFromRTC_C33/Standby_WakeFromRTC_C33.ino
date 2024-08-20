@@ -3,7 +3,7 @@
 
     This example demonstrates how to  wake up the Portenta C33 from standby mode using the included RTC (Real Time Clock).
     The device will go to sleep for 1 second and then wake up. When the device is awake you will see the board's blue LED turned on. 
-    Effectivelly, you will get the same effect as with blink. 
+    Effectively, you will get the same effect as with blink. 
 
     On the Portenta C33 with the peripherals turned off you can expect around 60uA of current consumption in standby mode.
     The example also turns off the peripherals before going to sleep and turns them back on after waking up.
@@ -62,7 +62,7 @@ void setup() {
 
     board.enableWakeupFromRTC(0, 0, 10); // Sleep for 10 seconds
 
-    delay(10000); // Keep the board awake for 1 second, so we can se it working
+    delay(10000); // Keep the board awake for 10 seconds, so we can se it working
 
     board.shutDownFuelGauge();
     board.setAllPeripheralsPower(false);
