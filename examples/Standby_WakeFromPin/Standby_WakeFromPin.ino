@@ -5,7 +5,7 @@
     This sketch is universal and worksn on both Portenta C33 and H7. 
 
     On the the Portenta C33 you can select any of the supported pins (A0, A1, A2, A3, A4, A5, D4, D7) to wake up the board from standby mode, 
-    but on the Portenta H7 only GPIO0 can be used to wake up the board from standby mode. GPIO0 is available trough the High Density Connectors and you need a breakout board to access it. 
+    but on the Portenta H7 only GPIO0 can be used to wake up the board from standby mode. GPIO0 is available through the High Density Connectors and you need a breakout board to access it. 
 
     Requirements:
         - Arduino Portenta C33, Arduino Portenta H7
