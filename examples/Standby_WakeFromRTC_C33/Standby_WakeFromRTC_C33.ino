@@ -62,7 +62,7 @@ void setup() {
 
     board.enableWakeupFromRTC(0, 0, 10); // Sleep for 10 seconds
 
-    delay(10000); // Keep the board awake for 1 second, so we can se it working
+    delay(10000); // Keep the board awake for 10 seconds, so we can se it working
 
     board.shutDownFuelGauge();
     board.setAllPeripheralsPower(false);

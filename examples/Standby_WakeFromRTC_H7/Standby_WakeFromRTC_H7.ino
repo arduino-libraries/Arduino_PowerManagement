@@ -55,7 +55,7 @@ void setup() {
         }
     }
 
-    delay(10000); // keep the board awake for 5 seconds, so we can se it working
+    delay(10000); // keep the board awake for 10 seconds, so we can se it working
     board.shutDownFuelGauge();
 
 
