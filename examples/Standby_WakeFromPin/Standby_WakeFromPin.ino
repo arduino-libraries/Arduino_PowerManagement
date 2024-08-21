@@ -36,23 +36,26 @@ volatile bool shouldGoToSleep = false;
 Board board; 
 
 void setup() {
-    board = Board();
+    pinMode(LED_BUILTIN, OUTPUT);
+
+    // Register the sleep and wake-up pins as inputs
+    pinMode(GOTO_SLEEP_PIN, INPUT);
+    pinMode(PORTENTA_C33_WAKEUP_PIN, INPUT);
+
     board.begin();
-    board.setAllPeripheralsPower(true); // TODO: Check if this is necessary
+    board.setAllPeripheralsPower(true); // turn on peripherals after waking up from deep sleep
 
     // Allows to use a button to put the device into sleep mode
-    attachInterrupt(digitalPinToInterrupt(GOTO_SLEEP_PIN), goToSleep, RISING);
+    attachInterrupt(digitalPinToInterrupt(GOTO_SLEEP_PIN), goToSleep, FALLING);
 
     #if defined(ARDUINO_PORTENTA_C33)
         // On Portenta C33, you can specify which pin to use to wake up the device from sleep mode
         // Please read the documentation to understand which pins can be used to wake up the device.
-        board.enableWakeupFromPin(PORTENTA_C33_WAKEUP_PIN, RISING);
+        board.enableWakeupFromPin(PORTENTA_C33_WAKEUP_PIN, FALLING);
     #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_GENERIC_STM32H747_M4) || defined(ARDUINO_NICLA_VISION)
         // On Portenta only pin GPIO0 can be used to wake up the device from sleep mode
         board.enableWakeupFromPin();
-    #endif
-
-    pinMode(LEDB, OUTPUT);
+    #endif    
 }
 
 void goToSleep(){
@@ -61,15 +64,16 @@ void goToSleep(){
 
 void loop() {
     if(shouldGoToSleep){
-        shouldGoToSleep = false;
+        digitalWrite(LED_BUILTIN, HIGH); // turn off the LED to show that the board is going to sleep
         board.shutDownFuelGauge();
         board.setAllPeripheralsPower(false); // turn off peripherals before going to sleep 
         board.standByUntilWakeupEvent();
+        shouldGoToSleep = false;
     } else {
         // Show that the board is awake by blinking the LED
-        digitalWrite(LEDB, HIGH);
-        delay(1000);
-        digitalWrite(LEDB, LOW);
-        delay(1000);
+        digitalWrite(LED_BUILTIN, HIGH);
+        delay(500);
+        digitalWrite(LED_BUILTIN, LOW);
+        delay(500);
     }
 }
