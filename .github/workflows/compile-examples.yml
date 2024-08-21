@@ -54,6 +54,10 @@ jobs:
             artifact-name-suffix: arduino-renesas_portenta-portenta_c33
             additional-sketch-paths: |
               - examples/Standby_WakeFromRTC_C33
+          - fqbn: arduino:mbed_nicla:nicla_vision
+            platforms: |
+              - name: arduino:mbed_nicla
+            artifact-name-suffix: arduino-mbed_nicla-nicla_vision
 
     steps:
       - name: Checkout repository
@@ -70,6 +74,7 @@ jobs:
             - name: Arduino_PF1550
             - name: Arduino_LowPowerPortentaH7
             - source-url: https://github.com/arduino-libraries/Arduino_LowPowerPortentaC33.git
+            - source-url: https://github.com/bcmi-labs/Arduino_LowPowerNiclaVision.git
           sketch-paths: |
             ${{ env.UNIVERSAL_SKETCH_PATHS }}
             ${{ matrix.board.additional-sketch-paths }}
