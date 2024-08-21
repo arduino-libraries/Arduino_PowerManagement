@@ -37,6 +37,8 @@ Charger charger;
 
 // Charge current in mA, a safe value for most batteries is half the battery capacity
 constexpr int CHARGE_CURRENT_MA = 100; // mA
+
+// End of charge current in mA, a safe value for most batteries is 5% of the battery capacity
 constexpr int END_OF_CHARGE_CURRENT_MA = 5; // mA
 
 void setup() {
@@ -52,15 +54,11 @@ void setup() {
     
     Serial.print("* ✅ Charging is enabled: ");
     Serial.println(charger.isEnabled() ? "true" : "false");
-
-    auto chargeCurrent = charger.getChargeCurrent();
+    
     auto chargeVoltage = charger.getChargeVoltage();
-    auto endOfChargeCurrent = charger.getEndOfChargeCurrent();
     auto inputCurrentLimit = charger.getInputCurrentLimit();
 
-    Serial.println("* ⚡️ Charge current: " + String(chargeCurrent) + " mA");
     Serial.println("* ⚡️ Charge voltage: " + String(chargeVoltage) + " V");
-    Serial.println("* ⚡️ End of charge current: " + String(endOfChargeCurrent) + " mA");
     Serial.println("* ⚡️ Input current limit: " + String(inputCurrentLimit) + " mA");
 
     if (!charger.setChargeCurrent(CHARGE_CURRENT_MA)){
@@ -72,6 +70,12 @@ void setup() {
         Serial.println("Failed to set end of charge current");
         Serial.println("Please double check the supported values in the documentation");
     }
+
+    auto chargeCurrent = charger.getChargeCurrent();
+    auto endOfChargeCurrent = charger.getEndOfChargeCurrent();    
+
+    Serial.println("* ⚡️ Charge current set to: " + String(CHARGE_CURRENT_MA) + " mA");
+    Serial.println("* ⚡️ End of charge current set to: " + String(END_OF_CHARGE_CURRENT_MA) + " mA");
 }
 
 String getChargerState(){
