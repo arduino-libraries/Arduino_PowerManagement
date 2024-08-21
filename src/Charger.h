@@ -127,7 +127,7 @@ public:
      * This is because the amount of charge going into the battery exponentially decreases during CV charging, 
      * and it would take a significantly longer time to recharge the battery with a very little increase in capacity.
      * @param current End-of-charge current in milli amperes (mA).
-     * The default end-of-charge current is set to 5 mA.
+     * The default end-of-charge current is set to 50 mA.
      * Supported values: 5, 10, 20, 30, 50
      * @return True if successful, false if an invalid value was provided or if the PMIC communication failed.
      */
