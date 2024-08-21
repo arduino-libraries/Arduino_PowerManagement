@@ -137,38 +137,7 @@ void Board::enableSleepWhenIdle(){
 
 #if defined(ARDUINO_PORTENTA_C33)
 bool Board::enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds, void (* const callbackFunction)(), RTClock * rtc){
-    lowPower->enableWakeupFromRTC();
-
-    RTCTime currentTime;
-    if (!rtc -> getTime(currentTime)) {
-        return false; 
-    }
-    delay(1);
-
-    // Convert current time to UNIX timestamp and add the desired interval
-    time_t currentTimestamp = currentTime.getUnixTime();
-    currentTimestamp += hours * 3600 + minutes * 60 + seconds;
-
-    // Convert back to RTCTime
-    RTCTime alarmTime(currentTimestamp);
-
-    // Configure the alarm match criteria
-    AlarmMatch match;
-    match.addMatchSecond(); // Trigger the alarm when the seconds match
-    match.addMatchMinute(); // Trigger the alarm when the minutes match
-    match.addMatchHour();   // Trigger the alarm when the hours match
-
-    // Set the alarm callback (assuming you have a callback function named alarmCallback)
-    if (callbackFunction && !rtc -> setAlarmCallback(callbackFunction, alarmTime, match)) {
-        return false; // Failed to set the alarm
-    } else {
-        // Set the alarm without a callback
-        if (!rtc -> setAlarm(alarmTime, match)) {
-            return false; // Failed to set the alarm
-        }
-    }
-    delay(1);
-    return true; 
+    return lowPower->setWakeUpAlarm(hours, minutes, seconds, callbackFunction, rtc);
 }
 
 bool Board::enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds, RTClock * rtc){
