@@ -41,13 +41,8 @@ void setup() {
     pinMode(LEDR, OUTPUT); // Used to indicate errors
     digitalWrite(LEDR, HIGH); // Turn off the red LED
     pinMode(LED_BUILTIN, OUTPUT);
-    digitalWrite(LED_BUILTIN, HIGH); // Turn off the built-in LED
-    pinMode(LEDB, OUTPUT); // Used to indicate that the board is awake    
+    digitalWrite(LED_BUILTIN, LOW); // Turn on the built-in LED to show that the board is awake
     
-    // Turn on the blue LED to show that the board is still awake
-    digitalWrite(LEDB, LOW);
-
-
     if(!board.begin()){
         // If the board fails to initialize, it will blink the red LED
         while (true){
@@ -57,8 +52,6 @@ void setup() {
 
     delay(10000); // keep the board awake for 10 seconds, so we can se it working
     board.shutDownFuelGauge();
-
-
 
     // The LED should go off when the board goes to sleep
     board.setAllPeripheralsPower(false);    
