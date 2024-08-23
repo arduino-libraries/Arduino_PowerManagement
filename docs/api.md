@@ -739,7 +739,7 @@ bool setEndOfChargeCurrent(uint16_t current)
 Set the end-of-charge current. The charger IC determines when to terminate the charge cycle based on the current going into the battery dropping below the given threshold during the constant voltage phase. At this point, the battery is considered fully charged and charging is completed. If charge termination is disabled, the charge current will naturally decay to 0mA, but this is rarely done in practice. This is because the amount of charge going into the battery exponentially decreases during CV charging, and it would take a significantly longer time to recharge the battery with a very little increase in capacity.
 
 #### Parameters
-* `current` End-of-charge current in milli amperes (mA). The default end-of-charge current is set to 5 mA. Supported values: 5, 10, 20, 30, 50 
+* `current` End-of-charge current in milli amperes (mA). The default end-of-charge current is set to 50 mA. Supported values: 5, 10, 20, 30, 50 
 
 #### Returns
 True if successful, false if an invalid value was provided or if the PMIC communication failed.
