@@ -63,13 +63,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
-      - name: Checkout private library repo
-        uses: actions/checkout@v4
-        with:
-          repository: bcmi-labs/Arduino_LowPowerNiclaVision
-          token: ${{ secrets.GH_PAT }}
-          path: Arduino_LowPowerNiclaVision
-
       - name: Compile examples
         uses: arduino/compile-sketches@v1
         with:
@@ -81,8 +74,6 @@ jobs:
             - name: Arduino_PF1550
             - name: Arduino_LowPowerPortentaH7
             - source-url: https://github.com/arduino-libraries/Arduino_LowPowerPortentaC33.git
-            - source-path: ./Arduino_LowPowerNiclaVision
-          
           sketch-paths: |
             ${{ env.UNIVERSAL_SKETCH_PATHS }}
             ${{ matrix.board.additional-sketch-paths }}
