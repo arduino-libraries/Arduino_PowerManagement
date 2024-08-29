@@ -25,7 +25,6 @@ env:
   UNIVERSAL_SKETCH_PATHS: |
     - examples/Battery
     - examples/Charger
-    - examples/Standby_WakeFromPin
   SKETCHES_REPORTS_PATH: sketches-reports
   SKETCHES_REPORTS_ARTIFACT_NAME: sketches-reports
 
@@ -48,12 +47,14 @@ jobs:
             artifact-name-suffix: arduino-mbed_portenta-envie_m7
             additional-sketch-paths: |
               - examples/Standby_WakeFromRTC_H7
+              - examples/Standby_WakeFromPin
           - fqbn: arduino:renesas_portenta:portenta_c33
             platforms: |
               - name: arduino:renesas_portenta
             artifact-name-suffix: arduino-renesas_portenta-portenta_c33
             additional-sketch-paths: |
               - examples/Standby_WakeFromRTC_C33
+              - examples/Standby_WakeFromPin
           - fqbn: arduino:mbed_nicla:nicla_vision
             platforms: |
               - name: arduino:mbed_nicla
