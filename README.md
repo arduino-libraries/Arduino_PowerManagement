@@ -86,6 +86,3 @@ Here's a table with the current consumption you can expect from each board in Sl
 
 ## 📖 Documentation
 For more information on how to use this library please read the documentation [here](./docs).
-
-> [!NOTE]  
-> The Low Power functionality on the Portenta H7 and Nicla Vision are still experimental. It works well on some chip revisions while on other chip revisions it will go to sleep and never wake up unless you manually restart the board. If your board doesn't wake up from sleep, please create a Github Issue and let us know your board version. You can find the 4-digit number on the back of the board next to the High Density connector that is on the opposite side from the USB connector. 
