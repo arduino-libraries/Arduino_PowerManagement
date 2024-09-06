@@ -95,19 +95,19 @@ Charging a LiPo battery is done in three stages. This library allows you to moni
 * **Constant Voltage** - Third phase of the charging process where the battery is kept at the fully charged voltage and current is slowly decreased to the *end of charge current*.
 
 #### Get charger status 
-You can find out what stage the charger is in by calling the `getChargeStatus()` method.
+You can find out what stage the charger is in by calling the `getState()` method.
 
 It will return a value of *ChargeStatus* which can be one of the above:
-* `PRECHARGE` - First stage of the charging process
-* `FAST_CHARGE_CC` - Second stage of the charging process
-* `FAST_CHARGE_CV` - Last stage of the charging process
-* `END_OF_CHARGE` - If the battery is still connected, the charger will ensure it's kept at 4.2V by topping up the voltage to avoid self discharge. 
-* `DONE` - Battery is fully charged
-* `TIMER_FAULT` - The timer that is monitoring the charge status has encountered an error. 
-* `THERMISTOR_SUSPEND` - Charging was suspended due to overheating
-* `OFF` - Charger is disabled 
-* `BATTERY_OVERVOLTAGE` - Charging was suspended due to an overvoltage fault
-* `LINEAR_ONLY` - in this state, the charger is bypassed completely and the USB voltage is powering the board
+* `preCharge` - First stage of the charging process
+* `fastChargeConstantCurrent` - Second stage of the charging process
+* `fastChargeConstantVoltage` - Last stage of the charging process
+* `endOfCharge` - If the battery is still connected, the charger will ensure it's kept at 4.2V by topping up the voltage to avoid self discharge. 
+* `done` - Battery is fully charged
+* `timerFaultError` - The timer that is monitoring the charge status has encountered an error. 
+* `thermistorSuspendError` - Charging was suspended due to overheating
+* `chargerDisabled` - Charger is disabled 
+* `batteryOvervoltageError` - Charging was suspended due to an overvoltage fault
+* `chargerBypassed` - in this state, the charger is bypassed completely and the USB voltage is powering the board
 
 #### Set charging parameters
 This library allows you to change the following charging parameters of the charging process. Please be careful with these and make sure they are supported by the battery you are using as the wrong values might damage your board or the battery. 
