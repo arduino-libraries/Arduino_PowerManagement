@@ -4,51 +4,86 @@
 
 ```cpp
 #include "PowerManagement.h"
-#include <vector>
-#include <string>
 
-PowerManagement manager = PowerManagement();
 Battery battery; 
-Board board; 
 Charger charger;
+Board board;
 
 void setup(){
-    manager.begin();
-    battery = manager.getBattery();
-    board = manager.getBoard();
-    charger = manager.getCharger();
-
+    battery.begin();
+    charger.begin();
+    board.begin();
     /* Rest of your setup() code */
 }
 ```
 
 
 ## Battery
-The battery object contains methods to read battery usage and health metrics. You can get current and average values for voltage, percentage, current and time as well as an estimated of the time left to charge completely and time left to discharge. 
+The Battery class in the PowerManagement library provides a comprehensive set of tools for monitoring and managing the health and usage of your battery. This includes real-time data on voltage, current, power, temperature, and overall battery capacity, enabling you to optimize your application for better energy efficiency and battery longevity.
+
+### Voltage Monitoring
+
+| Method                   | Data Type   | Description                                      |
+|:-------------------------|:------------|:-------------------------------------------------|
+| battery.voltage()        | float       | Read the current voltage of the battery.         |
+| battery.averageVoltage() | float       | Get the average voltage.                         |
+| battery.minimumVoltage() | float       | Access the minimum voltage since the last reset. |
+| battery.maximumVoltage() | float       | Access the maximum voltage since the last reset. |
+
+### Current Monitoring
+
+| Method                   | Data Type   | Description                                      |
+|:-------------------------|:------------|:-------------------------------------------------|
+| battery.current()        | int16_t     | Measure the current flow from the battery.       |
+| battery.averageCurrent() | int16_t     | Obtain the average current.                      |
+| battery.minimumCurrent() | int16_t     | Access the minimum current since the last reset. |
+| battery.maximumCurrent() | int16_t     | Access the maximum current since the last reset. |
+
+### Power Monitoring
+
+| Method                 | Data Type   | Description                                           |
+|:-----------------------|:------------|:------------------------------------------------------|
+| battery.power()        | int16_t     | Calculate the current power usage in milliwatts (mW). |
+| battery.averagePower() | int16_t     | Get the average power usage in milliwatts (mW).       |
+
+### Temperature Monitoring
+
+| Method                               | Data Type   | Description                                              |
+|:-------------------------------------|:------------|:---------------------------------------------------------|
+| battery.internalTemperature()        | uint8_t     | Read the internal temperature of the battery gauge chip. |
+| battery.averageInternalTemperature() | uint8_t     | Obtain the average internal temperature.                 |
+
+### Capacity and State of Charge
+
+| Method                      | Data Type   | Description                                                 |
+|:----------------------------|:------------|:------------------------------------------------------------|
+| battery.remainingCapacity() | uint16_t    | Monitor the battery's remaining capacity in mAh.            |
+| battery.percentage()        | uint8_t     | Get the battery's state of charge as a percentage (0-100%). |
+
+### Time Estimates
+
+| Method                | Data Type   | Description                                           |
+|:----------------------|:------------|:------------------------------------------------------|
+| battery.timeToEmpty() | int32_t     | Estimate the time until the battery is empty.         |
+| battery.timeToFull()  | int32_t     | Estimate the time until the battery is fully charged. |
+
+### Configuring Battery Characteristics
+
+To ensure accurate readings and effective battery management, you can configure the `BatteryCharacteristics` struct to match the specific attributes of your battery:
 
 ```cpp
-Serial.print("* Voltage: ");
-Serial.println(String(battery.readVoltageAvg()) + "mV");
+BatteryCharacteristics characteristics = BatteryCharacteristics();
 
-Serial.print("* Current: ");
-Serial.println(String(battery.readCurrent()) + "mA");
-
-Serial.print("* Percentage: ");
-Serial.println(String(battery.readPercentage()) + "%");
-
-Serial.print("* Remaining Capacity: ");
-Serial.println(String(battery.readRemainingCapacity()) + "mAh");
-
-Serial.print("* Temperature: ");
-Serial.println(String(battery.readTempAvg()));
-
-Serial.print("* Time-to-full: ");
-Serial.println(String(battery.readTimeToFull()) + "s");
-
-Serial.print("* Time-to-empty: ");
-Serial.println(String(battery.readTimeToEmpty()) + "s");
-
+characteristics.capacity = 200; // Set the battery's capacity in mAh
+characteristics.emptyVoltage = 3.3f; // Voltage at which the battery is considered empty
+characteristics.chargeVoltage = 4.2f; // Voltage at which the battery is charged
+characteristics.endOfChargeCurrent = 50; // End of charge current in mA
+characteristics.ntcResistor = NTCResistor::Resistor10K; // Set NTC resistor value (10K or 100K Ohm)
+characteristics.recoveryVoltage = 3.88f; // Voltage to reset empty detection
 ```
+
+This configuration ensures that the Battery class operates with parameters that match your battery’s specifications, providing more accurate and reliable monitoring and management.
+
 
 ## Charger 
 Charging a LiPo battery is done in three stages. This library allows you to monitor what charging stage we are in as well as control some of the chagring parameters. 
@@ -60,19 +95,19 @@ Charging a LiPo battery is done in three stages. This library allows you to moni
 * **Constant Voltage** - Third phase of the charging process where the battery is kept at the fully charged voltage and current is slowly decreased to the *end of charge current*.
 
 #### Get charger status 
-You can find out what stage the charger is in by calling the `getChargeStatus()` method.
+You can find out what stage the charger is in by calling the `getState()` method.
 
 It will return a value of *ChargeStatus* which can be one of the above:
-* `PRECHARGE` - First stage of the charging process
-* `FAST_CHARGE_CC` - Second stage of the charging process
-* `FAST_CHARGE_CV` - Last stage of the charging process
-* `END_OF_CHARGE` - If the battery is still connected, the charger will ensure it's kept at 4.2V by topping up the voltage to avoid self discharge. 
-* `DONE` - Battery is fully charged
-* `TIMER_FAULT` - The timer that is monitoring the charge status has encountered an error. 
-* `THERMISTOR_SUSPEND` - Charging was suspended due to overheating
-* `OFF` - Charger is disabled 
-* `BATTERY_OVERVOLTAGE` - Charging was suspended due to an overvoltage fault
-* `LINEAR_ONLY` - in this state, the charger is bypassed completely and the USB voltage is powering the board
+* `preCharge` - First stage of the charging process
+* `fastChargeConstantCurrent` - Second stage of the charging process
+* `fastChargeConstantVoltage` - Last stage of the charging process
+* `endOfCharge` - If the battery is still connected, the charger will ensure it's kept at 4.2V by topping up the voltage to avoid self discharge. 
+* `done` - Battery is fully charged
+* `timerFaultError` - The timer that is monitoring the charge status has encountered an error. 
+* `thermistorSuspendError` - Charging was suspended due to overheating
+* `chargerDisabled` - Charger is disabled 
+* `batteryOvervoltageError` - Charging was suspended due to an overvoltage fault
+* `chargerBypassed` - in this state, the charger is bypassed completely and the USB voltage is powering the board
 
 #### Set charging parameters
 This library allows you to change the following charging parameters of the charging process. Please be careful with these and make sure they are supported by the battery you are using as the wrong values might damage your board or the battery. 
@@ -181,22 +216,22 @@ board.setCameraSwitch(false);
 ##  Low Power 
 
 ### Sleep Modes
-The Renesas and ST chips that are supported by this library have a slightly different way of handling sleep, and very different ways of calling those modes. For example ST calls the deepest sleep mode *Standby* while Renesas calls the most light sleep mode *Standby*. To reduce the confusion, and to have a universal API for both architectures we have selected two sleep modes and simply called them: **Sleep** and **Deep Sleep**: 
+The Renesas and ST chips that are supported by this library have a slightly different way of handling sleep, and very different ways of calling those modes. For example ST calls the deepest sleep mode *Standby* while Renesas calls the most light sleep mode *Standby*. To reduce the confusion, and to have a universal API for both architectures we have selected two sleep modes and simply called them: **Sleep** and **Standby**: 
 
 #### Sleep 
 * **Function**: Reduces the microcontroller's power usage to about half of its normal consumption.
 * **Effect**: Upon waking up from this mode, the execution of your program resumes exactly where it stopped. This is particularly useful for applications that require a quick resume with minimal power savings.
 * **Wake-Up Triggers**: Differ from board to board.
   
-#### Deep Sleep
+#### Standby
 * **Function**: Significantly reduces power usage to approximately 100uA-300uA (when all peripherals are off), making it ideal for long-term, battery-dependent operations.
-* **Effect**: Unlike Sleep Mode, waking up from Deep Sleep Mode restarts the board, triggering the void setup() function. This behavior is suitable for scenarios where a full reset is acceptable or desired upon waking up.
+* **Effect**: Unlike Sleep Mode, waking up from standby Mode restarts the board, triggering the void setup() function. This behavior is suitable for scenarios where a full reset is acceptable or desired upon waking up.
 * **Wake-Up Triggers**: Both board can be configured to wake up either from an RTC alarm or an external interrupt pin.
 
 
 ### Portenta C33
 #### Selecting a wakeup source
-The wakeup source can be one of the deep-sleep enabled wakeup pins, and an RTC Alarm. You can select multiple pins or the RTC alarm to wake up the board. These sources are the same for both **Sleep** and **Deep Sleep**
+The wakeup source can be one of the deep-sleep enabled wakeup pins, and an RTC Alarm. You can select multiple pins or the RTC alarm to wake up the board. These sources are the same for both **Sleep** and **Standby**
 
 ##### Wakeup Pins
 This feature can be used when you want to wake up the board from external stimuli, such as sensors or user input. Some sensors have an interrupt pin that you can connect to one of the wakeup pins (eg: most motion sensors), while some output voltage on a pin, (eg: Passive Infrared Sensors or user buttons).
@@ -221,11 +256,11 @@ Here is a list of the usable interrupts:
 This feature is particularly useful when you want to set the board to wake up at specific times. You can use this in conjunction with the [RTC library](). 
 To make your board wake up on an RTC alarm you simply need to call `board.setWakeupRTC()` and it will enable that functionality. Check out [this example]() for more details about setting up the RTC. 
 
-To simplify things, we have added a convenience function in `Board` called `sleepFor`. This method takes a number of hours, minutes and seconds as a parameters. For more information, check out the [DeepSleep_WakeFromRTC_C33](https://github.com/arduino-libraries/Arduino_PowerManagement/blob/main/examples/DeepSleep_WakeFromRTC_H7/DeepSleep_WakeFromRTC_C33.ino) example. 
+To simplify things, we have added a convenience function in `Board` called `sleepFor`. This method takes a number of hours, minutes and seconds as a parameters. For more information, check out the [Standby_WakeFromRTC_C33](https://github.com/arduino-libraries/Arduino_PowerManagement/blob/main/examples/Standby_WakeFromRTC_C33/Standby_WakeFromRTC_C33.ino) example. 
 
 ##### Send the board to sleep
 * `board.sleepUntilwakeupEvent();` - Sends the board into the sleep state, where it consumes about ~6mA without peripherals and ~18mA with peripherals. 
-* `board.deepSleepUntilwakeupEvent();` - Sends the board into the deep sleep state, where it consumes around ~100uA without peripherals and ~12mA with peripherals. 
+* `board.standByUntilWakeupEvent();` - Sends the board into the standby state, where it consumes around ~100uA without peripherals and ~12mA with peripherals. 
 
 ##### Toggle peripherals
 * `board.turnPeripheralsOff();` - Turn the peripherals on Portenta C33 (ADC, RGB LED, Secure Element, Wifi and Bluetooth) off.
@@ -240,26 +275,25 @@ Here's an overview of the reduction in power usage that you can expect from this
 #### Sleep (ADC, RGB LED, Secure Element, Wifi and Bluetooth off)
 ![](https://raw.githubusercontent.com/arduino-libraries/Arduino_LowPowerPortentaC33/main/docs/assets/sleep_no_peripherals.png)
 
-#### Deep Sleep (ADC, RGB LED, Secure Element, Wifi and Bluetooth off)
+#### Standby (ADC, RGB LED, Secure Element, Wifi and Bluetooth off)
 ![](https://raw.githubusercontent.com/arduino-libraries/Arduino_LowPowerPortentaC33/main/docs/assets/deep_sleep_no_peripherals.png)
 
 #### Sleep (ADC, RGB LED, Secure Element, Wifi and Bluetooth on)
 ![](https://raw.githubusercontent.com/arduino-libraries/Arduino_LowPowerPortentaC33/main/docs/assets/sleep_peripherals_on.png)
 
-#### Deep Sleep (ADC, RGB LED, Secure Element, Wifi and Bluetooth on)
+#### Standby (ADC, RGB LED, Secure Element, Wifi and Bluetooth on)
 ![](https://raw.githubusercontent.com/arduino-libraries/Arduino_LowPowerPortentaC33/main/docs/assets/deep_sleep_peripherals_on.png)
 
 
-
-### Portenta H7/Nicla Vison Low Power
-When utilizing Mbed with STM32-based microcontrollers such as the Portenta H7 and Nicla Vision, the approach to managing sleep modes exhibits some unique characteristics. Mbed is designed to transition the board to a sleep-like state—akin to the Sleep Mode found on the Portenta C33—whenever the system is not actively processing tasks. This energy-saving feature can be activated by invoking the `board.enableSleepWhenIdle()` method within your code.
+### Portenta H7 Low Power
+When utilizing Mbed with STM32-based microcontrollers such as the Portenta H7, the approach to managing sleep modes exhibits some unique characteristics. Mbed is designed to transition the board to a sleep-like state—akin to the Sleep Mode found on the Portenta C33—whenever the system is not actively processing tasks. This energy-saving feature can be activated by invoking the `board.enableSleepWhenIdle()` method within your code.
 
 However, initiating this command doesn't guarantee automatic entry into sleep mode due to the presence of Sleep Locks. These locks act as safeguards, preventing the system from sleeping under certain conditions to ensure ongoing operations remain uninterrupted. Common peripherals, such as the USB Stack, may engage a sleep lock, effectively keeping the board awake even during periods of apparent inactivity. This behavior underscores how the effectiveness of sleep mode is closely linked to the specific operations and configurations defined in your sketch.
 
 For those looking to fine-tune their board's energy efficiency by leveraging automatic sleep functionality, a particularly useful resource is [the Sleep Lock Example Sketch](https://github.com/alrvid/Arduino_LowPowerPortentaH7/blob/main/examples/DeepSleepLockDebug_Example/DeepSleepLockDebug_Example.ino). This sketch provides a comprehensive overview of the active sleep locks, offering insights into what may be preventing the board from entering sleep mode and how to address these obstacles. 
 
 #### Send the board to sleep
-`board.deepSleepUntilwakeupEvent()` - Sends the board into the deep sleep state, where it consumes around ~100uA and ~300uA without peripherals.
+`board.standByUntilWakeupEvent()` - Sends the board into the standby state, where it consumes around ~100uA and ~300uA without peripherals.
 
 #### Waking up from GPIO
 > [!NOTE]  
@@ -269,20 +303,16 @@ For those looking to fine-tune their board's energy efficiency by leveraging aut
 
 This feature is particularly useful when you want to set the board to wake up at specific times.  To make your board wake up on an RTC alarm you simply need to call `board.setWakeupRTC()` and it will enable that functionality. 
 
-To simplify things, we have added a convenience function in `Board` called `sleepFor`. This method takes a number of hours, minutes and seconds as a parameters. For more information, check out the [DeepSleep_WakeFromRTC_H7](https://github.com/arduino-libraries/Arduino_PowerManagement/blob/main/examples/DeepSleep_WakeFromRTC_H7/DeepSleep_WakeFromRTC_H7.ino) example.
+To simplify things, we have added a convenience function in `Board` called `sleepFor`. This method takes a number of hours, minutes and seconds as a parameters. For more information, check out the [Standby_WakeFromRTC_H7](../examples/Standby_WakeFromRTC_H7/Standby_WakeFromRTC_H7.ino) example.
 
 ```cpp
-PowerManagement manager;
 Board board; 
 
 void setup() {
-    manager = PowerManagement();
-    manager.begin();
-    board = manager.getBoard();
-    board.enableWakeupFromRTC();
-    board.sleepFor(0, 0, 1);
+    board.begin();
+    board.enableWakeupFromRTC(0, 0, 1);
     board.setAllPeripheralsPower(false);
-    board.deepSleepUntilWakeupEvent();
+    board.standByUntilWakeupEvent();
 }
 ```
 
