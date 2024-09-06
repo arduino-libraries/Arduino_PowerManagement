@@ -216,7 +216,7 @@ board.setCameraSwitch(false);
 ##  Low Power 
 
 ### Sleep Modes
-The Renesas and ST chips that are supported by this library have a slightly different way of handling sleep, and very different ways of calling those modes. For example ST calls the deepest sleep mode *Standby* while Renesas calls the most light sleep mode *Standby*. To reduce the confusion, and to have a universal API for both architectures we have selected two sleep modes and simply called them: **Sleep** and **Deep Sleep**: 
+The Renesas and ST chips that are supported by this library have a slightly different way of handling sleep, and very different ways of calling those modes. For example ST calls the deepest sleep mode *Standby* while Renesas calls the most light sleep mode *Standby*. To reduce the confusion, and to have a universal API for both architectures we have selected two sleep modes and simply called them: **Sleep** and **Standby**: 
 
 #### Sleep 
 * **Function**: Reduces the microcontroller's power usage to about half of its normal consumption.
@@ -225,13 +225,13 @@ The Renesas and ST chips that are supported by this library have a slightly diff
   
 #### Standby
 * **Function**: Significantly reduces power usage to approximately 100uA-300uA (when all peripherals are off), making it ideal for long-term, battery-dependent operations.
-* **Effect**: Unlike Sleep Mode, waking up from Deep Sleep Mode restarts the board, triggering the void setup() function. This behavior is suitable for scenarios where a full reset is acceptable or desired upon waking up.
+* **Effect**: Unlike Sleep Mode, waking up from standby Mode restarts the board, triggering the void setup() function. This behavior is suitable for scenarios where a full reset is acceptable or desired upon waking up.
 * **Wake-Up Triggers**: Both board can be configured to wake up either from an RTC alarm or an external interrupt pin.
 
 
 ### Portenta C33
 #### Selecting a wakeup source
-The wakeup source can be one of the deep-sleep enabled wakeup pins, and an RTC Alarm. You can select multiple pins or the RTC alarm to wake up the board. These sources are the same for both **Sleep** and **Deep Sleep**
+The wakeup source can be one of the deep-sleep enabled wakeup pins, and an RTC Alarm. You can select multiple pins or the RTC alarm to wake up the board. These sources are the same for both **Sleep** and **Standby**
 
 ##### Wakeup Pins
 This feature can be used when you want to wake up the board from external stimuli, such as sensors or user input. Some sensors have an interrupt pin that you can connect to one of the wakeup pins (eg: most motion sensors), while some output voltage on a pin, (eg: Passive Infrared Sensors or user buttons).
@@ -256,11 +256,11 @@ Here is a list of the usable interrupts:
 This feature is particularly useful when you want to set the board to wake up at specific times. You can use this in conjunction with the [RTC library](). 
 To make your board wake up on an RTC alarm you simply need to call `board.setWakeupRTC()` and it will enable that functionality. Check out [this example]() for more details about setting up the RTC. 
 
-To simplify things, we have added a convenience function in `Board` called `sleepFor`. This method takes a number of hours, minutes and seconds as a parameters. For more information, check out the [DeepSleep_WakeFromRTC_C33](https://github.com/arduino-libraries/Arduino_PowerManagement/blob/main/examples/DeepSleep_WakeFromRTC_H7/DeepSleep_WakeFromRTC_C33.ino) example. 
+To simplify things, we have added a convenience function in `Board` called `sleepFor`. This method takes a number of hours, minutes and seconds as a parameters. For more information, check out the [Standby_WakeFromRTC_C33](https://github.com/arduino-libraries/Arduino_PowerManagement/blob/main/examples/Standby_WakeFromRTC_C33/Standby_WakeFromRTC_C33.ino) example. 
 
 ##### Send the board to sleep
 * `board.sleepUntilwakeupEvent();` - Sends the board into the sleep state, where it consumes about ~6mA without peripherals and ~18mA with peripherals. 
-* `board.standByUntilWakeupEvent();` - Sends the board into the deep sleep state, where it consumes around ~100uA without peripherals and ~12mA with peripherals. 
+* `board.standByUntilWakeupEvent();` - Sends the board into the standby state, where it consumes around ~100uA without peripherals and ~12mA with peripherals. 
 
 ##### Toggle peripherals
 * `board.turnPeripheralsOff();` - Turn the peripherals on Portenta C33 (ADC, RGB LED, Secure Element, Wifi and Bluetooth) off.
@@ -275,13 +275,13 @@ Here's an overview of the reduction in power usage that you can expect from this
 #### Sleep (ADC, RGB LED, Secure Element, Wifi and Bluetooth off)
 ![](https://raw.githubusercontent.com/arduino-libraries/Arduino_LowPowerPortentaC33/main/docs/assets/sleep_no_peripherals.png)
 
-#### Deep Sleep (ADC, RGB LED, Secure Element, Wifi and Bluetooth off)
+#### Standby (ADC, RGB LED, Secure Element, Wifi and Bluetooth off)
 ![](https://raw.githubusercontent.com/arduino-libraries/Arduino_LowPowerPortentaC33/main/docs/assets/deep_sleep_no_peripherals.png)
 
 #### Sleep (ADC, RGB LED, Secure Element, Wifi and Bluetooth on)
 ![](https://raw.githubusercontent.com/arduino-libraries/Arduino_LowPowerPortentaC33/main/docs/assets/sleep_peripherals_on.png)
 
-#### Deep Sleep (ADC, RGB LED, Secure Element, Wifi and Bluetooth on)
+#### Standby (ADC, RGB LED, Secure Element, Wifi and Bluetooth on)
 ![](https://raw.githubusercontent.com/arduino-libraries/Arduino_LowPowerPortentaC33/main/docs/assets/deep_sleep_peripherals_on.png)
 
 
@@ -293,7 +293,7 @@ However, initiating this command doesn't guarantee automatic entry into sleep mo
 For those looking to fine-tune their board's energy efficiency by leveraging automatic sleep functionality, a particularly useful resource is [the Sleep Lock Example Sketch](https://github.com/alrvid/Arduino_LowPowerPortentaH7/blob/main/examples/DeepSleepLockDebug_Example/DeepSleepLockDebug_Example.ino). This sketch provides a comprehensive overview of the active sleep locks, offering insights into what may be preventing the board from entering sleep mode and how to address these obstacles. 
 
 #### Send the board to sleep
-`board.deepSleepUntilwakeupEvent()` - Sends the board into the deep sleep state, where it consumes around ~100uA and ~300uA without peripherals.
+`board.standByUntilWakeupEvent()` - Sends the board into the standby state, where it consumes around ~100uA and ~300uA without peripherals.
 
 #### Waking up from GPIO
 > [!NOTE]  
