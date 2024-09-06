@@ -223,7 +223,7 @@ The Renesas and ST chips that are supported by this library have a slightly diff
 * **Effect**: Upon waking up from this mode, the execution of your program resumes exactly where it stopped. This is particularly useful for applications that require a quick resume with minimal power savings.
 * **Wake-Up Triggers**: Differ from board to board.
   
-#### Deep Sleep
+#### Standby
 * **Function**: Significantly reduces power usage to approximately 100uA-300uA (when all peripherals are off), making it ideal for long-term, battery-dependent operations.
 * **Effect**: Unlike Sleep Mode, waking up from Deep Sleep Mode restarts the board, triggering the void setup() function. This behavior is suitable for scenarios where a full reset is acceptable or desired upon waking up.
 * **Wake-Up Triggers**: Both board can be configured to wake up either from an RTC alarm or an external interrupt pin.
@@ -260,7 +260,7 @@ To simplify things, we have added a convenience function in `Board` called `slee
 
 ##### Send the board to sleep
 * `board.sleepUntilwakeupEvent();` - Sends the board into the sleep state, where it consumes about ~6mA without peripherals and ~18mA with peripherals. 
-* `board.deepSleepUntilwakeupEvent();` - Sends the board into the deep sleep state, where it consumes around ~100uA without peripherals and ~12mA with peripherals. 
+* `board.standByUntilWakeupEvent();` - Sends the board into the deep sleep state, where it consumes around ~100uA without peripherals and ~12mA with peripherals. 
 
 ##### Toggle peripherals
 * `board.turnPeripheralsOff();` - Turn the peripherals on Portenta C33 (ADC, RGB LED, Secure Element, Wifi and Bluetooth) off.
@@ -303,20 +303,16 @@ For those looking to fine-tune their board's energy efficiency by leveraging aut
 
 This feature is particularly useful when you want to set the board to wake up at specific times.  To make your board wake up on an RTC alarm you simply need to call `board.setWakeupRTC()` and it will enable that functionality. 
 
-To simplify things, we have added a convenience function in `Board` called `sleepFor`. This method takes a number of hours, minutes and seconds as a parameters. For more information, check out the [DeepSleep_WakeFromRTC_H7](https://github.com/arduino-libraries/Arduino_PowerManagement/blob/main/examples/DeepSleep_WakeFromRTC_H7/DeepSleep_WakeFromRTC_H7.ino) example.
+To simplify things, we have added a convenience function in `Board` called `sleepFor`. This method takes a number of hours, minutes and seconds as a parameters. For more information, check out the [Standby_WakeFromRTC_H7](../examples/Standby_WakeFromRTC_H7/Standby_WakeFromRTC_H7.ino) example.
 
 ```cpp
-PowerManagement manager;
 Board board; 
 
 void setup() {
-    manager = PowerManagement();
-    manager.begin();
-    board = manager.getBoard();
-    board.enableWakeupFromRTC();
-    board.sleepFor(0, 0, 1);
+    board.begin();
+    board.enableWakeupFromRTC(0, 0, 1);
     board.setAllPeripheralsPower(false);
-    board.deepSleepUntilWakeupEvent();
+    board.standByUntilWakeupEvent();
 }
 ```
 
