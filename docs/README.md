@@ -4,20 +4,12 @@
 
 ```cpp
 #include "PowerManagement.h"
-#include <vector>
-#include <string>
 
-PowerManagement manager = PowerManagement();
 Battery battery; 
 Board board; 
 Charger charger;
 
 void setup(){
-    manager.begin();
-    battery = manager.getBattery();
-    board = manager.getBoard();
-    charger = manager.getCharger();
-
     /* Rest of your setup() code */
 }
 ```

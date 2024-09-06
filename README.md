@@ -28,10 +28,10 @@ In addition to power rail management and battery handling, the library provides 
 -  **Sleep**
 This mode offers a significant reduction in power consumption while maintaining a state of minimal activity. 
 It's ideal for applications requiring periodic wake-ups or brief intervals of inactivity. This sleep mode resumes the operation from the last operation.
-You can manually enable this sleep mode on the Portenta C33, on the H7 and Nicla Vision however, this is automatically handled by mbed. 
+You can manually enable this sleep mode on the Portenta C33. On the H7 and Nicla Vision however, this is automatically handled by mbed. There is a separate (deep) sleep mode on Portenta H7 and Nicla Vision that can be enabled through their [low power libraries](https://github.com/arduino-libraries/Arduino_LowPowerPortentaH7).
 
-- **Deep Sleep**
-For scenarios demanding drastic power conservation, the Deep Sleep Mode drastically reduces the board's power usage. It's suitable for long-duration, battery-dependent applications where occasional wake-ups are sufficient. This mode restarts the board on wakeup, effectively running the `setup()` function again. 
+- **Standby**
+For scenarios demanding drastic power conservation, the Standby Mode drastically reduces the board's power usage. It's suitable for long-duration, battery-dependent applications where occasional wake-ups are sufficient. This mode restarts the board on wakeup, effectively running the `setup()` function again. 
 
 #### Low Power Measurements
 Here's a table with the current consumption you can expect from each board in Sleep and Standby modes. Clicking on any of the values in the table above will send you to an image of the measurements for that specific scenario. 
@@ -41,8 +41,8 @@ Here's a table with the current consumption you can expect from each board in Sl
 | Without power optimisations 	| [41.37 mA](https://github.com/arduino-libraries/Arduino_LowPowerPortentaC33/blob/main/docs/assets/normal_usage_blink.png) 	| [123.86 mA](https://github.com/arduino-libraries/Arduino_PowerManagement/blob/main/docs/assets/normal_usage.png) 	| [123.86 mA](https://github.com/arduino-libraries/Arduino_PowerManagement/blob/main/docs/assets/normal_usage.png) 	|
 | Standby consumption with peripherals off  	| [58.99 μA](https://github.com/arduino-libraries/Arduino_LowPowerPortentaC33/blob/main/docs/assets/deep_sleep_no_peripherals.png) 	| [75.51 μA](https://github.com/arduino-libraries/Arduino_PowerManagement/blob/main/docs/assets/H7_lite_deep_sleep_peripherals_off.png) 	| [379 μA](https://github.com/arduino-libraries/Arduino_PowerManagement/blob/main/docs/assets/H7_deep_sleep_peripherals_off.png) 	|
 | Standby consumption with peripherals on 	| [11.53 mA](https://github.com/arduino-libraries/Arduino_LowPowerPortentaC33/blob/main/docs/assets/deep_sleep_peripherals_on.png) 	| [4.89 mA](https://github.com/arduino-libraries/Arduino_PowerManagement/blob/main/docs/assets/H7_lite_deep_sleep_peripherals_on.png) 	| [7.98 mA](https://github.com/arduino-libraries/Arduino_PowerManagement/blob/main/docs/assets/H7_deep_sleep_peripherals_on.png) 	|
-| Sleep consumption with peripherals off 	| [7.02 mA](https://github.com/arduino-libraries/Arduino_LowPowerPortentaC33/blob/main/docs/assets/sleep_no_peripherals.png) 	| N/a 	| N/a 	|
-| Sleep consumption with peripherals on 	| [18.26 mA](https://github.com/arduino-libraries/Arduino_LowPowerPortentaC33/blob/main/docs/assets/sleep_peripherals_on.png) 	| N/a 	| N/a 	|
+| Sleep consumption with peripherals off 	| [7.02 mA](https://github.com/arduino-libraries/Arduino_LowPowerPortentaC33/blob/main/docs/assets/sleep_no_peripherals.png) 	| N/A 	| N/A 	|
+| Sleep consumption with peripherals on 	| [18.26 mA](https://github.com/arduino-libraries/Arduino_LowPowerPortentaC33/blob/main/docs/assets/sleep_peripherals_on.png) 	| N/A 	| N/A 	|
 
 > [!NOTE]  
 > Sleep measurements are not available on the H7 boards because the board goes to sleep automatically when idling.
@@ -54,10 +54,9 @@ Here's a table with the current consumption you can expect from each board in Sl
 ## Examples 
 - [Battery](./examples/Battery/Battery.ino) - Demonstrates battery metrics monitoring.
 - [Charger](./examples/Charger/Charger.ino) - Illustrates charger status monitoring and control.
-- [DeepSleep_WakeFromPin](./examples/DeepSleep_WakeFromPin/DeepSleep_WakeFromPin.ino) - Demonstrates how to wake up the board from deep sleep using a wakeup pin.
-- [DeepSleep_WakeFromRTC_C33](./examples/DeepSleep_WakeFromRTC/DeepSleep_WakeFromRTC_C33.ino) - Demonstrates how to use the RTC to wake the Portenta C33 from deep sleep.
-- [DeepSleep_WakeFromRTC_H7](./examples/DeepSleep_WakeFromRTC/DeepSleep_WakeFromRTC_H7.ino) - Demonstrates how to use the RTC to wake the Portenta H7 from deep sleep.
-- [Powershell](./examples/Powershell/Powershell.ino) - Provides an interactive shell on the serial port that allows you to interact with any aspect of this library. 
+- [Standby_WakeFromPin](./examples/Standby_WakeFromPin/Standby_WakeFromPin.ino) - Demonstrates how to wake up the board from standby using a wakeup pin.
+- [Standby_WakeFromRTC_C33](./examples/Standby_WakeFromRTC_C33/Standby_WakeFromRTC_C33.ino) - Demonstrates how to use the RTC to wake the Portenta C33 from standby.
+- [Standby_WakeFromRTC_H7](./examples/Standby_WakeFromRTC_H7/Standby_WakeFromRTC_H7.ino) - Demonstrates how to use the RTC to wake the Portenta H7 from standby.
 
 ## 👀 Instructions
 
@@ -67,10 +66,10 @@ Here's a table with the current consumption you can expect from each board in Sl
 
 
 ## ✨ Features
-- Monitor current and average battery metrics (voltage, current, percentage, temperature)
-- Monitor battery health metrics (power cycles, temperature, reported capacity)
+- Monitor current and average battery metrics (voltage, current, percentage)
+- Monitor battery health metrics (temperature, reported capacity)
 - Monitor and control charging
-- Save significant amounts of power by sending the boards into Sleep and Deep Sleep modes (only available for Portenta C33 for now)
+- Save significant amounts of power by sending the boards into Sleep (only available for Portenta C33 for now) and Standby modes
 - Toggle and set voltages on different power rails of the board
     - On Nicla Vision 
         - Enable and disable the external power rail
