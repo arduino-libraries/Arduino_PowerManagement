@@ -6,41 +6,84 @@
 #include "PowerManagement.h"
 
 Battery battery; 
-Board board; 
 Charger charger;
+Board board;
 
 void setup(){
+    battery.begin();
+    charger.begin();
+    board.begin();
     /* Rest of your setup() code */
 }
 ```
 
 
 ## Battery
-The battery object contains methods to read battery usage and health metrics. You can get current and average values for voltage, percentage, current and time as well as an estimated of the time left to charge completely and time left to discharge. 
+The Battery class in the PowerManagement library provides a comprehensive set of tools for monitoring and managing the health and usage of your battery. This includes real-time data on voltage, current, power, temperature, and overall battery capacity, enabling you to optimize your application for better energy efficiency and battery longevity.
+
+### Voltage Monitoring
+
+| Method                   | Data Type   | Description                                      |
+|:-------------------------|:------------|:-------------------------------------------------|
+| battery.voltage()        | float       | Read the current voltage of the battery.         |
+| battery.averageVoltage() | float       | Get the average voltage.                         |
+| battery.minimumVoltage() | float       | Access the minimum voltage since the last reset. |
+| battery.maximumVoltage() | float       | Access the maximum voltage since the last reset. |
+
+### Current Monitoring
+
+| Method                   | Data Type   | Description                                      |
+|:-------------------------|:------------|:-------------------------------------------------|
+| battery.current()        | int16_t     | Measure the current flow from the battery.       |
+| battery.averageCurrent() | int16_t     | Obtain the average current.                      |
+| battery.minimumCurrent() | int16_t     | Access the minimum current since the last reset. |
+| battery.maximumCurrent() | int16_t     | Access the maximum current since the last reset. |
+
+### Power Monitoring
+
+| Method                 | Data Type   | Description                                           |
+|:-----------------------|:------------|:------------------------------------------------------|
+| battery.power()        | int16_t     | Calculate the current power usage in milliwatts (mW). |
+| battery.averagePower() | int16_t     | Get the average power usage in milliwatts (mW).       |
+
+### Temperature Monitoring
+
+| Method                               | Data Type   | Description                                              |
+|:-------------------------------------|:------------|:---------------------------------------------------------|
+| battery.internalTemperature()        | uint8_t     | Read the internal temperature of the battery gauge chip. |
+| battery.averageInternalTemperature() | uint8_t     | Obtain the average internal temperature.                 |
+
+### Capacity and State of Charge
+
+| Method                      | Data Type   | Description                                                 |
+|:----------------------------|:------------|:------------------------------------------------------------|
+| battery.remainingCapacity() | uint16_t    | Monitor the battery's remaining capacity in mAh.            |
+| battery.percentage()        | uint8_t     | Get the battery's state of charge as a percentage (0-100%). |
+
+### Time Estimates
+
+| Method                | Data Type   | Description                                           |
+|:----------------------|:------------|:------------------------------------------------------|
+| battery.timeToEmpty() | int32_t     | Estimate the time until the battery is empty.         |
+| battery.timeToFull()  | int32_t     | Estimate the time until the battery is fully charged. |
+
+### Configuring Battery Characteristics
+
+To ensure accurate readings and effective battery management, you can configure the `BatteryCharacteristics` struct to match the specific attributes of your battery:
 
 ```cpp
-Serial.print("* Voltage: ");
-Serial.println(String(battery.readVoltageAvg()) + "mV");
+BatteryCharacteristics characteristics = BatteryCharacteristics();
 
-Serial.print("* Current: ");
-Serial.println(String(battery.readCurrent()) + "mA");
-
-Serial.print("* Percentage: ");
-Serial.println(String(battery.readPercentage()) + "%");
-
-Serial.print("* Remaining Capacity: ");
-Serial.println(String(battery.readRemainingCapacity()) + "mAh");
-
-Serial.print("* Temperature: ");
-Serial.println(String(battery.readTempAvg()));
-
-Serial.print("* Time-to-full: ");
-Serial.println(String(battery.readTimeToFull()) + "s");
-
-Serial.print("* Time-to-empty: ");
-Serial.println(String(battery.readTimeToEmpty()) + "s");
-
+characteristics.capacity = 200; // Set the battery's capacity in mAh
+characteristics.emptyVoltage = 3.3f; // Voltage at which the battery is considered empty
+characteristics.chargeVoltage = 4.2f; // Voltage at which the battery is charged
+characteristics.endOfChargeCurrent = 50; // End of charge current in mA
+characteristics.ntcResistor = NTCResistor::Resistor10K; // Set NTC resistor value (10K or 100K Ohm)
+characteristics.recoveryVoltage = 3.88f; // Voltage to reset empty detection
 ```
+
+This configuration ensures that the Battery class operates with parameters that match your battery’s specifications, providing more accurate and reliable monitoring and management.
+
 
 ## Charger 
 Charging a LiPo battery is done in three stages. This library allows you to monitor what charging stage we are in as well as control some of the chagring parameters. 
@@ -242,9 +285,8 @@ Here's an overview of the reduction in power usage that you can expect from this
 ![](https://raw.githubusercontent.com/arduino-libraries/Arduino_LowPowerPortentaC33/main/docs/assets/deep_sleep_peripherals_on.png)
 
 
-
-### Portenta H7/Nicla Vison Low Power
-When utilizing Mbed with STM32-based microcontrollers such as the Portenta H7 and Nicla Vision, the approach to managing sleep modes exhibits some unique characteristics. Mbed is designed to transition the board to a sleep-like state—akin to the Sleep Mode found on the Portenta C33—whenever the system is not actively processing tasks. This energy-saving feature can be activated by invoking the `board.enableSleepWhenIdle()` method within your code.
+### Portenta H7 Low Power
+When utilizing Mbed with STM32-based microcontrollers such as the Portenta H7, the approach to managing sleep modes exhibits some unique characteristics. Mbed is designed to transition the board to a sleep-like state—akin to the Sleep Mode found on the Portenta C33—whenever the system is not actively processing tasks. This energy-saving feature can be activated by invoking the `board.enableSleepWhenIdle()` method within your code.
 
 However, initiating this command doesn't guarantee automatic entry into sleep mode due to the presence of Sleep Locks. These locks act as safeguards, preventing the system from sleeping under certain conditions to ensure ongoing operations remain uninterrupted. Common peripherals, such as the USB Stack, may engage a sleep lock, effectively keeping the board awake even during periods of apparent inactivity. This behavior underscores how the effectiveness of sleep mode is closely linked to the specific operations and configurations defined in your sketch.
 
