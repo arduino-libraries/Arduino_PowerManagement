@@ -58,7 +58,7 @@ Board::~Board() {
 }
 
 bool Board::begin() {
-    #if defined(ARDUINO_PORTENTA_H7_M7)
+    #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_NICLA_VISION)
         if (CM7_CPUID == HAL_GetCurrentCPUID()){
             if (LowPowerReturnCode::success != LowPower.checkOptionBytes()){
                 LowPower.prepareOptionBytes();
@@ -146,7 +146,7 @@ bool Board::enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t secon
 
 #endif
 
-#if defined(ARDUINO_PORTENTA_H7)
+#if defined(ARDUINO_PORTENTA_H7) || defined(ARDUINO_NICLA_VISION)
 bool Board::enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds){
     standbyType |= StandbyType::untilTimeElapsed;
     wakeupDelayHours = hours;
@@ -165,9 +165,9 @@ void Board::sleepUntilWakeupEvent(){
 void Board::standByUntilWakeupEvent(){
     #if defined(ARDUINO_PORTENTA_C33)
         lowPower -> deepSleep();
-    #elif defined(ARDUINO_GENERIC_STM32H747_M4)
+    #elif defined(CORE_CM4)
         LowPower.standbyM4();
-    #elif defined(ARDUINO_PORTENTA_H7_M7) 
+    #elif defined(ARDUINO_PORTENTA_H7_M7)
         RTCWakeupDelay rtcWakeupDelay = RTCWakeupDelay(wakeupDelayHours, wakeupDelayMinutes, wakeupDelaySeconds);
         if(standbyType == StandbyType::untilEither)
             LowPower.standbyM7(LowPowerStandbyType::untilPinActivity | LowPowerStandbyType::untilTimeElapsed, rtcWakeupDelay);
@@ -175,6 +175,9 @@ void Board::standByUntilWakeupEvent(){
             LowPower.standbyM7(LowPowerStandbyType::untilPinActivity);
         else if (standbyType == StandbyType::untilTimeElapsed)
            LowPower.standbyM7(LowPowerStandbyType::untilTimeElapsed, rtcWakeupDelay);
+    #elif defined(ARDUINO_NICLA_VISION) && defined(CORE_CM7)
+        RTCWakeupDelay rtcWakeupDelay = RTCWakeupDelay(wakeupDelayHours, wakeupDelayMinutes, wakeupDelaySeconds);
+        LowPower.standbyM7(rtcWakeupDelay);
     #endif
 }
 
@@ -185,7 +188,7 @@ void Board::setAllPeripheralsPower(bool on){
         this -> setCommunicationPeripheralsPower(on);
         this -> setExternalPowerEnabled(on);
         this -> setAnalogDigitalConverterPower(on);
-    #else if defined(ARDUINO_PORTENTA_H7)
+    #elif defined(ARDUINO_PORTENTA_H7)
     // On the H7 several chips need different voltages, so we cannot turn the lanes that are dependent on each other separately.
     // This should only be used when going into standby mode, as turning off the USB-C PHY, Ethernet or Video bridge might cause undefined behaviour. 
     if(on){
@@ -198,6 +201,23 @@ void Board::setAllPeripheralsPower(bool on){
         PMIC.getControl() -> turnLDO1Off(Ldo1Mode::Normal);
         PMIC.getControl() -> turnLDO3Off(Ldo3Mode::Normal);
         PMIC.getControl() -> turnSw1Off(Sw1Mode::Normal);
+    }
+
+    #elif defined(ARDUINO_NICLA_VISION)
+    if(on){
+        PMIC.getControl() -> turnLDO2On(Ldo2Mode::Normal);  // Camera
+        PMIC.getControl() -> turnLDO1On(Ldo1Mode::Normal);  // ToF sensor / Camera
+        PMIC.getControl() -> turnLDO3On(Ldo3Mode::Normal);  // VDDA - Analog components, e.g. ADC
+        PMIC.getControl() -> turnSw2On(Sw2Mode::Normal);    // USB, 25 MHz crystal, 32 kHz crystal
+        // TODO: Not supported yet by PMIC library
+        // PMIC.getControl() -> turnSw3On(Sw3Mode::Normal);    // External power VDDIO_EXT
+    } else {
+        PMIC.getControl() -> turnLDO2Off(Ldo2Mode::Normal); // Camera
+        PMIC.getControl() -> turnLDO1Off(Ldo1Mode::Normal); // ToF sensor / Camera
+        PMIC.getControl() -> turnLDO3Off(Ldo3Mode::Normal); // VDDA - Analog components, e.g. ADC
+        PMIC.getControl() -> turnSw2Off(Sw2Mode::Normal);   // USB, 25 MHz crystal, 32 kHz crystal
+        // TODO: Not supported yet by PMIC library
+        // PMIC.getControl() -> turnSw3Off(Sw3Mode::Normal);   // External power VDDIO_EXT
     }
     #endif
 }
@@ -270,7 +290,7 @@ bool Board::setReferenceVoltage(float voltage) {
 void Board::shutDownFuelGauge() {
     #if defined(ARDUINO_PORTENTA_C33)
         MAX1726Driver fuelGauge(&Wire3);
-    #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_GENERIC_STM32H747_M4)
+    #elif defined(ARDUINO_PORTENTA_H7)
         MAX1726Driver fuelGauge(&Wire1);
     #elif defined(ARDUINO_NICLA_VISION)
         MAX1726Driver fuelGauge(&Wire1);
