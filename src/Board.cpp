@@ -1,9 +1,11 @@
 #include "Board.h"
 #include "MAX1726Driver.h"
-#include "Arduino_LowPowerPortentaH7.h"
 #include <map>
 
-LowPowerPortentaH7& PortentaH7 = LowPowerPortentaH7::getInstance();
+#if defined(ARDUINO_PORTENTA_H7)
+#include "Arduino_LowPowerPortentaH7.h"
+LowPowerPortentaH7& lowPowerPortentaH7 = LowPowerPortentaH7::getInstance();
+#endif
 
 constexpr int UNKNOWN_VALUE = 0xFF;
 
@@ -197,13 +199,14 @@ void Board::setAllPeripheralsPower(bool on){
         PMIC.getControl() -> turnLDO3On(Ldo3Mode::Normal);
         PMIC.getControl() -> turnSw1On(Sw1Mode::Normal);
     } else {
+        #if defined(ARDUINO_PORTENTA_H7)
         // Ethernet must be turned off before we enter Standby Mode, because
         // otherwise, the Ethernet transmit termination resistors will overheat
         // from the voltage that gets applied over them. It would be 125 mW in each
         // of them, while they are rated at 50 mW. If we fail to turn off Ethernet,
         // we must not proceed.
 
-        if (false == PortentaH7.turnOffEthernet())
+        if (false == lowPowerPortentaH7.turnOffEthernet())
         {
             {
                 while(1)
@@ -215,6 +218,7 @@ void Board::setAllPeripheralsPower(bool on){
                 }
             }
         }
+        #endif
         PMIC.getControl() -> turnLDO1Off(Ldo1Mode::Normal);
         PMIC.getControl() -> turnLDO2Off(Ldo2Mode::Normal);
         PMIC.getControl() -> turnLDO3Off(Ldo3Mode::Normal);
