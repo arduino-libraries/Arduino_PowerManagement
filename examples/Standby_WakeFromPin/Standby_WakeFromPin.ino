@@ -48,7 +48,7 @@ Board board;
 
 void setup() {
     // When uploading this sketch to the M4 core, it just goes to standby mode.
-    #if defined(ARDUINO_GENERIC_STM32H747_M4)
+    #if defined(CORE_CM4)
       board.standByUntilWakeupEvent();
       return;
     #endif
@@ -69,7 +69,7 @@ void setup() {
         // On Portenta C33, you can specify which pin to use to wake up the device from sleep mode
         // Please read the documentation to understand which pins can be used to wake up the device.
         board.enableWakeupFromPin(PORTENTA_C33_WAKEUP_PIN, FALLING);
-    #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_GENERIC_STM32H747_M4) || defined(ARDUINO_NICLA_VISION)
+    #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_GENERIC_STM32H747_M4)
         // On Portenta only pin GPIO0 can be used to wake up the device from sleep mode
         board.enableWakeupFromPin();
     #endif    
