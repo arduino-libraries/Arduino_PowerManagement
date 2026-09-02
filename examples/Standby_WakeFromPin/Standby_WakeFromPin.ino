@@ -1,20 +1,20 @@
 /*
     Standby Wake From Pin Demo
 
-    This sketch demonstrates how you can use the Arduino_PowermManagement library to send a board to standby mode by using a GPIO pin and wake it up from another.
-    This sketch is universal and worksn on both Portenta C33 and H7.
+    This sketch demonstrates how you can use the Arduino_PowerManagement library to send a board to standby mode by using a GPIO pin and wake it up from another.
+    This sketch is universal and works on both Portenta C33 and H7.
 
-    On the the Portenta C33 you can select any of the supported pins (A0, A1, A2, A3, A4, A5, D4, D7) to wake up the board from standby mode.
+    On the Portenta C33 you can select any of the supported pins (A0, A1, A2, A3, A4, A5, D4, D7) to wake up the board from standby mode.
     However setAllPeripheralsPower(false) in this sketch turns off the power lane of the analog pins.
     This means they cannot sink current and therefore cannot be used to wake up the device.
-    Hency only D4 and D7 can be used to wake up the device in this configuration.
+    Hence, only D4 and D7 can be used to wake up the device in this configuration.
 
     On the Portenta H7 only GPIO0 can be used to wake up the board from standby mode. GPIO0 is available through the High Density Connectors and you need a breakout board to access it.
 
     Requirements:
         - Arduino Portenta C33, Arduino Portenta H7
         - Arduino IDE / Arduino CLI
-        - PowerManagement library (installable from the Arduino Library Manager)
+        - Arduino_PowerManagement library (installable from the Arduino Library Manager)
 
     Usage:
         - Connect a button to GOTO_SLEEP_PIN and with a pull-up resistor to 3.3V
@@ -62,7 +62,7 @@ void setup() {
     board.begin();
     board.setAllPeripheralsPower(true); // turn on peripherals after waking up from deep sleep
 
-    // Allows to use a button to put the device into sleep mode
+    // Allows using a button to put the device into sleep mode
     attachInterrupt(digitalPinToInterrupt(GOTO_SLEEP_PIN), goToSleep, FALLING);
 
     #if defined(ARDUINO_PORTENTA_C33)

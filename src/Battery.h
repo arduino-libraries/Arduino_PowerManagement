@@ -30,7 +30,7 @@ struct BatteryCharacteristics {
     /// @brief The voltage in volts (V) at which the battery is being charged.
     float chargeVoltage = DEFAULT_CHARGE_VOLTAGE;
 
-    /// @brief The current in milli amperes (mA) that is used to keep the battery charged at the end of the charging process.
+    /// @brief The current in milliamperes (mA) that is used to keep the battery charged at the end of the charging process.
     int endOfChargeCurrent = DEFAULT_END_OF_CHARGE_CURRENT;
 
     /// @brief The NTC resistor value used in the battery pack (10K or 100K Ohm).
@@ -107,13 +107,13 @@ class Battery {
          * Negative values indicate that the battery is charging, 
          * positive values indicate that the battery is discharging.
          * When no battery is connected, the value is -1.
-         * @return The current flowing from the battery in milli amperes (mA).
+         * @return The current flowing from the battery in milliamperes (mA).
         */
         int16_t current();
 
         /**
          * @brief Reads an average of current readings of the battery.
-         * @return The average current in milli amperes (mA).
+         * @return The average current in milliamperes (mA).
         */
         int16_t averageCurrent();
 
@@ -121,7 +121,7 @@ class Battery {
          * @brief Reads the minimum current values measured since the last device reset.
          * Note: The resolution of the minimum current value is 160mA so the value
          * is rounded to the nearest 160mA.
-         * @return The minimum current values in milli amperes (mA).
+         * @return The minimum current values in milliamperes (mA).
          */
         int16_t minimumCurrent();
 
@@ -129,7 +129,7 @@ class Battery {
          * @brief Reads the maximum current values measured since the last device reset.
          * Note: The resolution of the minimum current value is 160mA so the value
          * is rounded to the nearest 160mA.
-         * @return The maximum current values in milli amperes (mA).
+         * @return The maximum current values in milliamperes (mA).
          */
         int16_t maximumCurrent();
 

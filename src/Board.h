@@ -130,7 +130,7 @@ class Board {
         #if defined(ARDUINO_PORTENTA_C33)
         /**
          * @brief Enables wake-up of the device from the RTC.
-         * This function allows to use a custom RTC instance to put the device in sleep mode.
+         * This function allows the use of a custom RTC instance to put the device in sleep mode.
          * @param hours The number of hours to sleep.
          * @param minutes The number of minutes to sleep.
          * @param seconds The number of seconds to sleep.
@@ -196,7 +196,7 @@ class Board {
         void setAllPeripheralsPower(bool on);
 
         /**
-         * @brief Toggles the communication peripherials' power on Portenta C33 (Wifi, Bluetooth and Secure Element)
+         * @brief Toggles the communication peripherals' power on Portenta C33 (Wifi, Bluetooth and Secure Element)
          * @param on True to turn on the power, false to turn it off.
         */
         void setCommunicationPeripheralsPower(bool on);

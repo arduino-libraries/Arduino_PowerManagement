@@ -1,8 +1,8 @@
-# ⚡ Arduino PowerManagement
+# ⚡ Arduino_PowerManagement
 
 [![Check Arduino](https://github.com/arduino-libraries/Arduino_PowerManagement/actions/workflows/check-arduino.yml/badge.svg)](https://github.com/arduino-libraries/Arduino_PowerManagement/actions/workflows/check-arduino.yml) [![Compile Examples](https://github.com/arduino-libraries/Arduino_PowerManagement/actions/workflows/compile-examples.yml/badge.svg)](https://github.com/arduino-libraries/Arduino_PowerManagement/actions/workflows/compile-examples.yml) [![Spell Check](https://github.com/arduino-libraries/Arduino_PowerManagement/actions/workflows/spell-check.yml/badge.svg)](https://github.com/arduino-libraries/Arduino_PowerManagement/actions/workflows/spell-check.yml) [![Sync Labels](https://github.com/arduino-libraries/Arduino_PowerManagement/actions/workflows/sync-labels.yml/badge.svg)](https://github.com/arduino-libraries/Arduino_PowerManagement/actions/workflows/sync-labels.yml)
 
-The Arduino Pro Power Management Library serves as a comprehensive and sophisticated power management toolkit tailored for Arduino Pro boards, encompassing the Portenta H7, Portenta C33, and Nicla Vision.
+The Arduino_PowerManagement Library serves as a comprehensive and sophisticated power management toolkit tailored for Arduino Pro boards, encompassing the Portenta H7, Portenta C33, and Nicla Vision.
 
 This library streamlines the interaction with complex hardware components such as the [PF1550 Power Management Integrated Circuit](https://www.nxp.com/docs/en/data-sheet/PF1550.pdf) (PMIC) and the [MAX17262 LiPo Fuel Gauge](https://www.analog.com/media/en/technical-documentation/data-sheets/MAX17262.pdf) and presents a user-friendly, functionality-oriented interface.
 
@@ -49,7 +49,7 @@ Here's a table with the current consumption you can expect from each board in Sl
 
 > [!NOTE]
 > These measurements have been taken using a [Nordic Power Profiler Kit II](https://www.nordicsemi.com/Products/Development-hardware/Power-Profiler-Kit-2) through the JST power connector of the Portenta boards,
-> the numbers might be higher when powering  through the VIN or 5V pins because it involves more power regulators that are not as efficient as the PF1550's integrated regulators.
+> the numbers might be higher when powering through the VIN or 5V pins because it involves more power regulators that are not as efficient as the PF1550's integrated regulators.
 
 ## Examples
 - [Battery](./examples/Battery/Battery.ino) - Demonstrates battery metrics monitoring.

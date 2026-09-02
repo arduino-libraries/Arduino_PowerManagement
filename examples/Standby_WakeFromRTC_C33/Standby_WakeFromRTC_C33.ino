@@ -1,7 +1,7 @@
 /*
     Standby Wake from RTC Demo for Portenta C33
 
-    This example demonstrates how to  wake up the Portenta C33 from standby mode using the included RTC (Real Time Clock).
+    This example demonstrates how to wake up the Portenta C33 from standby mode using the included RTC (Real Time Clock).
     The device will go to sleep for 5 seconds and then wake up. When the device is awake you will see the board's built-in LED turned on.
     Effectively, you will get the same effect as with blink.
 

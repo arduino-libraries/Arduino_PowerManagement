@@ -1,6 +1,6 @@
 /*
 Standby Wake from RTC Demo for Portenta H7
-This example demonstrates how to  wake up the Portenta H7 from standby mode using the included RTC (Real Time Clock).
+This example demonstrates how to wake up the Portenta H7 from standby mode using the included RTC (Real Time Clock).
 The device will stay awake for ~5 seconds, then go to sleep for 10 second. When the device is awake you will see the board's blue LED turned on.
 Effectively, you will get the same effect as with blink.
 
@@ -50,7 +50,7 @@ void setup() {
         }
     }
 
-    delay(10000); // keep the board awake for 10 seconds, so we can se it working
+    delay(10000); // keep the board awake for 10 seconds, so we can see it working
     board.shutDownFuelGauge();
 
     // The LED should go off when the board goes to sleep

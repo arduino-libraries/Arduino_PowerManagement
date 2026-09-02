@@ -1,14 +1,14 @@
 /*
   Battery Information Display Demo
 
-  This sketch demonstrates how to read battery information using the PowerManagement library.
+  This sketch demonstrates how to read battery information using the Arduino_PowerManagement library.
   It prints the battery's voltage, current, percentage, remaining capacity and temperature in a loop.
-  The sketch is designed to work with the PowerManagement library and is intended for educational purposes.
+  The sketch is designed to work with the Arduino_PowerManagement library and is intended for educational purposes.
 
   Requirements:
   - Arduino Portenta C33, Arduino Portenta H7, Arduino Nicla Vision
   - Arduino IDE / Arduino CLI
-  - PowerManagement library (installable from the Arduino Library Manager)
+  - Arduino_PowerManagement library (installable from the Arduino Library Manager)
 
   Usage:
 

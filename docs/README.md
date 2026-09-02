@@ -1,4 +1,4 @@
-# Arduino PowerManagement Documentation
+# Arduino_PowerManagement Documentation
 
 ## Usage
 
@@ -19,7 +19,7 @@ void setup(){
 
 
 ## Battery
-The Battery class in the PowerManagement library provides a comprehensive set of tools for monitoring and managing the health and usage of your battery. This includes real-time data on voltage, current, power, temperature, and overall battery capacity, enabling you to optimize your application for better energy efficiency and battery longevity.
+The Battery class in the Arduino_PowerManagement library provides a comprehensive set of tools for monitoring and managing the health and usage of your battery. This includes real-time data on voltage, current, power, temperature, and overall battery capacity, enabling you to optimize your application for better energy efficiency and battery longevity.
 
 ### Voltage Monitoring
 
@@ -86,7 +86,7 @@ This configuration ensures that the Battery class operates with parameters that 
 
 
 ## Charger
-Charging a LiPo battery is done in three stages. This library allows you to monitor what charging stage we are in as well as control some of the chagring parameters.
+Charging a LiPo battery is done in three stages. This library allows you to monitor what charging stage we are in as well as control some of the charging parameters.
 
 * **Pre-charge** - First phase of the charging process where the battery is charged at a low constant current and is slowly increased until it reaches the full *charge current*
 
@@ -174,7 +174,7 @@ or change its voltage between the following values (1.10V, 1.20V, 1.35V, 1.50V, 
 board.setExternalVoltage(1.80);
 ```
 
-This method takes a float parameter and automatically converts it internally to the specific internal representation, but any voltage that is not one of the enumerated walue will not work and get this method to return false.
+This method takes a float parameter and automatically converts it internally to the specific internal representation, but any voltage that is not one of the enumerated value will not work and get this method to return false.
 
 This power rail is the only rail that can be modified on the Portenta H7 board, while Portenta C33 and Nicla Vision have some extra tricks up their sleeves.
 
@@ -226,7 +226,7 @@ The Renesas and ST chips that are supported by this library have a slightly diff
 #### Standby
 * **Function**: Significantly reduces power usage to approximately 100uA-300uA (when all peripherals are off), making it ideal for long-term, battery-dependent operations.
 * **Effect**: Unlike Sleep Mode, waking up from standby Mode restarts the board, triggering the void setup() function. This behavior is suitable for scenarios where a full reset is acceptable or desired upon waking up.
-* **Wake-Up Triggers**: Both board can be configured to wake up either from an RTC alarm or an external interrupt pin.
+* **Wake-Up Triggers**: Both boards can be configured to wake up either from an RTC alarm or an external interrupt pin.
 
 
 ### Portenta C33
@@ -250,7 +250,7 @@ Here is a list of the usable interrupts:
 | D7          | P402    | IRQ4 |
 
 > [!IMPORTANT]
-> Not all IRQs are created equal, the number of the IRQ represents it's priority. (IRQ0 being the highest priority and IRQ15 the lowest). Be careful when selecting your IRQ pin to make sure the board behaves as expected.
+> Not all IRQs are created equal, the number of the IRQ represents its priority. (IRQ0 being the highest priority and IRQ15 the lowest). Be careful when selecting your IRQ pin to make sure the board behaves as expected.
 
 ##### RTC Alarm
 This feature is particularly useful when you want to set the board to wake up at specific times. You can use this in conjunction with the [RTC library]().
@@ -318,7 +318,7 @@ void setup() {
 
 ### Toggle peripherals
 * `board.setAllPeripheralsPower(false);` - Turn the peripherals on Portenta C33 (ADC, RGB LED, Secure Element, Wifi and Bluetooth) off.
-* `board.setAllPeripheralsPower(true);` - Turns them back on. (should be called as close to the beginning of the `void setup()` method as possible.
+* `board.setAllPeripheralsPower(true);` - Turns them back on. Should be called as close to the beginning of the `void setup()` method as possible.
 
 > [!WARNING]
-> This method toggles power to important system peripherals like the DRAM, Oscilllators, USB and Ethernet PHY chips. Do set this to `false` unless it's before sending the board to sleep, as it might cause undefined behaviours.
+> This method toggles power to important system peripherals like the DRAM, Oscilllators, USB and Ethernet PHY chips. Don't set this to `false` unless it's before sending the board to sleep, as it might cause undefined behaviours.

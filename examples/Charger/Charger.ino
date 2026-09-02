@@ -1,14 +1,14 @@
 /*
   Charger Demo
 
-  This sketch demonstrates how to write charging parameters,read charger state and monitor charging using the PowerManagement library:
+  This sketch demonstrates how to write charging parameters,read charger state and monitor charging using the Arduino_PowerManagement library:
   * In the setup() function, it sets the charging parameters
-  * In the loop() functionit prints the battery's voltage, current, percentage and the charger's state allowing you to monitor charging.
+  * In the loop() function, it prints the battery's voltage, current, percentage and the charger's state allowing you to monitor charging.
 
   Requirements:
   - Arduino Portenta C33, Arduino Portenta H7, Arduino Nicla Vision
   - Arduino IDE
-  - PowerManagement library (installable from the Arduino Library Manager)
+  - Arduino_PowerManagement library (installable from the Arduino Library Manager)
 
   Usage:
 
