@@ -161,7 +161,7 @@ int16_t current()
 Reads the current flowing from the battery at the moment. Negative values indicate that the battery is charging, positive values indicate that the battery is discharging. When no battery is connected, the value is -1.
 
 #### Returns
-The current flowing from the battery in milli amperes (mA).
+The current flowing from the battery in milliamperes (mA).
 <hr />
 
 ### `averageCurrent` <a id="class_battery_1ab74143421658d9aafb05535558a315dc" class="anchor"></a>
@@ -173,7 +173,7 @@ int16_t averageCurrent()
 Reads an average of current readings of the battery.
 
 #### Returns
-The average current in milli amperes (mA).
+The average current in milliamperes (mA).
 <hr />
 
 ### `minimumCurrent` <a id="class_battery_1a04fb9f935964dc4cad7673d581a4e701" class="anchor"></a>
@@ -185,7 +185,7 @@ int16_t minimumCurrent()
 Reads the minimum current values measured since the last device reset. Note: The resolution of the minimum current value is 160mA so the value is rounded to the nearest 160mA.
 
 #### Returns
-The minimum current values in milli amperes (mA).
+The minimum current values in milliamperes (mA).
 <hr />
 
 ### `maximumCurrent` <a id="class_battery_1a06bbac275505bd55f54904dde086ea72" class="anchor"></a>
@@ -197,7 +197,7 @@ int16_t maximumCurrent()
 Reads the maximum current values measured since the last device reset. Note: The resolution of the minimum current value is 160mA so the value is rounded to the nearest 160mA.
 
 #### Returns
-The maximum current values in milli amperes (mA).
+The maximum current values in milliamperes (mA).
 <hr />
 
 ### `resetMaximumMinimumCurrent` <a id="class_battery_1a86b64cfdb23050cc77a66c1e03750b42" class="anchor"></a>
@@ -352,13 +352,13 @@ Supported boards: Arduino Portenta H7, Arduino Portenta C33, Arduino Nicla Visio
 | [`enableWakeupFromPin`](#class_board_1ae04b853e945b07852a65fb4f0e7e7d2b) | Enables wakeup from pin GPIO0 on Portenta H7. The pin is only accessible via high-density connectors. |
 | [`enableSleepWhenIdle`](#class_board_1ae4c9772a307f85306102cf4333ecf249) | Enables sleep mode when the board is idle. |
 | [`enableWakeupFromPin`](#class_board_1a94ac54f76a7e8fff5b7c6523af64169a) | Enables wake-up of the device from a specified pin (A0, A1, A2, A3, A4, A5, D4, D7 ) on Arduino Portenta C33.  |
-| [`enableWakeupFromRTC`](#class_board_1a5fc9e67d4e42ce7943b9675c17fd77f6) | Enables wake-up of the device from the RTC. This function allows to use a custom RTC instance to put the device in sleep mode. |
+| [`enableWakeupFromRTC`](#class_board_1a5fc9e67d4e42ce7943b9675c17fd77f6) | Enables wake-up of the device from the RTC. This function allows the use of a custom RTC instance to put the device in sleep mode. |
 | [`enableWakeupFromRTC`](#class_board_1a49925de689c2f73f49b09d7b190e5036) | Enables wake-up of the device from the RTC. |
 | [`enableWakeupFromRTC`](#class_board_1a27a7db805596399daf0e89de755eca0c) | Enables wake-up of the device from the RTC.  |
 | [`sleepUntilWakeupEvent`](#class_board_1a1d23524e0bfeb7282fa465f3834027e1) | Put the device into sleep mode until a wakeup event occurs This sleep mode is ideal for applications requiring periodic wake-ups or brief intervals of inactivity and reduces consumption to a range between 6mA and 18mA depending on the state of the peripherals. This sleep mode resumes the operation from the last operation without resetting the board. A wakeup event can be an interrupt on a pin or the RTC, depending on what you set with [enableWakeupFromPin()](#class_board_1ae04b853e945b07852a65fb4f0e7e7d2b) and [enableWakeupFromRTC()](#class_board_1a5fc9e67d4e42ce7943b9675c17fd77f6). |
 | [`standByUntilWakeupEvent`](#class_board_1a7dda3836bbe5a11628d4d8a122529ded) | Put the device into standby mode until a wakeup event occurs. For scenarios demanding drastic power conservation, the standby Mode significantly reduces the board's power usage to micro amperes range depending on the state of the peripherals. This mode restarts the board on wake-up, effectively running the setup() function again. A wakeup event can be an interrupt on a pin or the RTC, depending on what you set with [enableWakeupFromPin()](#class_board_1ae04b853e945b07852a65fb4f0e7e7d2b) and [enableWakeupFromRTC()](#class_board_1a5fc9e67d4e42ce7943b9675c17fd77f6). |
 | [`setAllPeripheralsPower`](#class_board_1a27dcc0b9d69a8cce256494192f2efb3a) | Toggle the peripherals' power on Portenta C33 (ADC, RGB LED, Secure Element, Wifi and Bluetooth). |
-| [`setCommunicationPeripheralsPower`](#class_board_1ac91aa31be1ea833d7266dda45dd1c5f2) | Toggles the communication peripherials' power on Portenta C33 (Wifi, Bluetooth and Secure Element) |
+| [`setCommunicationPeripheralsPower`](#class_board_1ac91aa31be1ea833d7266dda45dd1c5f2) | Toggles the communication peripherals' power on Portenta C33 (Wifi, Bluetooth and Secure Element) |
 | [`setAnalogDigitalConverterPower`](#class_board_1a3d9fbb30b03c3a7f733f0c89dd9dc43d) | Toggles the power of the analog digital converter on Portenta C33. This is not available on the Portenta H7. |
 | [`setReferenceVoltage`](#class_board_1a8feb9efc5439c8fec5139f66484200b5) | Set the reference voltage. This value is used by the ADC to convert analog values to digital values. This can be particularly useful to increase the accuracy of the ADC when working with low voltages. |
 | [`shutDownFuelGauge`](#class_board_1ae4af8f64cc1389bc0b640124dbb0d9c8) | Shuts down the fuel gauge to reduce power consumption. The IC returns to active mode on any edge of any communication line. If the IC is power-cycled or the software RESET command is sent the IC returns to active mode of operation. |
@@ -495,7 +495,7 @@ Enables wake-up of the device from a specified pin (A0, A1, A2, A3, A4, A5, D4, 
 bool enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds, void(*)() callbackFunction, RTClock * rtc)
 ```
 
-Enables wake-up of the device from the RTC. This function allows to use a custom RTC instance to put the device in sleep mode.
+Enables wake-up of the device from the RTC. This function allows the use of a custom RTC instance to put the device in sleep mode.
 
 #### Parameters
 * `hours` The number of hours to sleep. 
@@ -587,7 +587,7 @@ Toggle the peripherals' power on Portenta C33 (ADC, RGB LED, Secure Element, Wif
 void setCommunicationPeripheralsPower(bool on)
 ```
 
-Toggles the communication peripherials' power on Portenta C33 (Wifi, Bluetooth and Secure Element)
+Toggles the communication peripherals' power on Portenta C33 (Wifi, Bluetooth and Secure Element)
 
 #### Parameters
 * `on` True to turn on the power, false to turn it off.
@@ -641,7 +641,7 @@ Class for controlling charging parameters and monitoring charging status.
 | [`Charger`](#class_charger_1a386eef9a5c151f3e5eb3ee67a0aeb0cb) | Constructs a new [Charger](#class_charger) object. |
 | [`begin`](#class_charger_1af3ebf5b1bbd6c4909f47217b83fe57ab) | Initializes the charger by initiating the PMIC. |
 | [`setChargeCurrent`](#class_charger_1a7092cf5385bf469d3b27204478fb1671) | Set the charging current. The default charging current is set to 100mA. |
-| [`getChargeCurrent`](#class_charger_1a3ff22dda98f766f42a3a7fdfc46d7a41) | Get the charge current in milli amperes (mA). |
+| [`getChargeCurrent`](#class_charger_1a3ff22dda98f766f42a3a7fdfc46d7a41) | Get the charge current in milliamperes (mA). |
 | [`setChargeVoltage`](#class_charger_1a46cee977438a93ef66ed3882d741efbc) | Set the charging voltage in volts (V). The current charging voltage is set to 4.2V by default. |
 | [`getChargeVoltage`](#class_charger_1af478d3be4756b758238823696c1a00c8) | Get the charge voltage in volts (V). |
 | [`setEndOfChargeCurrent`](#class_charger_1a9b54c1077cc45ed826b8269ff57a3ee2) | Set the end-of-charge current. The charger IC determines when to terminate the charge cycle based on the current going into the battery dropping below the given threshold during the constant voltage phase. At this point, the battery is considered fully charged and charging is completed. If charge termination is disabled, the charge current will naturally decay to 0mA, but this is rarely done in practice. This is because the amount of charge going into the battery exponentially decreases during CV charging, and it would take a significantly longer time to recharge the battery with a very little increase in capacity. |
@@ -685,7 +685,7 @@ bool setChargeCurrent(uint16_t current)
 Set the charging current. The default charging current is set to 100mA.
 
 #### Parameters
-* `current` Charging current in milli amperes (mA). Supported values: 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000 
+* `current` Charging current in milliamperes (mA). Supported values: 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000 
 
 #### Returns
 True if successful, false if an invalid value was provided or if the PMIC communication failed.
@@ -697,7 +697,7 @@ True if successful, false if an invalid value was provided or if the PMIC commun
 uint16_t getChargeCurrent()
 ```
 
-Get the charge current in milli amperes (mA).
+Get the charge current in milliamperes (mA).
 
 #### Returns
 The charge current in float.
@@ -739,7 +739,7 @@ bool setEndOfChargeCurrent(uint16_t current)
 Set the end-of-charge current. The charger IC determines when to terminate the charge cycle based on the current going into the battery dropping below the given threshold during the constant voltage phase. At this point, the battery is considered fully charged and charging is completed. If charge termination is disabled, the charge current will naturally decay to 0mA, but this is rarely done in practice. This is because the amount of charge going into the battery exponentially decreases during CV charging, and it would take a significantly longer time to recharge the battery with a very little increase in capacity.
 
 #### Parameters
-* `current` End-of-charge current in milli amperes (mA). The default end-of-charge current is set to 50 mA. Supported values: 5, 10, 20, 30, 50 
+* `current` End-of-charge current in milliamperes (mA). The default end-of-charge current is set to 50 mA. Supported values: 5, 10, 20, 30, 50 
 
 #### Returns
 True if successful, false if an invalid value was provided or if the PMIC communication failed.
@@ -768,7 +768,7 @@ bool setInputCurrentLimit(uint16_t current)
 The input current limit (ILIM) safeguards the device by preventing overcurrent, ensuring the charging current is within safe levels for the battery, and adapting to the maximum current the power source can provide, allowing you to charge and use the system at the same time. The default input current limit is set to 1.5A.
 
 #### Parameters
-* `current` Maximum input current in milli amperes (mA). Supported values: 10, 15, 20, 25, 30, 35, 40, 45, 50, 100, 150, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1500 
+* `current` Maximum input current in milliamperes (mA). Supported values: 10, 15, 20, 25, 30, 35, 40, 45, 50, 100, 150, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1500 
 
 #### Returns
 True if successful, false if an invalid value was provided or if the PMIC communication failed.
@@ -783,7 +783,7 @@ uint16_t getInputCurrentLimit()
 Get the input current limit. It is a safeguard to prevent overcurrent when charging respectively to the maximum current the power source can provide.
 
 #### Returns
-The input current limit in milli amperes (mA).
+The input current limit in milliamperes (mA).
 <hr />
 
 ### `getState` <a id="class_charger_1a4670cf2d22eb36216e7ef2b65077021a" class="anchor"></a>
@@ -927,7 +927,7 @@ This struct contains the characteristics of the battery.
 | [`capacity`](#struct_battery_characteristics_1a6bd20a3ca22801553596234c7d80014c) | The battery's capacity in milliampere-hours (mAh). |
 | [`emptyVoltage`](#struct_battery_characteristics_1af8847c64e47bd1ee07a2234572658baf) | The voltage in volts (V) at which the battery is considered empty. If you don't know this value you can use the minimumVoltage() function to find out while you let the battery completely discharge. |
 | [`chargeVoltage`](#struct_battery_characteristics_1a1278657cc6c246d6545a3770d213cf91) | The voltage in volts (V) at which the battery is being charged. |
-| [`endOfChargeCurrent`](#struct_battery_characteristics_1a13c651b4da45ab04ec9935023257aec2) | The current in milli amperes (mA) that is used to keep the battery charged at the end of the charging process. |
+| [`endOfChargeCurrent`](#struct_battery_characteristics_1a13c651b4da45ab04ec9935023257aec2) | The current in milliamperes (mA) that is used to keep the battery charged at the end of the charging process. |
 | [`ntcResistor`](#struct_battery_characteristics_1ab5b19a09ad5e5d61c1ad72bdf4de4fb3) | The NTC resistor value used in the battery pack (10K or 100K Ohm). |
 | [`recoveryVoltage`](#struct_battery_characteristics_1aff1e9cdf23f2a9ff9e23da138f1791b4) | Sets the voltage level for clearing empty detection. Once the cell voltage rises above this point, empty voltage detection is re-enabled. |
 
@@ -969,7 +969,7 @@ The voltage in volts (V) at which the battery is being charged.
 int endOfChargeCurrent
 ```
 
-The current in milli amperes (mA) that is used to keep the battery charged at the end of the charging process.
+The current in milliamperes (mA) that is used to keep the battery charged at the end of the charging process.
 
 <hr />
 

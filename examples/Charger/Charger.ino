@@ -1,19 +1,19 @@
 /*
   Charger Demo
 
-  This sketch demonstrates how to write charging parameters,read charger state and monitor charging using the PowerManagement library:
+  This sketch demonstrates how to write charging parameters,read charger state and monitor charging using the Arduino_PowerManagement library:
   * In the setup() function, it sets the charging parameters
-  * In the loop() functionit prints the battery's voltage, current, percentage and the charger's state allowing you to monitor charging. 
+  * In the loop() function, it prints the battery's voltage, current, percentage and the charger's state allowing you to monitor charging.
 
   Requirements:
   - Arduino Portenta C33, Arduino Portenta H7, Arduino Nicla Vision
   - Arduino IDE
-  - PowerManagement library (installable from the Arduino Library Manager)
+  - Arduino_PowerManagement library (installable from the Arduino Library Manager)
 
   Usage:
 
   1. Connect a Battery to the board
-  
+
   2. Upload the Sketch:
     - Open the provided sketch in the Arduino IDE.
     - Select your board type and port from the "Tools" menu.
@@ -24,9 +24,9 @@
     - Set the baud rate to 115200.
     - You will see the sketch continuously printing charger state information.
 
-    Please note that the Portenta C33 will not charge batteries that do not have an NTC. 
+    Please note that the Portenta C33 will not charge batteries that do not have an NTC.
 
-    Initial authors: 
+    Initial authors:
     Cristian Dragomir (c.dragomir@arduino.cc)
     Sebastian Romero (s.romero@arduino.cc)
 */
@@ -51,10 +51,10 @@ void setup() {
         Serial.println("Charger initialization failed.");
         while (true);
     }
-    
+
     Serial.print("* ✅ Charging is enabled: ");
     Serial.println(charger.isEnabled() ? "true" : "false");
-    
+
     auto chargeVoltage = charger.getChargeVoltage();
     auto inputCurrentLimit = charger.getInputCurrentLimit();
 
@@ -72,7 +72,7 @@ void setup() {
     }
 
     auto chargeCurrent = charger.getChargeCurrent();
-    auto endOfChargeCurrent = charger.getEndOfChargeCurrent();    
+    auto endOfChargeCurrent = charger.getEndOfChargeCurrent();
 
     Serial.println("* ⚡️ Charge current set to: " + String(CHARGE_CURRENT_MA) + " mA");
     Serial.println("* ⚡️ End of charge current set to: " + String(END_OF_CHARGE_CURRENT_MA) + " mA");

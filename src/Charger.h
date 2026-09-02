@@ -89,14 +89,14 @@ public:
     /**
      * @brief Set the charging current. 
      * The default charging current is set to 100mA.
-     * @param current Charging current in milli amperes (mA).
+     * @param current Charging current in milliamperes (mA).
      * Supported values: 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000
      * @return True if successful, false if an invalid value was provided or if the PMIC communication failed.
      */
     bool setChargeCurrent(uint16_t current);
 
     /**
-     * @brief Get the charge current in milli amperes (mA).
+     * @brief Get the charge current in milliamperes (mA).
      * @return The charge current in float.
      */
     uint16_t getChargeCurrent();
@@ -126,7 +126,7 @@ public:
      * the charge current will naturally decay to 0mA, but this is rarely done in practice. 
      * This is because the amount of charge going into the battery exponentially decreases during CV charging, 
      * and it would take a significantly longer time to recharge the battery with a very little increase in capacity.
-     * @param current End-of-charge current in milli amperes (mA).
+     * @param current End-of-charge current in milliamperes (mA).
      * The default end-of-charge current is set to 50 mA.
      * Supported values: 5, 10, 20, 30, 50
      * @return True if successful, false if an invalid value was provided or if the PMIC communication failed.
@@ -148,7 +148,7 @@ public:
      * ensuring the charging current is within safe levels for the battery, and adapting to the maximum 
      * current the power source can provide, allowing you to charge and use the system at the same time. 
      * The default input current limit is set to 1.5A.
-     * @param current Maximum input current in milli amperes (mA).
+     * @param current Maximum input current in milliamperes (mA).
     * Supported values: 10, 15, 20, 25, 30, 35, 40, 45, 50, 100, 150, 200, 300, 
     * 400, 500, 600, 700, 800, 900, 1000, 1500
      * @return True if successful, false if an invalid value was provided or if the PMIC communication failed.
@@ -159,7 +159,7 @@ public:
      * @brief Get the input current limit. It is a safeguard to prevent overcurrent when charging
      * respectively to the maximum current the power source can provide.
      * 
-     * @return The input current limit in milli amperes (mA).
+     * @return The input current limit in milliamperes (mA).
      */
     uint16_t getInputCurrentLimit();
 

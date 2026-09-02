@@ -1,9 +1,9 @@
 /*
-    Standby Wake from RTC Demo for Portenta C33 
+    Standby Wake from RTC Demo for Portenta C33
 
-    This example demonstrates how to  wake up the Portenta C33 from standby mode using the included RTC (Real Time Clock).
-    The device will go to sleep for 5 seconds and then wake up. When the device is awake you will see the board's built-in LED turned on. 
-    Effectively, you will get the same effect as with blink. 
+    This example demonstrates how to wake up the Portenta C33 from standby mode using the included RTC (Real Time Clock).
+    The device will go to sleep for 5 seconds and then wake up. When the device is awake you will see the board's built-in LED turned on.
+    Effectively, you will get the same effect as with blink.
 
     On the Portenta C33 with the peripherals turned off you can expect around 60uA of current consumption in standby mode.
     The example also turns off the peripherals before going to sleep and turns them back on after waking up.
@@ -13,7 +13,7 @@
         - Select the Portenta C33 board from the Tools menu
         - Select the Portenta C33 USB port from the Tools menu
         - Upload the code to your Portenta C33
-    
+
     Initial author: Cristian Dragomir (c.dragomir@arduino.cc)
 */
 
@@ -23,7 +23,7 @@
 
 RTCTime initialTime(1, Month::JANUARY, 2000, 12, 10, 00, DayOfWeek::SATURDAY, SaveLight::SAVING_TIME_ACTIVE);
 
-Board board; 
+Board board;
 
 void blinkLed(int ledPin, int delayTime = 1000){
     digitalWrite(ledPin, LOW);
@@ -35,8 +35,8 @@ void blinkLed(int ledPin, int delayTime = 1000){
 void setup() {
     pinMode(LEDR, OUTPUT); // Used to indicate errors
     digitalWrite(LEDR, HIGH); // Turn off the red LED
-    pinMode(LED_BUILTIN, OUTPUT); // Used to indicate that the board is awake    
-  
+    pinMode(LED_BUILTIN, OUTPUT); // Used to indicate that the board is awake
+
     if(!board.begin()){
         while (true){
             blinkLed(LEDR);
@@ -45,7 +45,7 @@ void setup() {
 
     board.setAllPeripheralsPower(true);
     digitalWrite(LED_BUILTIN, LOW); // Turn on the LED to show that the board is awake
-    
+
     RTC.begin();
     if (!RTC.isRunning()) {
         // The initial time is a dummy time
