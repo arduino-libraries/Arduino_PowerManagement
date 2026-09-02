@@ -17,6 +17,8 @@
     // but in this library we can turn of the Ethernet interface using the PMIC, so we set the NO_ETHERNET_TURN_OFF flag to avoid turning off the Ethernet interface from both sides. 
     #define NO_ETHERNET_TURN_OFF
     #include "Arduino_LowPowerPortentaH7.h"
+#elif defined(ARDUINO_NICLA_VISION)
+    #include "Arduino_LowPowerNiclaVision.h"
 #endif 
 
 #define CONTEXT_LDO2 2 // LDO regulator: 1.8 V to 3.3 V, 400 mA
@@ -110,7 +112,9 @@ class Board {
          * The pin is only accessible via high-density connectors.
          */
         void enableWakeupFromPin();
+        #endif
 
+        #if defined(ARDUINO_PORTENTA_H7) || defined(ARDUINO_NICLA_VISION)
         /**
          * Enables sleep mode when the board is idle.
          */
@@ -153,7 +157,7 @@ class Board {
         bool enableWakeupFromRTC(uint32_t hours, uint32_t minutes, uint32_t seconds, RTClock * rtc = &RTC);
         #endif
 
-        #if defined(ARDUINO_PORTENTA_H7)
+        #if defined(ARDUINO_PORTENTA_H7) || defined(ARDUINO_NICLA_VISION)
         /**
          * Enables wake-up of the device from the RTC.
          * @param hours The number of hours to sleep.
