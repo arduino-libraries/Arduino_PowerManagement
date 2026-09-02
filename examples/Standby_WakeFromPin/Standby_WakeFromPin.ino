@@ -1,15 +1,15 @@
 /*
     Standby Wake From Pin Demo
 
-    This sketch demonstrates how you can use the Arduino_PowermManagement library to send a board to standby mode by using a GPIO pin and wake it up from another. 
-    This sketch is universal and worksn on both Portenta C33 and H7. 
+    This sketch demonstrates how you can use the Arduino_PowermManagement library to send a board to standby mode by using a GPIO pin and wake it up from another.
+    This sketch is universal and worksn on both Portenta C33 and H7.
 
     On the the Portenta C33 you can select any of the supported pins (A0, A1, A2, A3, A4, A5, D4, D7) to wake up the board from standby mode.
     However setAllPeripheralsPower(false) in this sketch turns off the power lane of the analog pins.
-    This means they cannot sink current and therefore cannot be used to wake up the device. 
+    This means they cannot sink current and therefore cannot be used to wake up the device.
     Hency only D4 and D7 can be used to wake up the device in this configuration.
 
-    On the Portenta H7 only GPIO0 can be used to wake up the board from standby mode. GPIO0 is available through the High Density Connectors and you need a breakout board to access it. 
+    On the Portenta H7 only GPIO0 can be used to wake up the board from standby mode. GPIO0 is available through the High Density Connectors and you need a breakout board to access it.
 
     Requirements:
         - Arduino Portenta C33, Arduino Portenta H7
@@ -18,9 +18,9 @@
 
     Usage:
         - Connect a button to GOTO_SLEEP_PIN and with a pull-up resistor to 3.3V
-        - Connect a button to pin PORTENTA_C33_WAKEUP_PIN if you are using the Portenta C33 or GPIO0 if you are using a Portenta H7  and with a pull-up resistor to 3.3V 
+        - Connect a button to pin PORTENTA_C33_WAKEUP_PIN if you are using the Portenta C33 or GPIO0 if you are using a Portenta H7  and with a pull-up resistor to 3.3V
           For maximum power saving use external pull-up resistors.
-          You will need to power them separately as the 3.3V pin on the board 
+          You will need to power them separately as the 3.3V pin on the board
           is turned off when the device goes to sleep and peripherals are turned off.
           Alternatively, use pinMode(<pin>, INPUT_PULLUP) for the pins and connect the buttons to ground.
           (If you need information about how to wire the buttons check this link: https://docs.arduino.cc/built-in-examples/digital/Button/)
@@ -31,7 +31,7 @@
         - Press the button connected to GOTO_SLEEP_PIN to put the board into standby mode
         - Press the button connected to PORTENTA_C33_WAKEUP_PIN or GPIO0 on Portenta H7 to wake up the board from standby mode
         - The LED will blink every second to show that the board is awake when not in standby mode
-        
+
     Original author: C. Dragomir (http://arduino.cc)
 */
 
@@ -44,7 +44,7 @@
 
 volatile bool shouldGoToSleep = false;
 
-Board board; 
+Board board;
 
 void setup() {
     // When uploading this sketch to the M4 core, it just goes to standby mode.
@@ -72,7 +72,7 @@ void setup() {
     #elif defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_GENERIC_STM32H747_M4) || defined(ARDUINO_NICLA_VISION)
         // On Portenta only pin GPIO0 can be used to wake up the device from sleep mode
         board.enableWakeupFromPin();
-    #endif    
+    #endif
 }
 
 void goToSleep(){
@@ -83,7 +83,7 @@ void loop() {
     if(shouldGoToSleep){
         digitalWrite(LED_BUILTIN, HIGH); // turn off the LED to show that the board is going to sleep
         board.shutDownFuelGauge();
-        board.setAllPeripheralsPower(false); // turn off peripherals before going to sleep 
+        board.setAllPeripheralsPower(false); // turn off peripherals before going to sleep
         board.standByUntilWakeupEvent();
         shouldGoToSleep = false;
     } else {

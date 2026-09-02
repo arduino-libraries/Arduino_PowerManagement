@@ -1,8 +1,8 @@
 /*
   Battery Information Display Demo
 
-  This sketch demonstrates how to read battery information using the PowerManagement library. 
-  It prints the battery's voltage, current, percentage, remaining capacity and temperature in a loop. 
+  This sketch demonstrates how to read battery information using the PowerManagement library.
+  It prints the battery's voltage, current, percentage, remaining capacity and temperature in a loop.
   The sketch is designed to work with the PowerManagement library and is intended for educational purposes.
 
   Requirements:
@@ -13,9 +13,9 @@
   Usage:
 
   1. Connect the Battery:
-     - Please note that batteries without NTC thermistors will 
+     - Please note that batteries without NTC thermistors will
        not provide temperature information.
-  
+
   2. Upload the Sketch:
      - Open the provided sketch in the Arduino IDE.
      - Select your board type and port from the "Tools" menu.
@@ -31,7 +31,7 @@
 
 #include "Arduino_PowerManagement.h"
 
-Battery battery; 
+Battery battery;
 Charger charger;
 
 void setup() {
@@ -54,7 +54,7 @@ void setup() {
 
    battery = Battery(characteristics);
    bool batteryInitialized = battery.begin(true);
-   
+
    if (!batteryInitialized) {
       Serial.println("Battery initialization failed.");
       Serial.println("Please make sure the battery is connected and try again.");
@@ -94,10 +94,10 @@ void printTimeToFull(){
 void loop() {
    bool batteryConnected = battery.isConnected();
    Serial.println("* 🔌 Battery is connected: " + ( batteryConnected ? String("Yes") : String("No")));
-   
+
    if(batteryConnected){
       Serial.println("* 🪫 Battery is empty: " + ( battery.isEmpty() ? String("Yes") : String("No")));
-      
+
       Serial.println("* ⚡️ Voltage: " + String(battery.voltage()) + " V");
       Serial.println("* ⚡️ Average Voltage: " + String(battery.averageVoltage()) + " V");
       Serial.println("* ⚡️ Minimum Voltage since reset: " + String(battery.minimumVoltage()) + " V");
